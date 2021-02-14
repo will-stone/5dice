@@ -2,46 +2,26 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import crypto from "crypto";
 import _ from "lodash";
 import { calculatePotentialScores } from "./calculate-potential-scores";
-import type { Scorers, Scores } from "./model";
+import type { DieId, Scorers, Scores } from "./model";
 
 const cannotScore = (actualScores: Scores, potentialScores: Scores) =>
-	(Object.entries(potentialScores) as [keyof Scores, number][])
+	(Object.entries(potentialScores) as [Scorers, number][])
 		.filter(([, value]) => !_.isNull(value))
 		.every(([id]) => _.isNumber(actualScores[id]));
 
 const dieRoll = () => crypto.randomInt(1, 7);
 
-type DieId = "a" | "b" | "c" | "d" | "e";
-
-const nextDie = (currentDie: DieId) => {
-	if (currentDie === "a") return "b";
-	if (currentDie === "b") return "c";
-	if (currentDie === "c") return "d";
-	if (currentDie === "d") return "e";
-	return "e";
-};
-
-const prevDie = (currentDie: DieId) => {
-	if (currentDie === "e") return "d";
-	if (currentDie === "d") return "c";
-	if (currentDie === "c") return "b";
-	if (currentDie === "b") return "a";
-	return "a";
-};
-
 export const roll = createAction("roll");
-export const hold = createAction("hold");
+export const hold = createAction<DieId>("hold");
 export const score = createAction<Scorers>("score");
-export const select = createAction<"left" | "right">("direction");
 
 interface State {
-	selected: DieId;
 	dice: {
 		a: { value: number; held: boolean };
-		b: { value: number; held: boolean };
-		c: { value: number; held: boolean };
+		s: { value: number; held: boolean };
 		d: { value: number; held: boolean };
-		e: { value: number; held: boolean };
+		f: { value: number; held: boolean };
+		g: { value: number; held: boolean };
 	};
 	potentialScores: Scores;
 	scores: Scores;
@@ -49,13 +29,12 @@ interface State {
 }
 
 export const initialState: State = {
-	selected: "a",
 	dice: {
 		a: { value: 0, held: false },
-		b: { value: 0, held: false },
-		c: { value: 0, held: false },
+		s: { value: 0, held: false },
 		d: { value: 0, held: false },
-		e: { value: 0, held: false },
+		f: { value: 0, held: false },
+		g: { value: 0, held: false },
 	},
 	potentialScores: {
 		ones: null,
@@ -129,9 +108,9 @@ export const reducer = createReducer(initialState, (builder) => {
 				}
 			}
 		})
-		.addCase(hold, (state) => {
+		.addCase(hold, (state, action) => {
 			if (state.turn > 0) {
-				state.dice[state.selected].held = !state.dice[state.selected].held;
+				state.dice[action.payload].held = !state.dice[action.payload].held;
 			}
 		})
 		.addCase(score, (state, action) => {
@@ -146,15 +125,6 @@ export const reducer = createReducer(initialState, (builder) => {
 				state.potentialScores = initialState.potentialScores;
 				state.dice = initialState.dice;
 				state.turn = 0;
-				state.selected = "a";
-			}
-		})
-		.addCase(select, (state, action) => {
-			if (action.payload === "right") {
-				state.selected = nextDie(state.selected);
-			}
-			if (action.payload === "left") {
-				state.selected = prevDie(state.selected);
 			}
 		});
 });

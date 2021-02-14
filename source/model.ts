@@ -16,3 +16,5 @@ export interface Scores {
 }
 
 export type Scorers = keyof Scores;
+
+export type DieId = "a" | "s" | "d" | "f" | "g";
