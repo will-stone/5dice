@@ -82,8 +82,8 @@ const App: React.FC = () => {
 			return dispatch(score("tahtzee"));
 		}
 
-		if (input === "q") {
-			exit();
+		if (key.escape) {
+			return exit();
 		}
 	});
 
