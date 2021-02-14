@@ -15,4 +15,4 @@ export interface Scores {
 	tahtzee: number | null;
 }
 
-export type Scorers = keyof Scores
+export type Scorers = keyof Scores;

@@ -150,8 +150,8 @@ const App: React.FC = () => {
 						<Text>{_.startCase(id)}</Text>
 						<Spacer />
 						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={!scores[id]}>
-								{scores[id] || potentialScores[id]}
+							<Text dimColor={!_.isNumber(scores[id])}>
+								{scores[id] ?? potentialScores[id]}
 							</Text>
 						</Box>
 					</Box>
@@ -192,8 +192,8 @@ const App: React.FC = () => {
 						<Text>{_.startCase(id)}</Text>
 						<Spacer />
 						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={!scores[id]}>
-								{scores[id] || potentialScores[id]}
+							<Text dimColor={!_.isNumber(scores[id])}>
+								{scores[id] ?? potentialScores[id]}
 							</Text>
 						</Box>
 					</Box>
