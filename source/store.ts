@@ -1,7 +1,13 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
+import crypto from "crypto";
+import _ from "lodash";
 import { calculatePotentialScores } from "./calculate-potential-scores";
 import type { Scorers, Scores } from "./model";
-import crypto from "crypto";
+
+const cannotScore = (actualScores: Scores, potentialScores: Scores) =>
+	(Object.entries(potentialScores) as [keyof Scores, number][])
+		.filter(([, value]) => !_.isNull(value))
+		.every(([id]) => _.isNumber(actualScores[id]));
 
 const dieRoll = () => crypto.randomInt(1, 7);
 
@@ -99,7 +105,28 @@ export const reducer = createReducer(initialState, (builder) => {
 				}
 
 				const diceValues = Object.values(state.dice).map((d) => d.value);
-				state.potentialScores = calculatePotentialScores(diceValues);
+				const potentialScores = calculatePotentialScores(diceValues);
+
+				if (cannotScore(state.scores, potentialScores)) {
+					state.potentialScores = {
+						ones: 0,
+						twos: 0,
+						threes: 0,
+						fours: 0,
+						fives: 0,
+						sixes: 0,
+
+						threeOfAKind: 0,
+						fourOfAKind: 0,
+						fullHouse: 0,
+						smallStraight: 0,
+						largeStraight: 0,
+						chance: 0,
+						tahtzee: 0,
+					};
+				} else {
+					state.potentialScores = potentialScores;
+				}
 			}
 		})
 		.addCase(hold, (state) => {
@@ -109,7 +136,11 @@ export const reducer = createReducer(initialState, (builder) => {
 		})
 		.addCase(score, (state, action) => {
 			const potential = state.potentialScores[action.payload];
-			if (potential && !state.scores[action.payload]) {
+			if (
+				(potential || potential === 0) &&
+				!state.scores[action.payload] &&
+				state.scores[action.payload] !== 0
+			) {
 				state.scores[action.payload] = potential;
 				// Reset for next turn
 				state.potentialScores = initialState.potentialScores;
