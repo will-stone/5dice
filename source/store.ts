@@ -4,6 +4,9 @@ import _ from "lodash";
 import { calculatePotentialScores } from "./calculate-potential-scores";
 import type { DieId, Scorers, Scores } from "./model";
 
+/**
+ * Determines if you cannot score by seeing if every potential score is already taken.
+ */
 const cannotScore = (actualScores: Scores, potentialScores: Scores) =>
 	(Object.entries(potentialScores) as [Scorers, number][])
 		.filter(([, value]) => !_.isNull(value))
@@ -17,11 +20,7 @@ export const score = createAction<Scorers>("score");
 
 interface State {
 	dice: {
-		a: { value: number; held: boolean };
-		s: { value: number; held: boolean };
-		d: { value: number; held: boolean };
-		f: { value: number; held: boolean };
-		g: { value: number; held: boolean };
+		[key in DieId]: { value: number; held: boolean };
 	};
 	potentialScores: Scores;
 	scores: Scores;
