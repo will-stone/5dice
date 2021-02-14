@@ -2,9 +2,9 @@ import { Box, Newline, Spacer, Text, useApp, useInput } from "ink";
 import React, { useReducer } from "react";
 import { initialState, reducer, roll, score, hold } from "./store";
 import _ from "lodash";
-import { Scorers } from "./model";
+import { ScoreIds } from "./model";
 
-const upperBoard: { [key: string]: Scorers } = {
+const upperBoard: { [key: string]: ScoreIds } = {
 	1: "ones",
 	2: "twos",
 	3: "threes",
@@ -13,7 +13,7 @@ const upperBoard: { [key: string]: Scorers } = {
 	6: "sixes",
 };
 
-const lowerBoard: { [key: string]: Scorers } = {
+const lowerBoard: { [key: string]: ScoreIds } = {
 	q: "threeOfAKind",
 	w: "fourOfAKind",
 	e: "fullHouse",
@@ -26,7 +26,7 @@ const lowerBoard: { [key: string]: Scorers } = {
 const App: React.FC = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 	const dice = Object.entries(state.dice);
-	const { potentialScores, scores } = state;
+	const { scores } = state;
 	const { exit } = useApp();
 
 	useInput((input, key) => {
@@ -111,9 +111,7 @@ const App: React.FC = () => {
 						<Text>{_.startCase(id)}</Text>
 						<Spacer />
 						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={!_.isNumber(scores[id])}>
-								{scores[id] ?? potentialScores[id]}
-							</Text>
+							<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
 						</Box>
 					</Box>
 				))}
@@ -145,9 +143,7 @@ const App: React.FC = () => {
 						<Text>{_.startCase(id)}</Text>
 						<Spacer />
 						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={!_.isNumber(scores[id])}>
-								{scores[id] ?? potentialScores[id]}
-							</Text>
+							<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
 						</Box>
 					</Box>
 				))}

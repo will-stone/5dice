@@ -1,5 +1,5 @@
 import _ from "lodash";
-import type { Scores } from "./model";
+import type { ScoreIds } from "./model";
 
 const isStraight = (array: number[], size: number) => {
 	const uniqSortedArray = _.uniq(array).sort();
@@ -32,9 +32,10 @@ const isStraight = (array: number[], size: number) => {
 	return false;
 };
 
-
-export const calculatePotentialScores = (dice: number[]) => {
-	const score: Scores = {
+export const calculatePotentialScores = (
+	dice: number[]
+): { [key in ScoreIds]: string | null } => {
+	const score: { [key in ScoreIds]: string | null } = {
 		ones: null,
 		twos: null,
 		threes: null,
@@ -54,35 +55,35 @@ export const calculatePotentialScores = (dice: number[]) => {
 	const countByDie = _.countBy(dice);
 	const sumOfAllDie = _.sum(dice);
 
-	score.ones = countByDie["1"] ? countByDie["1"] * 1 : null;
-	score.twos = countByDie["2"] ? countByDie["2"] * 2 : null;
-	score.threes = countByDie["3"] ? countByDie["3"] * 3 : null;
-	score.fours = countByDie["4"] ? countByDie["4"] * 4 : null;
-	score.fives = countByDie["5"] ? countByDie["5"] * 5 : null;
-	score.sixes = countByDie["6"] ? countByDie["6"] * 6 : null;
+	score.ones = countByDie["1"] ? String(countByDie["1"] * 1) : null;
+	score.twos = countByDie["2"] ? String(countByDie["2"] * 2) : null;
+	score.threes = countByDie["3"] ? String(countByDie["3"] * 3) : null;
+	score.fours = countByDie["4"] ? String(countByDie["4"] * 4) : null;
+	score.fives = countByDie["5"] ? String(countByDie["5"] * 5) : null;
+	score.sixes = countByDie["6"] ? String(countByDie["6"] * 6) : null;
 
 	if (_.some(countByDie, (count) => count >= 4)) {
-		score.threeOfAKind = sumOfAllDie;
-		score.fourOfAKind = sumOfAllDie;
+		score.threeOfAKind = String(sumOfAllDie);
+		score.fourOfAKind = String(sumOfAllDie);
 	} else if (_.some(countByDie, (count) => count === 3)) {
-		score.threeOfAKind = sumOfAllDie;
+		score.threeOfAKind = String(sumOfAllDie);
 	}
 
 	if (_.includes(countByDie, 2) && _.includes(countByDie, 3)) {
-		score.fullHouse = 25;
+		score.fullHouse = String(25);
 	}
 
 	if (isStraight(dice, 5)) {
-		score.smallStraight = 30;
-		score.largeStraight = 40;
+		score.smallStraight = String(30);
+		score.largeStraight = String(40);
 	} else if (isStraight(dice, 4)) {
-		score.smallStraight = 30;
+		score.smallStraight = String(30);
 	}
 
-	score.chance = sumOfAllDie;
+	score.chance = String(sumOfAllDie);
 
 	if (_.includes(countByDie, 5)) {
-		score.tahtzee = 50;
+		score.tahtzee = String(50);
 	}
 
 	return score;

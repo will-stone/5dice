@@ -2,27 +2,18 @@ import { createAction, createReducer } from "@reduxjs/toolkit";
 import crypto from "crypto";
 import _ from "lodash";
 import { calculatePotentialScores } from "./calculate-potential-scores";
-import type { DieId, Scorers, Scores } from "./model";
-
-/**
- * Determines if you cannot score by seeing if every potential score is already taken.
- */
-const cannotScore = (actualScores: Scores, potentialScores: Scores) =>
-	(Object.entries(potentialScores) as [Scorers, number][])
-		.filter(([, value]) => !_.isNull(value))
-		.every(([id]) => _.isNumber(actualScores[id]));
+import type { DieId, Score, ScoreIds, Scores } from "./model";
 
 const dieRoll = () => crypto.randomInt(1, 7);
 
 export const roll = createAction("roll");
 export const hold = createAction<DieId>("hold");
-export const score = createAction<Scorers>("score");
+export const score = createAction<ScoreIds>("score");
 
 interface State {
 	dice: {
 		[key in DieId]: { value: number; held: boolean };
 	};
-	potentialScores: Scores;
 	scores: Scores;
 	turn: number;
 }
@@ -34,22 +25,6 @@ export const initialState: State = {
 		d: { value: 0, held: false },
 		f: { value: 0, held: false },
 		g: { value: 0, held: false },
-	},
-	potentialScores: {
-		ones: null,
-		twos: null,
-		threes: null,
-		fours: null,
-		fives: null,
-		sixes: null,
-
-		threeOfAKind: null,
-		fourOfAKind: null,
-		fullHouse: null,
-		smallStraight: null,
-		largeStraight: null,
-		chance: null,
-		tahtzee: null,
 	},
 	scores: {
 		ones: null,
@@ -85,25 +60,24 @@ export const reducer = createReducer(initialState, (builder) => {
 				const diceValues = Object.values(state.dice).map((d) => d.value);
 				const potentialScores = calculatePotentialScores(diceValues);
 
-				if (cannotScore(state.scores, potentialScores)) {
-					state.potentialScores = {
-						ones: 0,
-						twos: 0,
-						threes: 0,
-						fours: 0,
-						fives: 0,
-						sixes: 0,
+				// Determines if you cannot score by seeing if every potential score
+				// is already taken.
+				const cannotScore = (Object.entries(potentialScores) as [
+					ScoreIds,
+					Score
+				][])
+					.filter(([, value]) => !_.isNull(value))
+					.every(([id]) => _.isNumber(state.scores[id]));
 
-						threeOfAKind: 0,
-						fourOfAKind: 0,
-						fullHouse: 0,
-						smallStraight: 0,
-						largeStraight: 0,
-						chance: 0,
-						tahtzee: 0,
-					};
-				} else {
-					state.potentialScores = potentialScores;
+				for (const [id, score] of Object.entries(state.scores) as [
+					ScoreIds,
+					Score
+				][]) {
+					const potentialScore = potentialScores[id];
+					// Set potential score if score not set
+					if (!_.isNumber(score)) {
+						state.scores[id] = cannotScore ? "0" : potentialScore;
+					}
 				}
 			}
 		})
@@ -113,15 +87,18 @@ export const reducer = createReducer(initialState, (builder) => {
 			}
 		})
 		.addCase(score, (state, action) => {
-			const potential = state.potentialScores[action.payload];
-			if (
-				(potential || potential === 0) &&
-				!state.scores[action.payload] &&
-				state.scores[action.payload] !== 0
-			) {
-				state.scores[action.payload] = potential;
+			const potential = _.isString(state.scores[action.payload]);
+			if (potential) {
+				state.scores[action.payload] = Number(state.scores[action.payload]);
 				// Reset for next turn
-				state.potentialScores = initialState.potentialScores;
+				for (const [id, score] of Object.entries(state.scores) as [
+					ScoreIds,
+					Score
+				][]) {
+					if (_.isString(score)) {
+						state.scores[id] = null;
+					}
+				}
 				state.dice = initialState.dice;
 				state.turn = 0;
 			}

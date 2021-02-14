@@ -1,20 +1,22 @@
-export interface Scores {
-	ones: number | null;
-	twos: number | null;
-	threes: number | null;
-	fours: number | null;
-	fives: number | null;
-	sixes: number | null;
+export type Score = string | number | null
 
-	threeOfAKind: number | null;
-	fourOfAKind: number | null;
-	fullHouse: number | null;
-	smallStraight: number | null;
-	largeStraight: number | null;
-	chance: number | null;
-	tahtzee: number | null;
+export interface Scores {
+	ones: Score;
+	twos: Score;
+	threes: Score;
+	fours: Score;
+	fives: Score;
+	sixes: Score;
+
+	threeOfAKind: Score;
+	fourOfAKind: Score;
+	fullHouse: Score;
+	smallStraight: Score;
+	largeStraight: Score;
+	chance: Score;
+	tahtzee: Score;
 }
 
-export type Scorers = keyof Scores;
+export type ScoreIds = keyof Scores;
 
 export type DieId = "a" | "s" | "d" | "f" | "g";
