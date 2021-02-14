@@ -1,8 +1,27 @@
-import { Box, Spacer, Text, useApp, useInput } from "ink";
+import { Box, Newline, Spacer, Text, useApp, useInput } from "ink";
 import React, { useReducer } from "react";
-import { select, initialState, reducer, roll, score, hold } from "./store";
+import { initialState, reducer, roll, score, hold } from "./store";
 import _ from "lodash";
-import { Scores } from "./model";
+import { Scorers } from "./model";
+
+const upperBoard: { [key: string]: Scorers } = {
+	1: "ones",
+	2: "twos",
+	3: "threes",
+	4: "fours",
+	5: "fives",
+	6: "sixes",
+};
+
+const lowerBoard: { [key: string]: Scorers } = {
+	q: "threeOfAKind",
+	w: "fourOfAKind",
+	e: "fullHouse",
+	r: "smallStraight",
+	t: "largeStraight",
+	y: "chance",
+	u: "tahtzee",
+};
 
 const App: React.FC = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
@@ -12,74 +31,33 @@ const App: React.FC = () => {
 
 	useInput((input, key) => {
 		// Hold
-		if (key.rightArrow) {
-			return dispatch(select("right"));
-		}
-
-		if (key.leftArrow) {
-			return dispatch(select("left"));
-		}
-
-		if (key.downArrow || key.upArrow) {
-			return dispatch(hold());
+		if (
+			input === "a" ||
+			input === "s" ||
+			input === "d" ||
+			input === "f" ||
+			input === "g"
+		) {
+			return dispatch(hold(input));
 		}
 
 		// Roll
-		if (input === " ") {
+		if (key.return) {
 			return dispatch(roll());
 		}
 
 		// Scores
-		if (input === "1") {
-			return dispatch(score("ones"));
+
+		for (const [key, id] of Object.entries(upperBoard)) {
+			if (input === key) {
+				return dispatch(score(id));
+			}
 		}
 
-		if (input === "2") {
-			return dispatch(score("twos"));
-		}
-
-		if (input === "3") {
-			return dispatch(score("threes"));
-		}
-
-		if (input === "4") {
-			return dispatch(score("fours"));
-		}
-
-		if (input === "5") {
-			return dispatch(score("fives"));
-		}
-
-		if (input === "6") {
-			return dispatch(score("sixes"));
-		}
-
-		if (input === "t") {
-			return dispatch(score("threeOfAKind"));
-		}
-
-		if (input === "f") {
-			return dispatch(score("fourOfAKind"));
-		}
-
-		if (input === "h") {
-			return dispatch(score("fullHouse"));
-		}
-
-		if (input === "s") {
-			return dispatch(score("smallStraight"));
-		}
-
-		if (input === "l") {
-			return dispatch(score("largeStraight"));
-		}
-
-		if (input === "c") {
-			return dispatch(score("chance"));
-		}
-
-		if (input === "y") {
-			return dispatch(score("tahtzee"));
+		for (const [key, id] of Object.entries(lowerBoard)) {
+			if (input === key) {
+				return dispatch(score(id));
+			}
 		}
 
 		if (key.escape) {
@@ -101,32 +79,22 @@ const App: React.FC = () => {
 					<Text>{state.turn}</Text>
 				</Box>
 				<Box
-					justifyContent="space-between"
 					borderColor="white"
 					borderStyle="round"
 					paddingX={1}
 					width={13}
-					height={3}
+					height={4}
 				>
-					{dice.map(([id, { value, held }]) => (
-						<Text key={id} inverse={id === state.selected && !held}>
-							{held ? " " : value}
-						</Text>
-					))}
-				</Box>
-				<Box
-					justifyContent="space-between"
-					borderColor="white"
-					borderStyle="round"
-					paddingX={1}
-					width={13}
-					height={3}
-				>
-					{dice.map(([id, { value, held }]) => (
-						<Text key={id} inverse={id === state.selected && held}>
-							{held ? value : " "}
-						</Text>
-					))}
+					<Text>
+						<Text dimColor>a s d f g</Text>
+						<Newline />
+						{dice.map(([id, { value, held }], index) => (
+							<React.Fragment key={id}>
+								{index !== 0 && <Text> </Text>}
+								<Text inverse={held}>{value}</Text>
+							</React.Fragment>
+						))}
+					</Text>
 				</Box>
 			</Box>
 
@@ -137,14 +105,7 @@ const App: React.FC = () => {
 				flexDirection="column"
 				paddingX={1}
 			>
-				{([
-					{ hotkey: "1", id: "ones" },
-					{ hotkey: "2", id: "twos" },
-					{ hotkey: "3", id: "threes" },
-					{ hotkey: "4", id: "fours" },
-					{ hotkey: "5", id: "fives" },
-					{ hotkey: "6", id: "sixes" },
-				] as { hotkey: string; id: keyof Scores }[]).map(({ hotkey, id }) => (
+				{Object.entries(upperBoard).map(([hotkey, id]) => (
 					<Box key={id}>
 						<Text dimColor>{hotkey} </Text>
 						<Text>{_.startCase(id)}</Text>
@@ -178,15 +139,7 @@ const App: React.FC = () => {
 				flexDirection="column"
 				paddingX={1}
 			>
-				{([
-					{ hotkey: "t", id: "threeOfAKind" },
-					{ hotkey: "f", id: "fourOfAKind" },
-					{ hotkey: "h", id: "fullHouse" },
-					{ hotkey: "s", id: "smallStraight" },
-					{ hotkey: "l", id: "largeStraight" },
-					{ hotkey: "c", id: "chance" },
-					{ hotkey: "y", id: "tahtzee" },
-				] as { hotkey: string; id: keyof Scores }[]).map(({ hotkey, id }) => (
+				{Object.entries(lowerBoard).map(([hotkey, id]) => (
 					<Box key={id}>
 						<Text dimColor>{hotkey} </Text>
 						<Text>{_.startCase(id)}</Text>
