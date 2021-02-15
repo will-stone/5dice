@@ -122,7 +122,7 @@ export const selectUpperBoardBonus = (state: State): number => {
 	return selectUpperBoardSum(state) >= 63 ? 35 : 0;
 };
 
-export const selectLowerBoardSum = (state: State): number => {
+const selectLowerBoardSum = (state: State): number => {
 	return [
 		state.scores.threeOfAKind,
 		state.scores.fourOfAKind,
