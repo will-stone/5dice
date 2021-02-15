@@ -104,3 +104,42 @@ export const reducer = createReducer(initialState, (builder) => {
 			}
 		});
 });
+
+export const selectUpperBoardSum = (state: State): number => {
+	return [
+		state.scores.ones,
+		state.scores.twos,
+		state.scores.threes,
+		state.scores.fours,
+		state.scores.fives,
+		state.scores.sixes,
+	]
+		.filter(_.isNumber)
+		.reduce((accumulator, current) => accumulator + current, 0);
+};
+
+export const selectUpperBoardBonus = (state: State): number => {
+	return selectUpperBoardSum(state) >= 63 ? 35 : 0;
+};
+
+export const selectLowerBoardSum = (state: State): number => {
+	return [
+		state.scores.threeOfAKind,
+		state.scores.fourOfAKind,
+		state.scores.fullHouse,
+		state.scores.smallStraight,
+		state.scores.largeStraight,
+		state.scores.chance,
+		state.scores.tahtzee,
+	]
+		.filter(_.isNumber)
+		.reduce((accumulator, current) => accumulator + current, 0);
+};
+
+export const selectTotal = (state: State): number => {
+	return _.sum([
+		selectUpperBoardSum(state),
+		selectUpperBoardBonus(state),
+		selectLowerBoardSum(state),
+	]);
+};

@@ -1,6 +1,15 @@
 import { Box, Newline, Spacer, Text, useApp, useInput } from "ink";
 import React, { useReducer } from "react";
-import { initialState, reducer, roll, score, hold } from "./store";
+import {
+	initialState,
+	reducer,
+	selectTotal,
+	roll,
+	score,
+	hold,
+	selectUpperBoardSum,
+	selectUpperBoardBonus,
+} from "./store";
 import _ from "lodash";
 import { ScoreIds } from "./model";
 
@@ -28,6 +37,10 @@ const App: React.FC = () => {
 	const dice = Object.entries(state.dice);
 	const { scores } = state;
 	const { exit } = useApp();
+
+	const upperBoardSum = selectUpperBoardSum(state);
+	const upperBoardBonus = selectUpperBoardBonus(state);
+	const total = selectTotal(state);
 
 	useInput((input, key) => {
 		// Hold
@@ -121,12 +134,12 @@ const App: React.FC = () => {
 				<Box>
 					<Text>Sum</Text>
 					<Spacer />
-					<Text>63</Text>
+					<Text>{upperBoardSum}</Text>
 				</Box>
 				<Box>
 					<Text>Bonus</Text>
 					<Spacer />
-					<Text>35</Text>
+					<Text>{upperBoardBonus}</Text>
 				</Box>
 			</Box>
 
@@ -153,7 +166,7 @@ const App: React.FC = () => {
 				<Box>
 					<Text>Total</Text>
 					<Spacer />
-					<Text>290</Text>
+					<Text>{total}</Text>
 				</Box>
 			</Box>
 		</Box>
