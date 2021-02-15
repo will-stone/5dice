@@ -106,16 +106,16 @@ export const reducer = createReducer(initialState, (builder) => {
 });
 
 export const selectUpperBoardSum = (state: State): number => {
-	return [
+	const upperBoard = [
 		state.scores.ones,
 		state.scores.twos,
 		state.scores.threes,
 		state.scores.fours,
 		state.scores.fives,
 		state.scores.sixes,
-	]
-		.filter(_.isNumber)
-		.reduce((accumulator, current) => accumulator + current, 0);
+	];
+	const numbers = upperBoard.filter(_.isNumber);
+	return _.sum(numbers);
 };
 
 export const selectUpperBoardBonus = (state: State): number => {
@@ -123,7 +123,7 @@ export const selectUpperBoardBonus = (state: State): number => {
 };
 
 const selectLowerBoardSum = (state: State): number => {
-	return [
+	const lowerBoard = [
 		state.scores.threeOfAKind,
 		state.scores.fourOfAKind,
 		state.scores.fullHouse,
@@ -131,9 +131,9 @@ const selectLowerBoardSum = (state: State): number => {
 		state.scores.largeStraight,
 		state.scores.chance,
 		state.scores.tahtzee,
-	]
-		.filter(_.isNumber)
-		.reduce((accumulator, current) => accumulator + current, 0);
+	];
+	const numbers = lowerBoard.filter(_.isNumber);
+	return _.sum(numbers);
 };
 
 export const selectTotal = (state: State): number => {
