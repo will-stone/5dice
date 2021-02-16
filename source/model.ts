@@ -14,7 +14,7 @@ export interface Scores {
   smallStraight: Score
   largeStraight: Score
   chance: Score
-  tahtzee: Score
+  fiveDice: Score
 }
 
 export type ScoreIds = keyof Scores

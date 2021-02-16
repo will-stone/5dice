@@ -32,7 +32,7 @@ const lowerBoard: { [key: string]: ScoreIds } = {
   R: 'smallStraight',
   T: 'largeStraight',
   Y: 'chance',
-  U: 'tahtzee',
+  U: 'fiveDice',
 }
 
 const App: React.FC = () => {

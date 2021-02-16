@@ -41,7 +41,7 @@ export const initialState: State = {
     smallStraight: null,
     largeStraight: null,
     chance: null,
-    tahtzee: null,
+    fiveDice: null,
   },
   turn: 0,
 }
@@ -132,7 +132,7 @@ const selectLowerBoardSum = (state: State): number => {
     state.scores.smallStraight,
     state.scores.largeStraight,
     state.scores.chance,
-    state.scores.tahtzee,
+    state.scores.fiveDice,
   ]
   const numbers = lowerBoard.filter(_.isNumber)
   return _.sum(numbers)
