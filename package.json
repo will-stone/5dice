@@ -1,6 +1,6 @@
 {
   "name": "5dice",
-  "version": "1.0.0",
+  "version": "0.0.0",
   "description": "Terminal dice game. In no way related to Yahtzee ;-)",
   "license": "MIT",
   "bin": "dist/cli.js",
