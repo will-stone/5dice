@@ -1,13 +1,24 @@
 # 5Dice
 
-A 5 dice game to play in the terminal. Any similaraites with Yahtzee are completely coincidental.
+A 5 dice game to play in the terminal. Any similaraites with Yahtzee are
+completely coincidental.
 
 ## Play
 
 ```bash
-$ npx 5dice
+npx 5dice
 ```
 
 ## Development
 
-Install dependencies
+Install dependencies:
+
+```bash
+npm i
+```
+
+Run in watch mode:
+
+```
+npm start
+```
