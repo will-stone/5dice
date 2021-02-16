@@ -50,7 +50,7 @@ export const calculatePotentialScores = (
     smallStraight: null,
     largeStraight: null,
     chance: null,
-    tahtzee: null,
+    fiveDice: null,
   }
 
   const countByDie = _.countBy(dice)
@@ -84,7 +84,7 @@ export const calculatePotentialScores = (
   score.chance = String(sumOfAllDie)
 
   if (_.includes(countByDie, 5)) {
-    score.tahtzee = String(50)
+    score.fiveDice = String(50)
   }
 
   return score
