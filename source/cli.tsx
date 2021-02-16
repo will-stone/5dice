@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-import React from "react";
-import { render } from "ink";
-import App from "./ui";
+import { render } from 'ink'
+import React from 'react'
 
-render(<App />);
+import App from './ui'
+
+render(<App />)
