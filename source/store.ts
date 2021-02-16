@@ -1,11 +1,10 @@
 import { createAction, createReducer } from '@reduxjs/toolkit'
-import crypto from 'crypto'
 import _ from 'lodash'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
 import type { DieId, Score, ScoreIds, Scores } from './model'
 
-const dieRoll = () => crypto.randomInt(1, 7)
+const dieRoll = () => Math.ceil(Math.random() * 6)
 
 export const roll = createAction('roll')
 export const hold = createAction<DieId>('hold')
