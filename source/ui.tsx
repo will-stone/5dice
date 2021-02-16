@@ -12,6 +12,8 @@ import {
 } from "./store";
 import _ from "lodash";
 import { ScoreIds } from "./model";
+import Link from "ink-link";
+import Gradient from "ink-gradient";
 
 const upperBoard: { [key: string]: ScoreIds } = {
 	1: "ones",
@@ -23,13 +25,13 @@ const upperBoard: { [key: string]: ScoreIds } = {
 };
 
 const lowerBoard: { [key: string]: ScoreIds } = {
-	q: "threeOfAKind",
-	w: "fourOfAKind",
-	e: "fullHouse",
-	r: "smallStraight",
-	t: "largeStraight",
-	y: "chance",
-	u: "tahtzee",
+	Q: "threeOfAKind",
+	W: "fourOfAKind",
+	E: "fullHouse",
+	R: "smallStraight",
+	T: "largeStraight",
+	Y: "chance",
+	U: "tahtzee",
 };
 
 const App: React.FC = () => {
@@ -79,95 +81,112 @@ const App: React.FC = () => {
 	});
 
 	return (
-		<Box alignItems="flex-start">
-			<Box flexDirection="column">
-				<Box
-					justifyContent="space-between"
-					borderColor="white"
-					borderStyle="round"
-					paddingX={1}
-					width={13}
-				>
-					<Text>Turn</Text>
-					<Text>{state.turn}</Text>
+		<Box flexDirection="column" width={54}>
+			<Box>
+				<Box flexDirection="column">
+					<Box
+						justifyContent="space-between"
+						borderColor="white"
+						borderStyle="round"
+						paddingX={1}
+						width={13}
+					>
+						<Text>Turn</Text>
+						<Text>{state.turn}</Text>
+					</Box>
+					<Box
+						borderColor="white"
+						borderStyle="round"
+						paddingX={1}
+						width={13}
+						height={4}
+					>
+						<Text>
+							<Text dimColor>A S D F G</Text>
+							<Newline />
+							{dice.map(([id, { value, held }], index) => (
+								<React.Fragment key={id}>
+									{index !== 0 && <Text> </Text>}
+									<Text inverse={held}>{value}</Text>
+								</React.Fragment>
+							))}
+						</Text>
+					</Box>
 				</Box>
+
 				<Box
 					borderColor="white"
 					borderStyle="round"
+					width={16}
+					flexDirection="column"
 					paddingX={1}
-					width={13}
-					height={4}
 				>
-					<Text>
-						<Text dimColor>a s d f g</Text>
-						<Newline />
-						{dice.map(([id, { value, held }], index) => (
-							<React.Fragment key={id}>
-								{index !== 0 && <Text> </Text>}
-								<Text inverse={held}>{value}</Text>
-							</React.Fragment>
-						))}
-					</Text>
+					{Object.entries(upperBoard).map(([hotkey, id]) => (
+						<Box key={id}>
+							<Text dimColor>{hotkey} </Text>
+							<Text>{_.startCase(id)}</Text>
+							<Spacer />
+							<Box minWidth={2} justifyContent="flex-end">
+								<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
+							</Box>
+						</Box>
+					))}
+					<Box>
+						<Text>────────────</Text>
+					</Box>
+					<Box>
+						<Text>Sum</Text>
+						<Spacer />
+						<Text>{upperBoardSum}</Text>
+					</Box>
+					<Box>
+						<Text>Bonus</Text>
+						<Spacer />
+						<Text>{upperBoardBonus}</Text>
+					</Box>
+				</Box>
+
+				<Box
+					borderColor="white"
+					borderStyle="round"
+					width={25}
+					flexDirection="column"
+					paddingX={1}
+				>
+					{Object.entries(lowerBoard).map(([hotkey, id]) => (
+						<Box key={id}>
+							<Text dimColor>{hotkey} </Text>
+							<Text>{_.startCase(id)}</Text>
+							<Spacer />
+							<Box minWidth={2} justifyContent="flex-end">
+								<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
+							</Box>
+						</Box>
+					))}
+					<Box>
+						<Text>═════════════════════</Text>
+					</Box>
+					<Box>
+						<Text>Total</Text>
+						<Spacer />
+						<Text>{total}</Text>
+					</Box>
 				</Box>
 			</Box>
 
-			<Box
-				borderColor="white"
-				borderStyle="round"
-				width={16}
-				flexDirection="column"
-				paddingX={1}
-			>
-				{Object.entries(upperBoard).map(([hotkey, id]) => (
-					<Box key={id}>
-						<Text dimColor>{hotkey} </Text>
-						<Text>{_.startCase(id)}</Text>
-						<Spacer />
-						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
-						</Box>
-					</Box>
-				))}
-				<Box>
-					<Text>────────────</Text>
-				</Box>
-				<Box>
-					<Text>Sum</Text>
-					<Spacer />
-					<Text>{upperBoardSum}</Text>
-				</Box>
-				<Box>
-					<Text>Bonus</Text>
-					<Spacer />
-					<Text>{upperBoardBonus}</Text>
-				</Box>
-			</Box>
-
-			<Box
-				borderColor="white"
-				borderStyle="round"
-				width={25}
-				flexDirection="column"
-				paddingX={1}
-			>
-				{Object.entries(lowerBoard).map(([hotkey, id]) => (
-					<Box key={id}>
-						<Text dimColor>{hotkey} </Text>
-						<Text>{_.startCase(id)}</Text>
-						<Spacer />
-						<Box minWidth={2} justifyContent="flex-end">
-							<Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
-						</Box>
-					</Box>
-				))}
-				<Box>
-					<Text>═════════════════════</Text>
-				</Box>
-				<Box>
-					<Text>Total</Text>
-					<Spacer />
-					<Text>{total}</Text>
-				</Box>
+			<Box justifyContent="space-between">
+				<Text>
+					<Text dimColor>↵</Text> Roll
+				</Text>
+				<Text>
+					<Text dimColor>H</Text> Help
+				</Text>
+				<Text>
+					<Text dimColor>esc</Text> Quit
+				</Text>
+				<Link url="https://wstone.io" fallback={false}>
+					<Gradient name="atlas">https://wstone.io</Gradient>
+				</Link>
 			</Box>
 		</Box>
 	);
