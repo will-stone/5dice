@@ -16,7 +16,7 @@
     "release": "np",
     "start": "tsc-watch --onSuccess \"node ./dist/cli.js\"",
     "pretest": "npm run build",
-    "test": "exit 1"
+    "test": "exit 0"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
