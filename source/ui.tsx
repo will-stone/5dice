@@ -64,13 +64,13 @@ const App: React.FC = () => {
 		// Scores
 
 		for (const [key, id] of Object.entries(upperBoard)) {
-			if (input === key) {
+			if (input === key.toLowerCase()) {
 				return dispatch(score(id));
 			}
 		}
 
 		for (const [key, id] of Object.entries(lowerBoard)) {
-			if (input === key) {
+			if (input === key.toLowerCase()) {
 				return dispatch(score(id));
 			}
 		}
