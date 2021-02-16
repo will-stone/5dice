@@ -4,4 +4,6 @@ import React from 'react'
 
 import App from './ui'
 
-render(<App />)
+const { clear } = render(<App />)
+
+clear()
