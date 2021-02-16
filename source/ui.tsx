@@ -1,4 +1,7 @@
-import { Box, Newline, Spacer, Text, useApp, useInput } from 'ink'
+/* eslint-disable react/jsx-newline */
+
+import { Box, Spacer, Text, useApp, useInput } from 'ink'
+import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
 import Link from 'ink-link'
 import _ from 'lodash'
@@ -83,118 +86,129 @@ const App: React.FC = () => {
 
   return (
     <Box flexDirection="column" width={54}>
+      <Box justifyContent="center" marginBottom={1}>
+        <Divider dividerColor="grey" title="5Dice" titleColor="brightWhite" />
+      </Box>
+
       <Box>
         <Box flexDirection="column">
-          <Box
-            borderColor="white"
-            borderStyle="round"
-            justifyContent="space-between"
-            paddingX={1}
-            width={13}
-          >
-            <Text>Turn</Text>
-
-            <Text>{turn}</Text>
+          <Box flexDirection="column">
+            <Box>
+              <Text dimColor>╭ Turn ─────╮</Text>
+            </Box>
+            <Box>
+              <Text dimColor>│ </Text>
+              <Text dimColor={turn === 0}>{turn}</Text>
+              <Spacer />
+              <Text dimColor>│</Text>
+            </Box>
+            <Box>
+              <Text dimColor>╰───────────╯</Text>
+            </Box>
           </Box>
 
-          <Box
-            borderColor="white"
-            borderStyle="round"
-            height={4}
-            paddingX={1}
-            width={13}
-          >
-            <Text>
+          <Box flexDirection="column">
+            <Box>
+              <Text dimColor>╭ Dice ─────╮</Text>
+            </Box>
+            <Box>
+              <Text dimColor>│ </Text>
               <Text dimColor>A S D F G</Text>
-
-              <Newline />
-
+              <Text dimColor> │</Text>
+            </Box>
+            <Box>
+              <Text dimColor>│ </Text>
               {dice.map(([id, { value, held }], index) => (
                 <React.Fragment key={id}>
                   {index !== 0 && <Text> </Text>}
 
-                  <Text inverse={held}>{value}</Text>
+                  <Text dimColor={value === 0} inverse={held}>
+                    {value || '-'}
+                  </Text>
                 </React.Fragment>
               ))}
-            </Text>
+              <Text dimColor> │</Text>
+            </Box>
+            <Box>
+              <Text dimColor>╰───────────╯</Text>
+            </Box>
           </Box>
         </Box>
 
-        <Box
-          borderColor="white"
-          borderStyle="round"
-          flexDirection="column"
-          paddingX={1}
-          width={16}
-        >
+        <Box flexDirection="column" width={16}>
+          <Box>
+            <Text dimColor>╭ Upper Board ─╮</Text>
+          </Box>
           {Object.entries(upperBoard).map(([hotkey, id]) => (
             <Box key={id}>
-              <Text dimColor>{hotkey} </Text>
-
-              <Text>{_.startCase(id)}</Text>
-
+              <Text dimColor>│ </Text>
+              <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
+              <Text dimColor={!_.isString(scores[id])}>{_.startCase(id)}</Text>
               <Spacer />
-
               <Box justifyContent="flex-end" minWidth={2}>
-                <Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
+                <Text dimColor={_.isNumber(scores[id])}>{scores[id]}</Text>
               </Box>
+              <Text dimColor> │</Text>
             </Box>
           ))}
-
           <Box>
-            <Text>────────────</Text>
+            <Text dimColor>│ ──────────── │</Text>
           </Box>
-
           <Box>
-            <Text>Sum</Text>
-
+            <Text dimColor>│ </Text>
+            <Text dimColor={upperBoardSum === 0}>Sum</Text>
             <Spacer />
-
-            <Text>{upperBoardSum}</Text>
+            <Text dimColor={upperBoardSum === 0}>{upperBoardSum}</Text>
+            <Text dimColor> │</Text>
           </Box>
-
           <Box>
-            <Text>Bonus</Text>
-
+            <Text dimColor>│ </Text>
+            <Text dimColor={upperBoardBonus < 35}>Bonus</Text>
             <Spacer />
-
-            <Text>{upperBoardBonus}</Text>
+            <Text dimColor={upperBoardBonus < 35}>{upperBoardBonus}</Text>
+            <Text dimColor> │</Text>
+          </Box>
+          <Box>
+            <Text dimColor>╰──────────────╯</Text>
           </Box>
         </Box>
 
-        <Box
-          borderColor="white"
-          borderStyle="round"
-          flexDirection="column"
-          paddingX={1}
-          width={25}
-        >
+        <Box flexDirection="column" width={25}>
+          <Box>
+            <Text dimColor>╭ Lower Board ──────────╮</Text>
+          </Box>
           {Object.entries(lowerBoard).map(([hotkey, id]) => (
             <Box key={id}>
-              <Text dimColor>{hotkey} </Text>
-
-              <Text>{_.startCase(id)}</Text>
-
+              <Text dimColor>│ </Text>
+              <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
+              <Text dimColor={!_.isString(scores[id])}>{_.startCase(id)}</Text>
               <Spacer />
-
               <Box justifyContent="flex-end" minWidth={2}>
-                <Text dimColor={_.isString(scores[id])}>{scores[id]}</Text>
+                <Text dimColor={_.isNumber(scores[id])}>{scores[id]}</Text>
               </Box>
+              <Text dimColor> │</Text>
             </Box>
           ))}
-
           <Box>
-            <Text>═════════════════════</Text>
+            <Text dimColor>│ </Text>
+            <Text dimColor>═════════════════════</Text>
+            <Text dimColor> │</Text>
           </Box>
-
           <Box>
-            <Text>Total</Text>
-
+            <Text dimColor>│ </Text>
+            <Text dimColor={total === 0}>Total</Text>
             <Spacer />
-
-            <Text>{total}</Text>
+            <Text dimColor={total === 0}>{total}</Text>
+            <Text dimColor> │</Text>
+          </Box>
+          <Box>
+            <Text dimColor>╰───────────────────────╯</Text>
           </Box>
         </Box>
+      </Box>
+
+      <Box justifyContent="center" marginTop={1}>
+        <Divider dividerColor="grey" />
       </Box>
 
       <Box justifyContent="space-between">
