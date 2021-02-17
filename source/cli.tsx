@@ -4,6 +4,7 @@ import React from 'react'
 
 import App from './ui'
 
-const { clear } = render(<App />)
+// eslint-disable-next-line no-console
+console.clear()
 
-clear()
+render(<App />)
