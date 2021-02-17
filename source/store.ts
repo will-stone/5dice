@@ -9,6 +9,7 @@ const dieRoll = () => Math.floor(6 * Math.random()) + 1
 export const roll = createAction('roll')
 export const hold = createAction<DieId>('hold')
 export const score = createAction<ScoreIds>('score')
+export const restartGame = createAction('restartGame')
 
 interface State {
   dice: {
@@ -107,6 +108,9 @@ export const reducer = createReducer(initialState, (builder) => {
         state.dice = initialState.dice
         state.turn = 0
       }
+    })
+    .addCase(restartGame, () => {
+      return initialState
     })
 })
 
