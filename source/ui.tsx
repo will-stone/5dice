@@ -20,6 +20,7 @@ import {
   hold,
   initialState,
   reducer,
+  restartGame,
   roll,
   score,
   selectTotal,
@@ -98,15 +99,16 @@ const App: React.FC = () => {
   const total = selectTotal(state)
 
   useInput((input, key) => {
+    const lowerInput = input.toLowerCase()
     // Hold
     if (
-      input === 'a' ||
-      input === 's' ||
-      input === 'd' ||
-      input === 'f' ||
-      input === 'g'
+      lowerInput === 'a' ||
+      lowerInput === 's' ||
+      lowerInput === 'd' ||
+      lowerInput === 'f' ||
+      lowerInput === 'g'
     ) {
-      return dispatch(hold(input))
+      return dispatch(hold(lowerInput))
     }
 
     // Roll
@@ -117,15 +119,19 @@ const App: React.FC = () => {
     // Scores
 
     for (const [hotkey, id] of Object.entries(upperBoard)) {
-      if (input === hotkey.toLowerCase()) {
+      if (lowerInput === hotkey.toLowerCase()) {
         return dispatch(score(id))
       }
     }
 
     for (const [hotkey, id] of Object.entries(lowerBoard)) {
-      if (input === hotkey.toLowerCase()) {
+      if (lowerInput === hotkey.toLowerCase()) {
         return dispatch(score(id))
       }
+    }
+
+    if (lowerInput === 'l') {
+      return dispatch(restartGame())
     }
 
     if (key.escape) {
@@ -134,16 +140,18 @@ const App: React.FC = () => {
   })
 
   return (
-    <Box flexDirection="column" width={54}>
+    <Box flexDirection="column" width={56}>
       <Box justifyContent="center" marginBottom={1}>
         <Divider dividerColor="grey" title="5Dice" titleColor="brightWhite" />
       </Box>
 
-      <Box>
+      <Box justifyContent="space-between">
         <Box flexDirection="column" width={13}>
           <LabelBox label="Turn">
             <Text dimColor={turn === 0}>{turn}</Text>
           </LabelBox>
+
+          <Box height={1} />
 
           <LabelBox label="Dice">
             <Text dimColor>A S D F G</Text>
@@ -206,7 +214,7 @@ const App: React.FC = () => {
         </Box>
       </Box>
 
-      <Box justifyContent="center" marginTop={1}>
+      <Box justifyContent="center">
         <Divider dividerColor="grey" />
       </Box>
 
@@ -214,6 +222,11 @@ const App: React.FC = () => {
         <Box>
           <Text dimColor>↵ </Text>
           <Text>Roll</Text>
+        </Box>
+
+        <Box>
+          <Text dimColor>L </Text>
+          <Text>Restart</Text>
         </Box>
 
         <Box>
