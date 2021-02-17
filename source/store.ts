@@ -45,10 +45,14 @@ export const initialState: State = {
   turn: 0,
 }
 
+const selectIsGameOver = (state: State) => {
+  return Object.values(state.scores).every((s) => _.isNumber(s))
+}
+
 export const reducer = createReducer(initialState, (builder) => {
   builder
     .addCase(roll, (state) => {
-      if (state.turn < 3) {
+      if (state.turn < 3 && !selectIsGameOver(state)) {
         state.turn = state.turn + 1
 
         for (const die of Object.values(state.dice)) {
