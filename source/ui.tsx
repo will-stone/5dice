@@ -172,14 +172,12 @@ const App: React.FC = () => {
               </Box>
             ))}
             <Text dimColor>────────────</Text>
-            <Box flexGrow={1}>
+            <Box flexGrow={1} justifyContent="space-between">
               <Text dimColor={upperBoardSum === 0}>Sum</Text>
-              <Spacer />
               <Text dimColor={upperBoardSum === 0}>{upperBoardSum}</Text>
             </Box>
-            <Box flexGrow={1}>
+            <Box flexGrow={1} justifyContent="space-between">
               <Text dimColor={upperBoardBonus < 35}>Bonus</Text>
-              <Spacer />
               <Text dimColor={upperBoardBonus < 35}>{upperBoardBonus}</Text>
             </Box>
           </LabelBox>
@@ -200,9 +198,8 @@ const App: React.FC = () => {
               </Box>
             ))}
             <Text dimColor>═════════════════════</Text>
-            <Box flexGrow={1}>
+            <Box flexGrow={1} justifyContent="space-between">
               <Text dimColor={total === 0}>Total</Text>
-              <Spacer />
               <Text dimColor={total === 0}>{total}</Text>
             </Box>
           </LabelBox>
@@ -214,17 +211,20 @@ const App: React.FC = () => {
       </Box>
 
       <Box justifyContent="space-between">
-        <Text>
-          <Text dimColor>↵</Text> Roll
-        </Text>
+        <Box>
+          <Text dimColor>↵ </Text>
+          <Text>Roll</Text>
+        </Box>
 
-        <Text>
-          <Text dimColor>H</Text> Help
-        </Text>
+        <Box>
+          <Text dimColor>H </Text>
+          <Text>Help</Text>
+        </Box>
 
-        <Text>
-          <Text dimColor>esc</Text> Quit
-        </Text>
+        <Box>
+          <Text dimColor>esc </Text>
+          <Text>Quit</Text>
+        </Box>
 
         <Link fallback={false} url="https://wstone.io">
           <Gradient name="atlas">https://wstone.io</Gradient>
