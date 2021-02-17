@@ -4,7 +4,7 @@ import _ from 'lodash'
 import { calculatePotentialScores } from './calculate-potential-scores'
 import type { DieId, Score, ScoreIds, Scores } from './model'
 
-const dieRoll = () => Math.ceil(Math.random() * 6)
+const dieRoll = () => Math.floor(6 * Math.random()) + 1
 
 export const roll = createAction('roll')
 export const hold = createAction<DieId>('hold')
