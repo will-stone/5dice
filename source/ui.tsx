@@ -214,7 +214,7 @@ const App: React.FC = () => {
         </Box>
       </Box>
 
-      <Box justifyContent="center">
+      <Box justifyContent="center" marginTop={1}>
         <Divider dividerColor="grey" />
       </Box>
 
