@@ -1,4 +1,4 @@
-import { createAction, createReducer } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
 import os from 'os'
 import path from 'path'
@@ -8,11 +8,6 @@ import { calculatePotentialScores } from './calculate-potential-scores'
 import type { DieId, Score, ScoreIds, Scores } from './model'
 
 const dieRoll = () => Math.floor(6 * Math.random()) + 1
-
-export const roll = createAction('roll')
-export const hold = createAction<DieId>('hold')
-export const score = createAction<ScoreIds>('score')
-export const restartGame = createAction('restartGame')
 
 interface State {
   dice: {
@@ -92,9 +87,11 @@ export const selectTotal = (state: State): number => {
   ])
 }
 
-export const reducer = createReducer(initialState, (builder) => {
-  builder
-    .addCase(roll, (state) => {
+export const store = createSlice({
+  name: 'ui',
+  initialState,
+  reducers: {
+    roll: (state) => {
       if (state.turn < 3 && !selectIsGameOver(state)) {
         state.turn = state.turn + 1
 
@@ -127,13 +124,15 @@ export const reducer = createReducer(initialState, (builder) => {
           }
         }
       }
-    })
-    .addCase(hold, (state, action) => {
+    },
+
+    hold: (state, action: PayloadAction<DieId>) => {
       if (state.turn > 0) {
         state.dice[action.payload].held = !state.dice[action.payload].held
       }
-    })
-    .addCase(score, (state, action) => {
+    },
+
+    score: (state, action: PayloadAction<ScoreIds>) => {
       const potential = _.isString(state.scores[action.payload])
       if (potential) {
         state.scores[action.payload] = Number(state.scores[action.payload])
@@ -156,8 +155,8 @@ export const reducer = createReducer(initialState, (builder) => {
           topScores: [{ score: selectTotal(state) }],
         })
       }
-    })
-    .addCase(restartGame, () => {
-      return initialState
-    })
+    },
+
+    restartGame: () => initialState,
+  },
 })
