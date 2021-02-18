@@ -5,19 +5,12 @@ import path from 'path'
 import writeJsonFile from 'write-json-file'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
-import type { DieId, Score, ScoreIds, Scores } from './model'
+import type { DieId, Score, ScoreIds, State } from './model'
+import { selectIsGameOver, selectTotal } from './selectors'
 
 const dieRoll = () => Math.floor(6 * Math.random()) + 1
 
-interface State {
-  dice: {
-    [key in DieId]: { value: number; held: boolean }
-  }
-  scores: Scores
-  turn: number
-}
-
-export const initialState: State = {
+const initialState: State = {
   dice: {
     a: { value: 0, held: false },
     s: { value: 0, held: false },
@@ -44,50 +37,7 @@ export const initialState: State = {
   turn: 0,
 }
 
-const selectIsGameOver = (state: State) => {
-  return Object.values(state.scores).every((s) => _.isNumber(s))
-}
-
-export const selectUpperBoardSum = (state: State): number => {
-  const upperBoard = [
-    state.scores.ones,
-    state.scores.twos,
-    state.scores.threes,
-    state.scores.fours,
-    state.scores.fives,
-    state.scores.sixes,
-  ]
-  const numbers = upperBoard.filter(_.isNumber)
-  return _.sum(numbers)
-}
-
-export const selectUpperBoardBonus = (state: State): number => {
-  return selectUpperBoardSum(state) >= 63 ? 35 : 0
-}
-
-const selectLowerBoardSum = (state: State): number => {
-  const lowerBoard = [
-    state.scores.threeOfAKind,
-    state.scores.fourOfAKind,
-    state.scores.fullHouse,
-    state.scores.smallStraight,
-    state.scores.largeStraight,
-    state.scores.chance,
-    state.scores.fiveDice,
-  ]
-  const numbers = lowerBoard.filter(_.isNumber)
-  return _.sum(numbers)
-}
-
-export const selectTotal = (state: State): number => {
-  return _.sum([
-    selectUpperBoardSum(state),
-    selectUpperBoardBonus(state),
-    selectLowerBoardSum(state),
-  ])
-}
-
-export const store = createSlice({
+const store = createSlice({
   name: 'ui',
   initialState,
   reducers: {
@@ -160,3 +110,6 @@ export const store = createSlice({
     restartGame: () => initialState,
   },
 })
+
+const { reducer, actions } = store
+export { initialState, reducer, actions }

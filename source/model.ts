@@ -20,3 +20,11 @@ export interface Scores {
 export type ScoreIds = keyof Scores
 
 export type DieId = 'a' | 'd' | 'f' | 'g' | 's'
+
+export interface State {
+  dice: {
+    [key in DieId]: { value: number; held: boolean }
+  }
+  scores: Scores
+  turn: number
+}
