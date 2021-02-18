@@ -17,12 +17,11 @@ import React, { useEffect, useReducer, useRef, useState } from 'react'
 
 import { ScoreIds } from './model'
 import {
-  initialState,
   selectTotal,
   selectUpperBoardBonus,
   selectUpperBoardSum,
-  store,
-} from './store'
+} from './selectors'
+import { actions, initialState, reducer } from './store'
 
 const upperBoard: { [key: string]: ScoreIds } = {
   1: 'ones',
@@ -85,7 +84,7 @@ const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
 }
 
 const App: React.FC = () => {
-  const [state, dispatch] = useReducer(store.reducer, initialState)
+  const [state, dispatch] = useReducer(reducer, initialState)
   const dice = Object.entries(state.dice)
   const { scores, turn } = state
   const { exit } = useApp()
@@ -104,30 +103,30 @@ const App: React.FC = () => {
       lowerInput === 'f' ||
       lowerInput === 'g'
     ) {
-      return dispatch(store.actions.hold(lowerInput))
+      return dispatch(actions.hold(lowerInput))
     }
 
     // Roll
     if (key.return) {
-      return dispatch(store.actions.roll())
+      return dispatch(actions.roll())
     }
 
     // Scores
 
     for (const [hotkey, id] of Object.entries(upperBoard)) {
       if (lowerInput === hotkey.toLowerCase()) {
-        return dispatch(store.actions.score(id))
+        return dispatch(actions.score(id))
       }
     }
 
     for (const [hotkey, id] of Object.entries(lowerBoard)) {
       if (lowerInput === hotkey.toLowerCase()) {
-        return dispatch(store.actions.score(id))
+        return dispatch(actions.score(id))
       }
     }
 
     if (lowerInput === 'l') {
-      return dispatch(store.actions.restartGame())
+      return dispatch(actions.restartGame())
     }
 
     if (key.escape) {
