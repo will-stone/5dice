@@ -53,7 +53,8 @@
     "ink-gradient": "^2.0.0",
     "ink-link": "^2.0.0",
     "lodash": "^4.17.20",
-    "react": "^16.14.0"
+    "react": "^16.14.0",
+    "write-json-file": "^4.3.0"
   },
   "devDependencies": {
     "@types/ink-divider": "^2.0.1",
