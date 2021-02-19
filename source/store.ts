@@ -10,7 +10,7 @@ import { selectIsGameOver, selectTotal } from './selectors'
 
 const dieRoll = () => Math.floor(6 * Math.random()) + 1
 
-const initialState: State = {
+export const initialState: State = {
   dice: {
     a: { value: 0, held: false },
     s: { value: 0, held: false },
@@ -112,4 +112,3 @@ const store = createSlice({
 })
 
 export const { reducer, actions } = store
-export { initialState }
