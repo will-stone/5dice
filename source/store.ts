@@ -111,5 +111,5 @@ const store = createSlice({
   },
 })
 
-const { reducer, actions } = store
-export { initialState, reducer, actions }
+export const { reducer, actions } = store
+export { initialState }
