@@ -27,4 +27,5 @@ export interface State {
   }
   scores: Scores
   turn: number
+  topScores: { score: number }[]
 }
