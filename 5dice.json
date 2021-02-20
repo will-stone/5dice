@@ -1,0 +1,45 @@
+{
+  "dice": {
+    "a": {
+      "value": 0,
+      "held": false
+    },
+    "s": {
+      "value": 0,
+      "held": false
+    },
+    "d": {
+      "value": 0,
+      "held": false
+    },
+    "f": {
+      "value": 0,
+      "held": false
+    },
+    "g": {
+      "value": 0,
+      "held": false
+    }
+  },
+  "scores": {
+    "ones": null,
+    "twos": null,
+    "threes": null,
+    "fours": null,
+    "fives": null,
+    "sixes": null,
+    "threeOfAKind": null,
+    "fourOfAKind": null,
+    "fullHouse": null,
+    "smallStraight": null,
+    "largeStraight": null,
+    "chance": null,
+    "fiveDice": null
+  },
+  "turn": 0,
+  "topScores": [
+    {
+      "score": 0
+    }
+  ]
+}

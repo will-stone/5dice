@@ -1,6 +1,5 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import os from 'os'
 import path from 'path'
 import writeJsonFile from 'write-json-file'
 
@@ -35,6 +34,7 @@ export const initialState: State = {
     fiveDice: null,
   },
   turn: 0,
+  topScores: [],
 }
 
 const store = createSlice({
@@ -96,18 +96,23 @@ const store = createSlice({
           }
         }
 
+        // Reset
         state.dice = initialState.dice
-        state.turn = 0
+        state.turn = initialState.turn
       }
 
       if (selectIsGameOver(state)) {
-        writeJsonFile(path.join(os.homedir(), '5dice.json'), {
-          topScores: [{ score: selectTotal(state) }],
-        })
+        state.topScores = [{ score: selectTotal(state) }]
+
+        writeJsonFile(path.join('.', '5dice.json'), current(state))
       }
     },
 
-    restartGame: () => initialState,
+    restartGame: (state) => {
+      state.dice = initialState.dice
+      state.scores = initialState.scores
+      state.turn = initialState.turn
+    },
   },
 })
 
