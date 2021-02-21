@@ -42,8 +42,15 @@ export class GameEngine {
 
   topScores = initialState.topScores
 
-  constructor() {
+  constructor(savedState?: State) {
     makeAutoObservable(this, {}, { deep: true })
+
+    if (savedState) {
+      this.turn = savedState.turn
+      this.dice = savedState.dice
+      this.scores = savedState.scores
+      this.topScores = savedState.topScores
+    }
   }
 
   /**
@@ -90,7 +97,7 @@ export class GameEngine {
     }
 
     if (this.isGameOver) {
-      this.topScores = [{ score: this.total }]
+      this.topScores.push({ timestamp: Date.now(), score: this.total })
     }
   }
 
@@ -139,7 +146,3 @@ export class GameEngine {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
   }
 }
-
-const game = new GameEngine()
-
-export default game
