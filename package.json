@@ -24,7 +24,8 @@
     "release": "np",
     "start": "tsc-watch --onSuccess \"node ./dist/cli.js\"",
     "pretest": "npm run build",
-    "test": "exit 0"
+    "test": "exit 0",
+    "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
