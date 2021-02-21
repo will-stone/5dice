@@ -42,9 +42,12 @@ export class GameEngine {
   topScores = initialState.topScores
 
   constructor() {
-    makeAutoObservable(this)
+    makeAutoObservable(this, {}, { deep: true })
   }
 
+  /**
+   * Advance turn and roll all unheld dice
+   */
   roll(): void {
     if (this.turn < 3 && !this.isGameOver) {
       this.turn = this.turn + 1
@@ -56,27 +59,8 @@ export class GameEngine {
       }
 
       const diceValues = Object.values(this.dice).map((d) => d.value)
-      const potentialScores = calculatePotentialScores(diceValues)
 
-      // Determines if you cannot score by seeing if every potential score
-      // is already taken.
-      const cannotScore = (Object.entries(potentialScores) as [
-        ScoreIds,
-        Score,
-      ][])
-        .filter(([, value]) => !_.isNull(value))
-        .every(([id]) => _.isNumber(this.scores[id]))
-
-      for (const [id, value] of Object.entries(this.scores) as [
-        ScoreIds,
-        Score,
-      ][]) {
-        const potentialScore = potentialScores[id]
-        // Set potential score if score not set
-        if (!_.isNumber(value)) {
-          this.scores[id] = cannotScore ? '0' : potentialScore
-        }
-      }
+      this.scores = calculatePotentialScores(diceValues, this.scores)
     }
   }
 
@@ -87,9 +71,11 @@ export class GameEngine {
   }
 
   score(scoreId: ScoreIds): void {
-    const potential = _.isString(this.scores[scoreId])
-    if (potential) {
+    const isPotential = _.isString(this.scores[scoreId])
+
+    if (isPotential) {
       this.scores[scoreId] = Number(this.scores[scoreId])
+
       // Reset for next turn
       for (const [id, value] of Object.entries(this.scores) as [
         ScoreIds,
