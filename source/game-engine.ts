@@ -2,7 +2,8 @@ import _ from 'lodash'
 import { makeAutoObservable } from 'mobx'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
-import type { DieId, Score, ScoreIds, State } from './model'
+import type { DieId, ScoreIds, State } from './model'
+import { toPairs } from './utils'
 
 const initialState: State = {
   dice: {
@@ -77,10 +78,7 @@ export class GameEngine {
       this.scores[scoreId] = Number(this.scores[scoreId])
 
       // Reset for next turn
-      for (const [id, value] of Object.entries(this.scores) as [
-        ScoreIds,
-        Score,
-      ][]) {
+      for (const [id, value] of toPairs(this.scores)) {
         if (_.isString(value)) {
           this.scores[id] = null
         }

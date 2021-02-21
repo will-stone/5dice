@@ -1,7 +1,8 @@
 import produce, { setAutoFreeze } from 'immer'
 import _ from 'lodash'
 
-import type { ScoreIds, Scores } from './model'
+import type { Scores } from './model'
+import { toKeys } from './utils'
 
 // Immer returns frozen objects which are not compatible with MobX updates. This
 // turns off the freeze functionality.
@@ -112,7 +113,7 @@ export const calculatePotentialScores = (
     )
 
     if (!canScore) {
-      for (const id of Object.keys(draft) as ScoreIds[]) {
+      for (const id of toKeys(draft)) {
         if (!_.isNumber(draft[id])) {
           draft[id] = '0'
         }
