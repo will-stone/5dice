@@ -1,15 +1,10 @@
-import { createSlice, current, PayloadAction } from '@reduxjs/toolkit'
 import _ from 'lodash'
-import path from 'path'
-import writeJsonFile from 'write-json-file'
+import { makeAutoObservable } from 'mobx'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
 import type { DieId, Score, ScoreIds, State } from './model'
-import { selectIsGameOver, selectTotal } from './selectors'
 
-const dieRoll = () => Math.floor(6 * Math.random()) + 1
-
-export const initialState: State = {
+const initialState: State = {
   dice: {
     a: { value: 0, held: false },
     s: { value: 0, held: false },
@@ -37,83 +32,130 @@ export const initialState: State = {
   topScores: [],
 }
 
-const store = createSlice({
-  name: 'ui',
-  initialState,
-  reducers: {
-    roll: (state) => {
-      if (state.turn < 3 && !selectIsGameOver(state)) {
-        state.turn = state.turn + 1
+export class Game {
+  turn = initialState.turn
 
-        for (const die of Object.values(state.dice)) {
-          if (!die.held) {
-            die.value = dieRoll()
-          }
-        }
+  dice = initialState.dice
 
-        const diceValues = Object.values(state.dice).map((d) => d.value)
-        const potentialScores = calculatePotentialScores(diceValues)
+  scores = initialState.scores
 
-        // Determines if you cannot score by seeing if every potential score
-        // is already taken.
-        const cannotScore = (Object.entries(potentialScores) as [
-          ScoreIds,
-          Score,
-        ][])
-          .filter(([, value]) => !_.isNull(value))
-          .every(([id]) => _.isNumber(state.scores[id]))
+  topScores = initialState.topScores
 
-        for (const [id, value] of Object.entries(state.scores) as [
-          ScoreIds,
-          Score,
-        ][]) {
-          const potentialScore = potentialScores[id]
-          // Set potential score if score not set
-          if (!_.isNumber(value)) {
-            state.scores[id] = cannotScore ? '0' : potentialScore
-          }
+  constructor() {
+    makeAutoObservable(this)
+  }
+
+  roll(): void {
+    if (this.turn < 3 && !this.isGameOver) {
+      this.turn = this.turn + 1
+
+      for (const die of Object.values(this.dice)) {
+        if (!die.held) {
+          die.value = Math.floor(6 * Math.random()) + 1
         }
       }
-    },
 
-    hold: (state, action: PayloadAction<DieId>) => {
-      if (state.turn > 0) {
-        state.dice[action.payload].held = !state.dice[action.payload].held
-      }
-    },
+      const diceValues = Object.values(this.dice).map((d) => d.value)
+      const potentialScores = calculatePotentialScores(diceValues)
 
-    score: (state, action: PayloadAction<ScoreIds>) => {
-      const potential = _.isString(state.scores[action.payload])
-      if (potential) {
-        state.scores[action.payload] = Number(state.scores[action.payload])
-        // Reset for next turn
-        for (const [id, value] of Object.entries(state.scores) as [
-          ScoreIds,
-          Score,
-        ][]) {
-          if (_.isString(value)) {
-            state.scores[id] = null
-          }
+      // Determines if you cannot score by seeing if every potential score
+      // is already taken.
+      const cannotScore = (Object.entries(potentialScores) as [
+        ScoreIds,
+        Score,
+      ][])
+        .filter(([, value]) => !_.isNull(value))
+        .every(([id]) => _.isNumber(this.scores[id]))
+
+      for (const [id, value] of Object.entries(this.scores) as [
+        ScoreIds,
+        Score,
+      ][]) {
+        const potentialScore = potentialScores[id]
+        // Set potential score if score not set
+        if (!_.isNumber(value)) {
+          this.scores[id] = cannotScore ? '0' : potentialScore
         }
+      }
+    }
+  }
 
-        // Reset
-        state.dice = initialState.dice
-        state.turn = initialState.turn
+  hold(dieId: DieId): void {
+    if (this.turn > 0) {
+      this.dice[dieId].held = !this.dice[dieId].held
+    }
+  }
+
+  score(scoreId: ScoreIds): void {
+    const potential = _.isString(this.scores[scoreId])
+    if (potential) {
+      this.scores[scoreId] = Number(this.scores[scoreId])
+      // Reset for next turn
+      for (const [id, value] of Object.entries(this.scores) as [
+        ScoreIds,
+        Score,
+      ][]) {
+        if (_.isString(value)) {
+          this.scores[id] = null
+        }
       }
 
-      if (selectIsGameOver(state)) {
-        state.topScores = [{ score: selectTotal(state) }]
+      // Reset
+      this.dice = initialState.dice
+      this.turn = initialState.turn
+    }
 
-        writeJsonFile(path.join('.', '5dice.json'), current(state))
-      }
-    },
+    if (this.isGameOver) {
+      this.topScores = [{ score: this.total }]
+    }
+  }
 
-    restartGame: (state) => {
-      state.dice = initialState.dice
-      state.scores = initialState.scores
-      state.turn = initialState.turn
-    },
-  },
-})
+  restart(): void {
+    this.dice = initialState.dice
+    this.scores = initialState.scores
+    this.turn = initialState.turn
+  }
 
-export const { reducer, actions } = store
+  get isGameOver(): boolean {
+    return Object.values(this.scores).every((s) => _.isNumber(s))
+  }
+
+  get upperBoardSum(): number {
+    const upperBoard = [
+      this.scores.ones,
+      this.scores.twos,
+      this.scores.threes,
+      this.scores.fours,
+      this.scores.fives,
+      this.scores.sixes,
+    ]
+    const numbers = upperBoard.filter(_.isNumber)
+    return _.sum(numbers)
+  }
+
+  get upperBoardBonus(): number {
+    return this.upperBoardSum >= 63 ? 35 : 0
+  }
+
+  get lowerBoardSum(): number {
+    const lowerBoard = [
+      this.scores.threeOfAKind,
+      this.scores.fourOfAKind,
+      this.scores.fullHouse,
+      this.scores.smallStraight,
+      this.scores.largeStraight,
+      this.scores.chance,
+      this.scores.fiveDice,
+    ]
+    const numbers = lowerBoard.filter(_.isNumber)
+    return _.sum(numbers)
+  }
+
+  get total(): number {
+    return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
+  }
+}
+
+const game = new Game()
+
+export default game
