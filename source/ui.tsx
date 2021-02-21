@@ -133,7 +133,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
       <Box justifyContent="space-between">
         <Box flexDirection="column" width={13}>
           <LabelBox label="Turn">
-            <Text dimColor={turn === 0}>{turn}</Text>
+            <Text dimColor={turn === 0}>{turn || '-'}</Text>
           </LabelBox>
 
           <Box height={1} />
