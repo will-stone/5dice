@@ -53,6 +53,8 @@
     "ink-gradient": "^2.0.0",
     "ink-link": "^2.0.0",
     "lodash": "^4.17.20",
+    "mobx": "^6.1.7",
+    "mobx-react-lite": "^3.2.0",
     "react": "^16.14.0",
     "write-json-file": "^4.3.0"
   },

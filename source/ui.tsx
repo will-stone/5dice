@@ -13,15 +13,11 @@ import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
 import Link from 'ink-link'
 import _ from 'lodash'
-import React, { useEffect, useReducer, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 import { ScoreIds } from './model'
-import {
-  selectTotal,
-  selectUpperBoardBonus,
-  selectUpperBoardSum,
-} from './selectors'
-import { actions, initialState, reducer } from './store'
+import { observer } from './observer'
+import type { Game } from './store'
 
 const upperBoard: { [key: string]: ScoreIds } = {
   1: 'ones',
@@ -83,15 +79,9 @@ const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
   return <Box ref={reference} />
 }
 
-const App: React.FC = () => {
-  const [state, dispatch] = useReducer(reducer, initialState)
-  const dice = Object.entries(state.dice)
-  const { scores, turn } = state
+const App: React.FC<{ game: Game }> = observer(({ game }) => {
+  const { scores, turn, upperBoardSum, upperBoardBonus, total, dice } = game
   const { exit } = useApp()
-
-  const upperBoardSum = selectUpperBoardSum(state)
-  const upperBoardBonus = selectUpperBoardBonus(state)
-  const total = selectTotal(state)
 
   useInput((input, key) => {
     const lowerInput = input.toLowerCase()
@@ -103,30 +93,30 @@ const App: React.FC = () => {
       lowerInput === 'f' ||
       lowerInput === 'g'
     ) {
-      return dispatch(actions.hold(lowerInput))
+      return game.hold(lowerInput)
     }
 
     // Roll
     if (key.return) {
-      return dispatch(actions.roll())
+      return game.roll()
     }
 
     // Scores
 
     for (const [hotkey, id] of Object.entries(upperBoard)) {
       if (lowerInput === hotkey.toLowerCase()) {
-        return dispatch(actions.score(id))
+        return game.score(id)
       }
     }
 
     for (const [hotkey, id] of Object.entries(lowerBoard)) {
       if (lowerInput === hotkey.toLowerCase()) {
-        return dispatch(actions.score(id))
+        return game.score(id)
       }
     }
 
     if (lowerInput === 'l') {
-      return dispatch(actions.restartGame())
+      return game.restart()
     }
 
     if (key.escape) {
@@ -151,7 +141,7 @@ const App: React.FC = () => {
           <LabelBox label="Dice">
             <Text dimColor>A S D F G</Text>
             <Box flexGrow={1} justifyContent="space-between">
-              {dice.map(([id, { value, held }]) => (
+              {Object.entries(dice).map(([id, { value, held }]) => (
                 <Text key={id} dimColor={value === 0} inverse={held}>
                   {value || '-'}
                 </Text>
@@ -240,6 +230,6 @@ const App: React.FC = () => {
       </Box>
     </Box>
   )
-}
+})
 
 export default App
