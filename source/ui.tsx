@@ -15,9 +15,9 @@ import Link from 'ink-link'
 import _ from 'lodash'
 import React, { useEffect, useRef, useState } from 'react'
 
+import type { GameEngine } from './game-engine'
 import { ScoreIds } from './model'
 import { observer } from './observer'
-import type { Game } from './store'
 
 const upperBoard: { [key: string]: ScoreIds } = {
   1: 'ones',
@@ -79,7 +79,7 @@ const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
   return <Box ref={reference} />
 }
 
-const App: React.FC<{ game: Game }> = observer(({ game }) => {
+const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   const { scores, turn, upperBoardSum, upperBoardBonus, total, dice } = game
   const { exit } = useApp()
 
