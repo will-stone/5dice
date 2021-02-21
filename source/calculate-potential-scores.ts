@@ -1,6 +1,11 @@
+import produce, { setAutoFreeze } from 'immer'
 import _ from 'lodash'
 
-import type { ScoreIds } from './model'
+import type { ScoreIds, Scores } from './model'
+
+// Immer returns frozen objects which are not compatible with MobX updates. This
+// turns off the freeze functionality.
+setAutoFreeze(false)
 
 const isStraight = (array: number[], size: number) => {
   const uniqSortedArray = _.uniq(array).sort()
@@ -35,57 +40,83 @@ const isStraight = (array: number[], size: number) => {
 
 export const calculatePotentialScores = (
   dice: number[],
-): { [key in ScoreIds]: string | null } => {
-  const score: { [key in ScoreIds]: string | null } = {
-    ones: null,
-    twos: null,
-    threes: null,
-    fours: null,
-    fives: null,
-    sixes: null,
+  scores: Scores,
+): Scores => {
+  return produce(scores, (draft) => {
+    const countByDie = _.countBy(dice)
+    const sumOfAllDie = _.sum(dice)
 
-    threeOfAKind: null,
-    fourOfAKind: null,
-    fullHouse: null,
-    smallStraight: null,
-    largeStraight: null,
-    chance: null,
-    fiveDice: null,
-  }
+    if (!_.isNumber(scores.ones)) {
+      draft.ones = countByDie['1'] ? String(countByDie['1']) : null
+    }
 
-  const countByDie = _.countBy(dice)
-  const sumOfAllDie = _.sum(dice)
+    if (!_.isNumber(scores.twos)) {
+      draft.twos = countByDie['2'] ? String(countByDie['2'] * 2) : null
+    }
 
-  score.ones = countByDie['1'] ? String(Number(countByDie['1'])) : null
-  score.twos = countByDie['2'] ? String(countByDie['2'] * 2) : null
-  score.threes = countByDie['3'] ? String(countByDie['3'] * 3) : null
-  score.fours = countByDie['4'] ? String(countByDie['4'] * 4) : null
-  score.fives = countByDie['5'] ? String(countByDie['5'] * 5) : null
-  score.sixes = countByDie['6'] ? String(countByDie['6'] * 6) : null
+    if (!_.isNumber(scores.threes)) {
+      draft.threes = countByDie['3'] ? String(countByDie['3'] * 3) : null
+    }
 
-  if (_.some(countByDie, (count) => count >= 4)) {
-    score.threeOfAKind = String(sumOfAllDie)
-    score.fourOfAKind = String(sumOfAllDie)
-  } else if (_.some(countByDie, (count) => count === 3)) {
-    score.threeOfAKind = String(sumOfAllDie)
-  }
+    if (!_.isNumber(scores.fours)) {
+      draft.fours = countByDie['4'] ? String(countByDie['4'] * 4) : null
+    }
 
-  if (_.includes(countByDie, 2) && _.includes(countByDie, 3)) {
-    score.fullHouse = String(25)
-  }
+    if (!_.isNumber(scores.fives)) {
+      draft.fives = countByDie['5'] ? String(countByDie['5'] * 5) : null
+    }
 
-  if (isStraight(dice, 5)) {
-    score.smallStraight = String(30)
-    score.largeStraight = String(40)
-  } else if (isStraight(dice, 4)) {
-    score.smallStraight = String(30)
-  }
+    if (!_.isNumber(scores.sixes)) {
+      draft.sixes = countByDie['6'] ? String(countByDie['6'] * 6) : null
+    }
 
-  score.chance = String(sumOfAllDie)
+    if (!_.isNumber(scores.threeOfAKind)) {
+      draft.threeOfAKind =
+        _.some(countByDie, (count) => count >= 4) ||
+        _.some(countByDie, (count) => count === 3)
+          ? String(sumOfAllDie)
+          : null
+    }
 
-  if (_.includes(countByDie, 5)) {
-    score.fiveDice = String(50)
-  }
+    if (!_.isNumber(scores.fourOfAKind)) {
+      draft.fourOfAKind = _.some(countByDie, (count) => count >= 4)
+        ? String(sumOfAllDie)
+        : null
+    }
 
-  return score
+    if (!_.isNumber(scores.fullHouse)) {
+      draft.fullHouse =
+        _.includes(countByDie, 2) && _.includes(countByDie, 3)
+          ? String(25)
+          : null
+    }
+
+    if (!_.isNumber(scores.smallStraight)) {
+      draft.smallStraight = isStraight(dice, 4) ? String(30) : null
+    }
+
+    if (!_.isNumber(scores.largeStraight)) {
+      draft.largeStraight = isStraight(dice, 5) ? String(40) : null
+    }
+
+    if (!_.isNumber(scores.chance)) {
+      draft.chance = String(sumOfAllDie)
+    }
+
+    if (!_.isNumber(scores.fiveDice)) {
+      draft.fiveDice = _.includes(countByDie, 5) ? String(50) : null
+    }
+
+    const canScore = Object.entries(draft).some(([, value]) =>
+      _.isString(value),
+    )
+
+    if (!canScore) {
+      for (const id of Object.keys(draft) as ScoreIds[]) {
+        if (!_.isNumber(draft[id])) {
+          draft[id] = '0'
+        }
+      }
+    }
+  })
 }
