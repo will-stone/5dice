@@ -54,6 +54,7 @@
     "ink-divider": "^3.0.0",
     "ink-gradient": "^2.0.0",
     "ink-link": "^2.0.0",
+    "jsonfile": "^6.1.0",
     "lodash": "^4.17.20",
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",
@@ -63,6 +64,7 @@
   "devDependencies": {
     "@types/ink-divider": "^2.0.1",
     "@types/ink-gradient": "^2.0.1",
+    "@types/jsonfile": "^6.0.0",
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.28",
     "@types/react": "^17.0.1",

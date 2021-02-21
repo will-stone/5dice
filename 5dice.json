@@ -1,4 +1,5 @@
 {
+  "turn": 0,
   "dice": {
     "a": {
       "value": 0,
@@ -23,23 +24,18 @@
   },
   "scores": {
     "ones": null,
-    "twos": null,
-    "threes": null,
+    "twos": 2,
+    "threes": 6,
     "fours": null,
     "fives": null,
-    "sixes": null,
-    "threeOfAKind": null,
+    "sixes": 12,
+    "threeOfAKind": 22,
     "fourOfAKind": null,
     "fullHouse": null,
-    "smallStraight": null,
-    "largeStraight": null,
-    "chance": null,
+    "smallStraight": 30,
+    "largeStraight": 40,
+    "chance": 14,
     "fiveDice": null
   },
-  "turn": 0,
-  "topScores": [
-    {
-      "score": 0
-    }
-  ]
+  "topScores": []
 }
