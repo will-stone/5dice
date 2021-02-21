@@ -32,7 +32,7 @@ const initialState: State = {
   topScores: [],
 }
 
-export class Game {
+export class GameEngine {
   turn = initialState.turn
 
   dice = initialState.dice
@@ -156,6 +156,6 @@ export class Game {
   }
 }
 
-const game = new Game()
+const game = new GameEngine()
 
 export default game

@@ -2,7 +2,7 @@
 import { render } from 'ink'
 import React from 'react'
 
-import game from './store'
+import game from './game-engine'
 import App from './ui'
 
 // eslint-disable-next-line no-console
