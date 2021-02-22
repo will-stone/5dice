@@ -1,11 +1,13 @@
 import _ from 'lodash'
-import { makeAutoObservable } from 'mobx'
+import { flow, makeAutoObservable } from 'mobx'
+import sleep from 'tings/sleep'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
 import type { DieId, ScoreIds, State } from './model'
-import { toPairs } from './utils'
+import { d6, toPairs } from './utils'
 
 const initialState: State = {
+  rolling: false,
   dice: {
     a: { value: 0, held: false },
     s: { value: 0, held: false },
@@ -34,6 +36,8 @@ const initialState: State = {
 }
 
 export class GameEngine {
+  rolling = initialState.rolling
+
   turn = initialState.turn
 
   dice = initialState.dice
@@ -43,7 +47,7 @@ export class GameEngine {
   topScores = initialState.topScores
 
   constructor(savedState?: State) {
-    makeAutoObservable(this, {}, { deep: true })
+    makeAutoObservable(this, { roll: flow }, { deep: true })
 
     if (savedState) {
       this.turn = savedState.turn
@@ -56,15 +60,25 @@ export class GameEngine {
   /**
    * Advance turn and roll all unheld dice
    */
-  roll(): void {
-    if (this.turn < 3 && !this.isGameOver) {
+  *roll(): Generator<Promise<void>, void, unknown> {
+    if (!this.rolling && this.turn < 3 && !this.isGameOver) {
       this.turn = this.turn + 1
 
-      for (const die of Object.values(this.dice)) {
-        if (!die.held) {
-          die.value = Math.floor(6 * Math.random()) + 1
+      this.rolling = true
+
+      for (const roll of [1, 2, 3, 4, 5, 6, 7, 8]) {
+        for (const die of Object.values(this.dice)) {
+          if (!die.held) {
+            die.value = d6()
+          }
+        }
+
+        if (roll !== 8) {
+          yield sleep(50)
         }
       }
+
+      this.rolling = false
 
       const diceValues = Object.values(this.dice).map((d) => d.value)
 
@@ -73,7 +87,7 @@ export class GameEngine {
   }
 
   hold(dieId: DieId): void {
-    if (this.turn > 0) {
+    if (!this.rolling && this.turn > 0) {
       this.dice[dieId].held = !this.dice[dieId].held
     }
   }
@@ -81,7 +95,7 @@ export class GameEngine {
   score(scoreId: ScoreIds): void {
     const isPotential = _.isString(this.scores[scoreId])
 
-    if (isPotential) {
+    if (!this.rolling && isPotential) {
       this.scores[scoreId] = Number(this.scores[scoreId])
 
       // Reset for next turn

@@ -12,12 +12,15 @@ import {
 import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
 import Link from 'ink-link'
+import jsonfile from 'jsonfile'
 import _ from 'lodash'
+import { toJS } from 'mobx'
 import React, { useEffect, useRef, useState } from 'react'
 
 import type { GameEngine } from './game-engine'
 import { ScoreIds } from './model'
 import { observer } from './observer'
+import { toPairs } from './utils'
 
 const upperBoard: { [key: string]: ScoreIds } = {
   1: 'ones',
@@ -80,7 +83,15 @@ const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
 }
 
 const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
-  const { scores, turn, upperBoardSum, upperBoardBonus, total, dice } = game
+  const {
+    scores,
+    turn,
+    upperBoardSum,
+    upperBoardBonus,
+    total,
+    dice,
+    rolling,
+  } = game
   const { exit } = useApp()
 
   useInput((input, key) => {
@@ -120,6 +131,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     }
 
     if (key.escape) {
+      jsonfile.writeFileSync('5dice.json', toJS(game))
       return exit()
     }
   })
@@ -141,8 +153,12 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           <LabelBox label="Dice">
             <Text dimColor>A S D F G</Text>
             <Box flexGrow={1} justifyContent="space-between">
-              {Object.entries(dice).map(([id, { value, held }]) => (
-                <Text key={id} dimColor={value === 0} inverse={held}>
+              {toPairs(dice).map(([id, { value, held }]) => (
+                <Text
+                  key={id}
+                  dimColor={value === 0 || (rolling && !held)}
+                  inverse={held}
+                >
                   {value || '-'}
                 </Text>
               ))}
@@ -152,7 +168,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
         <Box flexDirection="column" width={16}>
           <LabelBox label="Upper Board">
-            {Object.entries(upperBoard).map(([hotkey, id]) => (
+            {toPairs(upperBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
                 <Text dimColor={!_.isString(scores[id])}>
@@ -178,7 +194,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
         <Box flexDirection="column" width={25}>
           <LabelBox label="Lower Board">
-            {Object.entries(lowerBoard).map(([hotkey, id]) => (
+            {toPairs(lowerBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
                 <Text dimColor={!_.isString(scores[id])}>
@@ -215,13 +231,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
         </Box>
 
         <Box>
-          <Text dimColor>H </Text>
-          <Text>Help</Text>
-        </Box>
-
-        <Box>
           <Text dimColor>esc </Text>
-          <Text>Quit</Text>
+          <Text>Save & Quit</Text>
         </Box>
 
         <Link fallback={false} url="https://wstone.io">
