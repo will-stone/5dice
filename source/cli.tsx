@@ -2,9 +2,7 @@
 import { render } from 'ink'
 import jsonfile from 'jsonfile'
 import { autorun, toJS } from 'mobx'
-import path from 'path'
 import React from 'react'
-import writeJsonFile from 'write-json-file'
 
 import { GameEngine } from './game-engine'
 import App from './ui'
@@ -15,7 +13,12 @@ const savedFile = jsonfile.readFileSync('5dice.json', { throws: false })
 const game = new GameEngine(savedFile)
 
 autorun(() => {
-  writeJsonFile(path.join('.', '5dice.json'), toJS(game))
+  jsonfile.writeFile('5dice.json', toJS(game), (error) => {
+    if (error) {
+      // eslint-disable-next-line no-console
+      console.error(error)
+    }
+  })
 })
 
 // eslint-disable-next-line no-console

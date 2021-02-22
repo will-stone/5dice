@@ -1,41 +1,26 @@
 {
-  "turn": 0,
+  "turn": 1,
   "dice": {
-    "a": {
-      "value": 0,
-      "held": false
-    },
-    "s": {
-      "value": 0,
-      "held": false
-    },
-    "d": {
-      "value": 0,
-      "held": false
-    },
-    "f": {
-      "value": 0,
-      "held": false
-    },
-    "g": {
-      "value": 0,
-      "held": false
-    }
+    "a": { "value": 3, "held": false },
+    "s": { "value": 1, "held": false },
+    "d": { "value": 1, "held": false },
+    "f": { "value": 6, "held": false },
+    "g": { "value": 2, "held": false }
   },
   "scores": {
-    "ones": null,
-    "twos": 2,
-    "threes": 6,
+    "ones": "2",
+    "twos": "2",
+    "threes": "3",
     "fours": null,
     "fives": null,
-    "sixes": 12,
-    "threeOfAKind": 22,
+    "sixes": "6",
+    "threeOfAKind": null,
     "fourOfAKind": null,
     "fullHouse": null,
     "smallStraight": 30,
-    "largeStraight": 40,
-    "chance": 14,
+    "largeStraight": null,
+    "chance": "13",
     "fiveDice": null
   },
-  "topScores": []
+  "topScores": [{ "timestamp": 1613981099250, "score": 164 }]
 }
