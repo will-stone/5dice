@@ -1,8 +1,11 @@
-import produce from 'immer'
+import produce, { setAutoFreeze } from 'immer'
 import _ from 'lodash'
 
 import type { Scores } from './model'
 import { toKeys } from './utils'
+
+// MobX can have issues with frozen objects
+setAutoFreeze(false)
 
 const isStraight = (array: number[], size: number) => {
   const uniqSortedArray = _.uniq(array).sort()

@@ -1,21 +1,11 @@
 /* eslint-disable react/jsx-newline */
 
-import {
-  Box,
-  DOMElement,
-  measureElement,
-  Spacer,
-  Text,
-  useApp,
-  useInput,
-} from 'ink'
+import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
 import Link from 'ink-link'
-import jsonfile from 'jsonfile'
 import _ from 'lodash'
-import { toJS } from 'mobx'
-import React, { useEffect, useRef, useState } from 'react'
+import React from 'react'
 
 import type { GameEngine } from './game-engine'
 import { ScoreIds } from './model'
@@ -41,17 +31,14 @@ const lowerBoard: { [key: string]: ScoreIds } = {
   U: 'fiveDice',
 }
 
-const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
-  const reference = useRef<DOMElement>(null)
-  const [{ width }, setMeasurements] = useState({ width: 0, height: 0 })
-
-  useEffect(() => {
-    setMeasurements(measureElement(reference.current as DOMElement))
-  }, [])
-
+const LabelBox: React.FC<{ label: string; width: number }> = ({
+  children,
+  label,
+  width,
+}) => {
   if (width > 0) {
     return (
-      <Box ref={reference} flexDirection="column">
+      <Box flexDirection="column" width={width}>
         <Box>
           <Text dimColor>
             ╭ {label} {'─'.repeat(width - 4 - label.length)}╮
@@ -79,7 +66,7 @@ const LabelBox: React.FC<{ label: string }> = ({ children, label }) => {
     )
   }
 
-  return <Box ref={reference} />
+  return <Box />
 }
 
 const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
@@ -91,6 +78,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     total,
     dice,
     rolling,
+    topScores,
   } = game
   const { exit } = useApp()
 
@@ -131,26 +119,23 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     }
 
     if (key.escape) {
-      jsonfile.writeFileSync('5dice.json', toJS(game))
       return exit()
     }
   })
 
   return (
-    <Box flexDirection="column" width={56}>
+    <Box flexDirection="column" width={58}>
       <Box justifyContent="center" marginBottom={1}>
         <Divider dividerColor="grey" title="5Dice" titleColor="brightWhite" />
       </Box>
 
-      <Box justifyContent="space-between">
-        <Box flexDirection="column" width={13}>
-          <LabelBox label="Turn">
+      <Box>
+        <Box flexDirection="column">
+          <LabelBox label="Turn" width={13}>
             <Text dimColor={turn === 0}>{turn || '-'}</Text>
           </LabelBox>
 
-          <Box height={1} />
-
-          <LabelBox label="Dice">
+          <LabelBox label="Dice" width={13}>
             <Text dimColor>A S D F G</Text>
             <Box flexGrow={1} justifyContent="space-between">
               {toPairs(dice).map(([id, { value, held }]) => (
@@ -166,8 +151,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           </LabelBox>
         </Box>
 
-        <Box flexDirection="column" width={16}>
-          <LabelBox label="Upper Board">
+        <Box flexDirection="column">
+          <LabelBox label="Upper Board" width={25}>
             {toPairs(upperBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
@@ -180,7 +165,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 </Box>
               </Box>
             ))}
-            <Text dimColor>────────────</Text>
+            <Text dimColor>─────────────────────</Text>
             <Box flexGrow={1} justifyContent="space-between">
               <Text dimColor={upperBoardSum === 0}>Sum</Text>
               <Text dimColor={upperBoardSum === 0}>{upperBoardSum}</Text>
@@ -190,10 +175,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Text dimColor={upperBoardBonus < 35}>{upperBoardBonus}</Text>
             </Box>
           </LabelBox>
-        </Box>
 
-        <Box flexDirection="column" width={25}>
-          <LabelBox label="Lower Board">
+          <LabelBox label="Lower Board" width={25}>
             {toPairs(lowerBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
@@ -213,6 +196,17 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
           </LabelBox>
         </Box>
+
+        <LabelBox label="Top Scores" width={20}>
+          {topScores.map((topScore) => {
+            const isRecent = Date.now() - topScore.timestamp < 30_000
+            return (
+              <Box key={topScore.timestamp}>
+                <Text inverse={isRecent}>{topScore.score}</Text>
+              </Box>
+            )
+          })}
+        </LabelBox>
       </Box>
 
       <Box justifyContent="center" marginTop={1}>
@@ -232,7 +226,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
         <Box>
           <Text dimColor>esc </Text>
-          <Text>Save & Quit</Text>
+          <Text>Quit</Text>
         </Box>
 
         <Link fallback={false} url="https://wstone.io">

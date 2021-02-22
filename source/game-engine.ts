@@ -47,7 +47,7 @@ export class GameEngine {
   topScores = initialState.topScores
 
   constructor(savedState?: State) {
-    makeAutoObservable(this, { roll: flow }, { deep: true })
+    makeAutoObservable(this, { roll: flow })
 
     if (savedState) {
       this.turn = savedState.turn
@@ -84,7 +84,7 @@ export class GameEngine {
 
       // Immer returns frozen objects which are not compatible with MobX updates.
       // Also replacing the whole object means computeds are no longer updated.
-      // By using `set` we force all observables to be replaced by observables.
+      // By using `set` we force all observables to be replaced by new observables.
       set(this.scores, calculatePotentialScores(diceValues, this.scores))
     }
   }
@@ -114,7 +114,13 @@ export class GameEngine {
     }
 
     if (this.isGameOver) {
-      this.topScores.push({ timestamp: Date.now(), score: this.total })
+      const updatedTopScores = _.sortBy(
+        [...this.topScores, { timestamp: Date.now(), score: this.total }],
+        ['score'],
+      )
+        .reverse()
+        .slice(0, 20)
+      set(this.topScores, updatedTopScores)
     }
   }
 

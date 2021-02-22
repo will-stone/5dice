@@ -21,6 +21,11 @@ export type ScoreIds = keyof Scores
 
 export type DieId = 'a' | 'd' | 'f' | 'g' | 's'
 
+export interface TopScore {
+  timestamp: number
+  score: number
+}
+
 export interface State {
   rolling: boolean
   dice: {
@@ -28,5 +33,5 @@ export interface State {
   }
   scores: Scores
   turn: number
-  topScores: { timestamp: number; score: number }[]
+  topScores: TopScore[]
 }
