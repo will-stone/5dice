@@ -157,7 +157,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box marginLeft={2} marginRight={1}>
                 <Text dimColor>↵</Text>
               </Box>
-              <Text>Roll</Text>
+              <Text dimColor={rolling}>Roll</Text>
             </Box>
 
             <Box>
@@ -235,10 +235,10 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 flexGrow={1}
                 justifyContent="space-between"
               >
-                <Text inverse={isRecent}>
+                <Text dimColor={!isRecent}>
                   {new Intl.DateTimeFormat().format(topScore.timestamp)}
                 </Text>
-                <Text inverse={isRecent}>{topScore.score}</Text>
+                <Text dimColor={!isRecent}>{topScore.score}</Text>
               </Box>
             )
           })}
