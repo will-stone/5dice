@@ -1,12 +1,8 @@
-import produce, { setAutoFreeze } from 'immer'
+import produce from 'immer'
 import _ from 'lodash'
 
 import type { Scores } from './model'
 import { toKeys } from './utils'
-
-// Immer returns frozen objects which are not compatible with MobX updates. This
-// turns off the freeze functionality.
-setAutoFreeze(false)
 
 const isStraight = (array: number[], size: number) => {
   const uniqSortedArray = _.uniq(array).sort()
