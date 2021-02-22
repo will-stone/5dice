@@ -1,29 +1,30 @@
 {
   "rolling": false,
-  "turn": 3,
+  "turn": 0,
   "dice": {
-    "a": { "value": 6, "held": false },
-    "s": { "value": 3, "held": false },
-    "d": { "value": 1, "held": false },
-    "f": { "value": 4, "held": false },
-    "g": { "value": 6, "held": false }
+    "a": { "value": 0, "held": false },
+    "s": { "value": 0, "held": false },
+    "d": { "value": 0, "held": false },
+    "f": { "value": 0, "held": false },
+    "g": { "value": 0, "held": false }
   },
   "scores": {
-    "ones": 1,
-    "twos": 4,
+    "ones": 4,
+    "twos": 6,
     "threes": 9,
-    "fours": 4,
-    "fives": null,
-    "sixes": "12",
-    "threeOfAKind": null,
-    "fourOfAKind": null,
-    "fullHouse": null,
-    "smallStraight": null,
-    "largeStraight": null,
-    "chance": 16,
-    "fiveDice": null
+    "fours": 16,
+    "fives": 20,
+    "sixes": 24,
+    "threeOfAKind": 23,
+    "fourOfAKind": 21,
+    "fullHouse": 25,
+    "smallStraight": 30,
+    "largeStraight": 40,
+    "chance": 10,
+    "fiveDice": 50
   },
   "topScores": [
+    { "timestamp": 1614031667061, "score": 313 },
     { "timestamp": 1614004591487, "score": 158 },
     { "timestamp": 1614008099386, "score": 47 },
     { "timestamp": 0, "score": 0 }
