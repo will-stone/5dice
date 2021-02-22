@@ -149,6 +149,35 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               ))}
             </Box>
           </LabelBox>
+
+          <Spacer />
+
+          <Box flexDirection="column" paddingBottom={1} paddingX={1}>
+            <Box>
+              <Box marginLeft={2} marginRight={1}>
+                <Text dimColor>↵</Text>
+              </Box>
+              <Text>Roll</Text>
+            </Box>
+
+            <Box>
+              <Box marginLeft={2} marginRight={1}>
+                <Text dimColor>L</Text>
+              </Box>
+              <Text>Restart</Text>
+            </Box>
+
+            <Box marginBottom={1}>
+              <Text dimColor>esc </Text>
+              <Text>Quit</Text>
+            </Box>
+
+            <Box justifyContent="center">
+              <Link fallback={false} url="https://wstone.io">
+                <Gradient name="atlas">wstone.io</Gradient>
+              </Link>
+            </Box>
+          </Box>
         </Box>
 
         <Box flexDirection="column">
@@ -207,31 +236,6 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             )
           })}
         </LabelBox>
-      </Box>
-
-      <Box justifyContent="center" marginTop={1}>
-        <Divider dividerColor="grey" />
-      </Box>
-
-      <Box justifyContent="space-between">
-        <Box>
-          <Text dimColor>↵ </Text>
-          <Text>Roll</Text>
-        </Box>
-
-        <Box>
-          <Text dimColor>L </Text>
-          <Text>Restart</Text>
-        </Box>
-
-        <Box>
-          <Text dimColor>esc </Text>
-          <Text>Quit</Text>
-        </Box>
-
-        <Link fallback={false} url="https://wstone.io">
-          <Gradient name="atlas">https://wstone.io</Gradient>
-        </Link>
       </Box>
     </Box>
   )
