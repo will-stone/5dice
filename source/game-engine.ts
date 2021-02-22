@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import { flow, makeAutoObservable } from 'mobx'
+import { flow, makeAutoObservable, set } from 'mobx'
 import sleep from 'tings/sleep'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
@@ -82,7 +82,10 @@ export class GameEngine {
 
       const diceValues = Object.values(this.dice).map((d) => d.value)
 
-      this.scores = calculatePotentialScores(diceValues, this.scores)
+      // Immer returns frozen objects which are not compatible with MobX updates.
+      // Also replacing the whole object means computeds are no longer updated.
+      // By using `set` we force all observables to be replaced by observables.
+      set(this.scores, calculatePotentialScores(diceValues, this.scores))
     }
   }
 
