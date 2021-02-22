@@ -22,6 +22,7 @@ export type ScoreIds = keyof Scores
 export type DieId = 'a' | 'd' | 'f' | 'g' | 's'
 
 export interface State {
+  rolling: boolean
   dice: {
     [key in DieId]: { value: number; held: boolean }
   }
