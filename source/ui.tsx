@@ -230,7 +230,14 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           {topScores.map((topScore) => {
             const isRecent = Date.now() - topScore.timestamp < 30_000
             return (
-              <Box key={topScore.timestamp}>
+              <Box
+                key={topScore.timestamp}
+                flexGrow={1}
+                justifyContent="space-between"
+              >
+                <Text inverse={isRecent}>
+                  {new Intl.DateTimeFormat().format(topScore.timestamp)}
+                </Text>
                 <Text inverse={isRecent}>{topScore.score}</Text>
               </Box>
             )
