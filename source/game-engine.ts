@@ -61,7 +61,7 @@ export class GameEngine {
    * Advance turn and roll all unheld dice
    */
   *roll(): Generator<Promise<void>, void, unknown> {
-    if (!this.rolling && this.turn < 3 && !this.isGameOver) {
+    if (this.canRoll) {
       this.turn = this.turn + 1
 
       this.rolling = true
@@ -128,6 +128,10 @@ export class GameEngine {
     this.dice = initialState.dice
     this.scores = initialState.scores
     this.turn = initialState.turn
+  }
+
+  get canRoll(): boolean {
+    return !this.isGameOver && !this.rolling && this.turn < 3
   }
 
   get isGameOver(): boolean {

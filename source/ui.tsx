@@ -79,6 +79,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     dice,
     rolling,
     topScores,
+    canRoll,
+    isGameOver,
   } = game
   const { exit } = useApp()
 
@@ -157,14 +159,14 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box marginLeft={2} marginRight={1}>
                 <Text dimColor>↵</Text>
               </Box>
-              <Text dimColor={rolling}>Roll</Text>
+              <Text dimColor={!canRoll}>Roll</Text>
             </Box>
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
                 <Text dimColor>L</Text>
               </Box>
-              <Text>Restart</Text>
+              <Text dimColor={!isGameOver}>Restart</Text>
             </Box>
 
             <Box marginBottom={1}>
