@@ -23,8 +23,7 @@
     "postpublish": "pinst --enable",
     "release": "np",
     "start": "tsc-watch --onSuccess \"node ./dist/cli.js\"",
-    "pretest": "npm run build",
-    "test": "exit 0",
+    "test": "jest",
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
@@ -64,6 +63,7 @@
   "devDependencies": {
     "@types/ink-divider": "^2.0.1",
     "@types/ink-gradient": "^2.0.1",
+    "@types/jest": "^26.0.20",
     "@types/jsonfile": "^6.0.0",
     "@types/lodash": "^4.14.168",
     "@types/node": "^14.14.28",
@@ -73,10 +73,12 @@
     "eslint": "^7.20.0",
     "husky": "^5.0.9",
     "ink-testing-library": "^2.1.0",
+    "jest": "^26.6.3",
     "lint-staged": "^10.5.4",
     "np": "^7.4.0",
     "pinst": "^2.1.4",
     "prettier": "^2.2.1",
+    "ts-jest": "^26.5.1",
     "tsc-watch": "^4.2.9",
     "typescript": "^4.1.3"
   },
