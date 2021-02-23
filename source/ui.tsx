@@ -127,7 +127,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
   return (
     <Box flexDirection="column" width={58}>
-      <Box justifyContent="center" marginBottom={1}>
+      <Box justifyContent="center" marginY={1}>
         <Divider dividerColor="grey" title="5Dice" titleColor="brightWhite" />
       </Box>
 
