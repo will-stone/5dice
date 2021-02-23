@@ -166,7 +166,9 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box marginLeft={2} marginRight={1}>
                 <Text dimColor>L</Text>
               </Box>
-              <Text dimColor={!isGameOver}>Restart</Text>
+              <Text dimColor={!isGameOver}>
+                {isGameOver ? 'Start' : 'Restart'}
+              </Text>
             </Box>
 
             <Box marginBottom={1}>
@@ -229,21 +231,25 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
         </Box>
 
         <LabelBox label="Top Scores" width={20}>
-          {topScores.map((topScore) => {
-            const isRecent = Date.now() - topScore.timestamp < 30_000
-            return (
-              <Box
-                key={topScore.timestamp}
-                flexGrow={1}
-                justifyContent="space-between"
-              >
-                <Text dimColor={!isRecent}>
-                  {new Intl.DateTimeFormat().format(topScore.timestamp)}
-                </Text>
-                <Text dimColor={!isRecent}>{topScore.score}</Text>
-              </Box>
-            )
-          })}
+          {topScores.length ? (
+            topScores.map((topScore) => {
+              const isRecent = Date.now() - topScore.timestamp < 30_000
+              return (
+                <Box
+                  key={topScore.timestamp}
+                  flexGrow={1}
+                  justifyContent="space-between"
+                >
+                  <Text dimColor={!isRecent}>
+                    {new Intl.DateTimeFormat().format(topScore.timestamp)}
+                  </Text>
+                  <Text dimColor={!isRecent}>{topScore.score}</Text>
+                </Box>
+              )
+            })
+          ) : (
+            <Text dimColor>----------------</Text>
+          )}
         </LabelBox>
       </Box>
     </Box>
