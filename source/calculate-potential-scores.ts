@@ -1,14 +1,14 @@
 import produce, { setAutoFreeze } from 'immer'
 import _ from 'lodash'
 
-import type { Scores } from './model'
+import type { Dice, DieNumber, Scores } from './model'
 import { toKeys } from './utils'
 
 // MobX can have issues with frozen objects
 setAutoFreeze(false)
 
-const isStraight = (array: number[], size: number) => {
-  const uniqSortedArray = _.uniq(array).sort()
+const isStraight = (dice: Dice, size: number) => {
+  const uniqSortedArray = _.uniq(dice).sort()
 
   if (uniqSortedArray.length < size) {
     return false
@@ -38,79 +38,155 @@ const isStraight = (array: number[], size: number) => {
   return false
 }
 
+const dieNumberToId = (number: DieNumber) => {
+  if (number === 1) return 'ones'
+  if (number === 2) return 'twos'
+  if (number === 3) return 'threes'
+  if (number === 4) return 'fours'
+  if (number === 5) return 'fives'
+  return 'sixes'
+}
+
 export const calculatePotentialScores = (
-  dice: number[],
+  dice: Dice,
   scores: Scores,
 ): Scores => {
   return produce(scores, (draft) => {
     const countByDie = _.countBy(dice)
     const sumOfAllDie = _.sum(dice)
 
-    if (!_.isNumber(scores.ones)) {
-      draft.ones = countByDie['1'] ? String(countByDie['1']) : null
+    /**
+     * 5 Dice
+     */
+
+    // Not scored
+    if (_.includes(countByDie, 5) && _.isNull(draft.fiveDice)) {
+      draft.fiveDice = '50'
     }
 
-    if (!_.isNumber(scores.twos)) {
-      draft.twos = countByDie['2'] ? String(countByDie['2'] * 2) : null
+    // Joker
+    else if (_.isNumber(draft.fiveDice) && draft.fiveDice !== 0) {
+      // Add bonus 100 points
+      draft.fiveDice = draft.fiveDice + 100
+
+      const dieScoreId = dieNumberToId(dice[0])
+
+      // Upperboard score
+      if (_.isNull(draft[dieScoreId])) {
+        draft[dieScoreId] = String(_.sum(dice))
+        return
+      }
+
+      // Upperboard score isn't available, Lowerboard is full, force 0
+      if (
+        [
+          draft.threeOfAKind,
+          draft.fourOfAKind,
+          draft.fullHouse,
+          draft.smallStraight,
+          draft.largeStraight,
+          draft.chance,
+        ].every((s) => _.isNumber(s))
+      ) {
+        for (const scoreId of toKeys(draft)) {
+          if (_.isNull(draft[scoreId])) {
+            draft[scoreId] = '0'
+          }
+        }
+
+        return
+      }
+
+      // Lowerboard score
+      if (_.isNull(draft.threeOfAKind)) {
+        draft.threeOfAKind = String(_.sum(dice))
+      }
+
+      if (_.isNull(draft.fourOfAKind)) {
+        draft.fourOfAKind = String(_.sum(dice))
+      }
+
+      if (_.isNull(draft.fullHouse)) {
+        draft.fullHouse = '25'
+      }
+
+      if (_.isNull(draft.smallStraight)) {
+        draft.smallStraight = '30'
+      }
+
+      if (_.isNull(draft.largeStraight)) {
+        draft.largeStraight = '40'
+      }
+
+      if (_.isNull(draft.chance)) {
+        draft.chance = String(_.sum(dice))
+      }
+
+      return
     }
 
-    if (!_.isNumber(scores.threes)) {
-      draft.threes = countByDie['3'] ? String(countByDie['3'] * 3) : null
+    if (countByDie['1'] && _.isNull(draft.ones)) {
+      draft.ones = String(countByDie['1'])
     }
 
-    if (!_.isNumber(scores.fours)) {
-      draft.fours = countByDie['4'] ? String(countByDie['4'] * 4) : null
+    if (countByDie['2'] && _.isNull(draft.twos)) {
+      draft.twos = String(countByDie['2'] * 2)
     }
 
-    if (!_.isNumber(scores.fives)) {
-      draft.fives = countByDie['5'] ? String(countByDie['5'] * 5) : null
+    if (countByDie['3'] && _.isNull(draft.threes)) {
+      draft.threes = String(countByDie['3'] * 3)
     }
 
-    if (!_.isNumber(scores.sixes)) {
-      draft.sixes = countByDie['6'] ? String(countByDie['6'] * 6) : null
+    if (countByDie['4'] && _.isNull(draft.fours)) {
+      draft.fours = String(countByDie['4'] * 4)
     }
 
-    if (!_.isNumber(scores.threeOfAKind)) {
-      draft.threeOfAKind =
-        _.some(countByDie, (count) => count >= 4) ||
-        _.some(countByDie, (count) => count === 3)
-          ? String(sumOfAllDie)
-          : null
+    if (countByDie['5'] && _.isNull(draft.fives)) {
+      draft.fives = String(countByDie['5'] * 5)
     }
 
-    if (!_.isNumber(scores.fourOfAKind)) {
-      draft.fourOfAKind = _.some(countByDie, (count) => count >= 4)
-        ? String(sumOfAllDie)
-        : null
+    if (countByDie['6'] && _.isNull(draft.sixes)) {
+      draft.sixes = String(countByDie['6'] * 6)
     }
 
-    if (!_.isNumber(scores.fullHouse)) {
-      draft.fullHouse =
-        _.includes(countByDie, 2) && _.includes(countByDie, 3)
-          ? String(25)
-          : null
+    if (
+      _.isNull(draft.threeOfAKind) &&
+      _.some(countByDie, (count) => count >= 3)
+    ) {
+      draft.threeOfAKind = String(sumOfAllDie)
     }
 
-    if (!_.isNumber(scores.smallStraight)) {
-      draft.smallStraight = isStraight(dice, 4) ? String(30) : null
+    if (
+      _.isNull(draft.fourOfAKind) &&
+      _.some(countByDie, (count) => count === 4)
+    ) {
+      draft.fourOfAKind = String(sumOfAllDie)
     }
 
-    if (!_.isNumber(scores.largeStraight)) {
-      draft.largeStraight = isStraight(dice, 5) ? String(40) : null
+    if (
+      _.isNull(draft.fullHouse) &&
+      _.includes(countByDie, 2) &&
+      _.includes(countByDie, 3)
+    ) {
+      draft.fullHouse = '25'
     }
 
-    if (!_.isNumber(scores.chance)) {
+    if (_.isNull(draft.smallStraight) && isStraight(dice, 4)) {
+      draft.smallStraight = '30'
+    }
+
+    if (_.isNull(draft.largeStraight) && isStraight(dice, 5)) {
+      draft.largeStraight = '40'
+    }
+
+    if (_.isNull(draft.chance)) {
       draft.chance = String(sumOfAllDie)
     }
 
-    if (!_.isNumber(scores.fiveDice)) {
-      draft.fiveDice = _.includes(countByDie, 5) ? String(50) : null
-    }
+    // At least one potential score
+    const canScore = Object.values(draft).some((value) => _.isString(value))
 
-    const canScore = Object.entries(draft).some(([, value]) =>
-      _.isString(value),
-    )
-
+    // No potential scores
     if (!canScore) {
       for (const id of toKeys(draft)) {
         if (!_.isNumber(draft[id])) {

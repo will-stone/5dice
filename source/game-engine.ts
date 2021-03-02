@@ -9,11 +9,11 @@ import { d6, toPairs } from './utils'
 const initialState: State = {
   rolling: false,
   dice: {
-    a: { value: 0, held: false },
-    s: { value: 0, held: false },
-    d: { value: 0, held: false },
-    f: { value: 0, held: false },
-    g: { value: 0, held: false },
+    a: { value: undefined, held: false },
+    s: { value: undefined, held: false },
+    d: { value: undefined, held: false },
+    f: { value: undefined, held: false },
+    g: { value: undefined, held: false },
   },
   scores: {
     ones: null,
@@ -66,26 +66,73 @@ export class GameEngine {
 
       this.rolling = true
 
-      for (const roll of [1, 2, 3, 4, 5, 6, 7, 8]) {
-        for (const die of Object.values(this.dice)) {
-          if (!die.held) {
-            die.value = d6()
-          }
-        }
-
-        if (roll !== 8) {
-          yield sleep(50)
-        }
-      }
+      // This repetition is because the typing does not work if put in a for loop :(
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
+      yield sleep(50)
+      this.dice.a.value = d6()
+      this.dice.s.value = d6()
+      this.dice.d.value = d6()
+      this.dice.f.value = d6()
+      this.dice.g.value = d6()
 
       this.rolling = false
-
-      const diceValues = Object.values(this.dice).map((d) => d.value)
 
       // Immer returns frozen objects which are not compatible with MobX updates.
       // Also replacing the whole object means computeds are no longer updated.
       // By using `set` we force all observables to be replaced by new observables.
-      set(this.scores, calculatePotentialScores(diceValues, this.scores))
+      set(
+        this.scores,
+        calculatePotentialScores(
+          [
+            this.dice.a.value,
+            this.dice.s.value,
+            this.dice.d.value,
+            this.dice.f.value,
+            this.dice.g.value,
+          ],
+          this.scores,
+        ),
+      )
     }
   }
 
