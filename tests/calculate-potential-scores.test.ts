@@ -55,7 +55,6 @@ test.each`
   ${[3, 3, 1, 1, 2]} | ${s()}                   | ${{ fourOfAKind: null }}
   ${[3, 3, 3, 1, 2]} | ${s()}                   | ${{ fourOfAKind: null }}
   ${[3, 3, 3, 3, 2]} | ${s()}                   | ${{ fourOfAKind: '14' }}
-  ${[3, 3, 3, 3, 3]} | ${s()}                   | ${{ fourOfAKind: '15' }}
   ${[5, 5, 3, 5, 5]} | ${s()}                   | ${{ fourOfAKind: '23' }}
   ${[5, 5, 3, 5, 5]} | ${s({ fourOfAKind: 2 })} | ${{ fourOfAKind: 2 }}
 `('four of a kind', ({ dice, scores, expected }) => {
@@ -99,11 +98,13 @@ test.each`
 })
 
 test.each`
-  dice               | scores                 | expected
-  ${[1, 2, 3, 4, 5]} | ${s()}                 | ${{ fiveDice: null }}
-  ${[2, 2, 2, 2, 2]} | ${s()}                 | ${{ fiveDice: '50' }}
-  ${[2, 2, 2, 2, 2]} | ${s({ fiveDice: 0 })}  | ${{ fiveDice: 0 }}
-  ${[2, 2, 2, 2, 2]} | ${s({ fiveDice: 50 })} | ${{ fiveDice: 50 }}
+  dice               | scores                           | expected
+  ${[1, 2, 3, 4, 5]} | ${s()}                           | ${{ fiveDice: null }}
+  ${[2, 2, 2, 2, 2]} | ${s()}                           | ${{ fiveDice: '50' }}
+  ${[2, 2, 2, 2, 2]} | ${s({ fiveDice: 0 })}            | ${{ fiveDice: 0 }}
+  ${[2, 2, 2, 2, 2]} | ${s({ fiveDice: 50 })}           | ${{ twos: '10', fiveDice: 150 }}
+  ${[2, 2, 2, 2, 2]} | ${s({ twos: 4, fiveDice: 50 })}  | ${{ ones: null, twos: 4, threeOfAKind: '10', fourOfAKind: '10', fullHouse: '25', smallStraight: '30', largeStraight: '40', chance: '10', fiveDice: 150 }}
+  ${[2, 2, 2, 2, 2]} | ${s({ twos: 4, fiveDice: 150 })} | ${{ ones: null, twos: 4, threeOfAKind: '10', fourOfAKind: '10', fullHouse: '25', smallStraight: '30', largeStraight: '40', chance: '10', fiveDice: 250 }}
 `('Five Dice', ({ dice, scores, expected }) => {
   expect(calculatePotentialScores(dice, scores)).toMatchObject(expected)
 })

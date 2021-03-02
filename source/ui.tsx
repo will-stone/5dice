@@ -143,7 +143,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               {toPairs(dice).map(([id, { value, held }]) => (
                 <Text
                   key={id}
-                  dimColor={value === 0 || (rolling && !held)}
+                  dimColor={!value || (rolling && !held)}
                   inverse={held}
                 >
                   {value || '-'}
