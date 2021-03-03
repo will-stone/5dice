@@ -81,6 +81,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     topScores,
     canRoll,
     isGameOver,
+    jokerCount,
   } = game
   const { exit } = useApp()
 
@@ -216,6 +217,12 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text dimColor={!_.isString(scores[id])}>
                   {_.startCase(id)}
                 </Text>
+                {id === 'fiveDice' &&
+                  _.times(jokerCount, (index) => (
+                    <Text key={index} dimColor>
+                      *
+                    </Text>
+                  ))}
                 <Spacer />
                 <Box justifyContent="flex-end" minWidth={2}>
                   <Text dimColor={_.isNumber(scores[id])}>{scores[id]}</Text>

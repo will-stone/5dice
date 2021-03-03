@@ -216,6 +216,14 @@ export class GameEngine {
     return _.sum(numbers)
   }
 
+  get jokerCount(): number {
+    if (_.isNumber(this.scores.fiveDice) && this.scores.fiveDice > 50) {
+      return (this.scores.fiveDice - 50) / 100
+    }
+
+    return 0
+  }
+
   get total(): number {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
   }
