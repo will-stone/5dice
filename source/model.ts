@@ -32,7 +32,7 @@ export interface TopScore {
 export interface State {
   rolling: boolean
   dice: {
-    [key in DieId]: { value?: DieNumber; held: boolean }
+    [key in DieId]: { value: DieNumber; held: boolean }
   }
   scores: Scores
   turn: number

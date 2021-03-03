@@ -9,11 +9,11 @@ import { d6, toPairs } from './utils'
 const initialState: State = {
   rolling: false,
   dice: {
-    a: { value: undefined, held: false },
-    s: { value: undefined, held: false },
-    d: { value: undefined, held: false },
-    f: { value: undefined, held: false },
-    g: { value: undefined, held: false },
+    a: { value: 1, held: false },
+    s: { value: 1, held: false },
+    d: { value: 1, held: false },
+    f: { value: 1, held: false },
+    g: { value: 1, held: false },
   },
   scores: {
     ones: null,
@@ -67,53 +67,53 @@ export class GameEngine {
       this.rolling = true
 
       // This repetition is because the typing does not work if put in a for loop :(
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
       yield sleep(50)
-      this.dice.a.value = d6()
-      this.dice.s.value = d6()
-      this.dice.d.value = d6()
-      this.dice.f.value = d6()
-      this.dice.g.value = d6()
+      this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
+      this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
+      this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
+      this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
+      this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
 
       this.rolling = false
 
