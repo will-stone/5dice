@@ -1,20 +1,17 @@
-export type Score = number | string | null
-
 export interface Scores {
-  ones: Score
-  twos: Score
-  threes: Score
-  fours: Score
-  fives: Score
-  sixes: Score
-
-  threeOfAKind: Score
-  fourOfAKind: Score
-  fullHouse: Score
-  smallStraight: Score
-  largeStraight: Score
-  chance: Score
-  fiveDice: Score
+  ones?: number
+  twos?: number
+  threes?: number
+  fours?: number
+  fives?: number
+  sixes?: number
+  threeOfAKind?: number
+  fourOfAKind?: number
+  fullHouse?: number
+  smallStraight?: number
+  largeStraight?: number
+  chance?: number
+  fiveDice?: number
 }
 
 export type ScoreIds = keyof Scores
@@ -35,6 +32,7 @@ export interface State {
     [key in DieId]: { value: DieNumber; held: boolean }
   }
   scores: Scores
+  potential: Scores
   turn: number
   topScores: TopScore[]
 }

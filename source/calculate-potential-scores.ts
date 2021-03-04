@@ -1,11 +1,8 @@
-import produce, { setAutoFreeze } from 'immer'
 import _ from 'lodash'
+import toNumberAlways from 'tings/toNumberAlways'
 
 import type { Dice, DieNumber, Scores } from './model'
 import { toKeys } from './utils'
-
-// MobX can have issues with frozen objects
-setAutoFreeze(false)
 
 const isStraight = (dice: Dice, size: number) => {
   const uniqSortedArray = _.uniq(dice).sort()
@@ -47,152 +44,157 @@ const dieNumberToId = (number: DieNumber) => {
   return 'sixes'
 }
 
-export const calculatePotentialScores = (
-  dice: Dice,
-  scores: Scores,
-): Scores => {
-  return produce(scores, (draft) => {
-    const countByDie = _.countBy(dice)
-    const sumOfAllDie = _.sum(dice)
+export function calculatePotentialScores(dice: Dice, scores: Scores): Scores {
+  const countByDie = _.countBy(dice)
+  const sumOfAllDie = _.sum(dice)
 
-    /**
-     * 5 Dice
-     */
+  const potential: Scores = {
+    ones: undefined,
+    twos: undefined,
+    threes: undefined,
+    fours: undefined,
+    fives: undefined,
+    sixes: undefined,
+    threeOfAKind: undefined,
+    fourOfAKind: undefined,
+    fullHouse: undefined,
+    smallStraight: undefined,
+    largeStraight: undefined,
+    chance: undefined,
+    fiveDice: undefined,
+  }
 
-    // Not scored
-    if (_.includes(countByDie, 5) && _.isNull(draft.fiveDice)) {
-      draft.fiveDice = '50'
+  // joker
+  if (
+    _.includes(countByDie, 5) &&
+    _.isNumber(scores.fiveDice) &&
+    scores.fiveDice >= 50
+  ) {
+    potential.fiveDice = scores.fiveDice + 100
+
+    const dieScoreId = dieNumberToId(dice[0])
+
+    // Upperboard score
+    if (_.isUndefined(scores[dieScoreId])) {
+      potential[dieScoreId] = sumOfAllDie
     }
-
-    // Joker
-    else if (_.isNumber(draft.fiveDice) && draft.fiveDice !== 0) {
-      // Add bonus 100 points
-      draft.fiveDice = draft.fiveDice + 100
-
-      const dieScoreId = dieNumberToId(dice[0])
-
-      // Upperboard score
-      if (_.isNull(draft[dieScoreId])) {
-        draft[dieScoreId] = String(_.sum(dice))
-        return
-      }
-
-      // Upperboard score isn't available, Lowerboard is full, force 0
-      if (
-        [
-          draft.threeOfAKind,
-          draft.fourOfAKind,
-          draft.fullHouse,
-          draft.smallStraight,
-          draft.largeStraight,
-          draft.chance,
-        ].every((s) => _.isNumber(s))
-      ) {
-        for (const scoreId of toKeys(draft)) {
-          if (_.isNull(draft[scoreId])) {
-            draft[scoreId] = '0'
-          }
-        }
-
-        return
-      }
-
-      // Lowerboard score
-      if (_.isNull(draft.threeOfAKind)) {
-        draft.threeOfAKind = String(_.sum(dice))
-      }
-
-      if (_.isNull(draft.fourOfAKind)) {
-        draft.fourOfAKind = String(_.sum(dice))
-      }
-
-      if (_.isNull(draft.fullHouse)) {
-        draft.fullHouse = '25'
-      }
-
-      if (_.isNull(draft.smallStraight)) {
-        draft.smallStraight = '30'
-      }
-
-      if (_.isNull(draft.largeStraight)) {
-        draft.largeStraight = '40'
-      }
-
-      if (_.isNull(draft.chance)) {
-        draft.chance = String(_.sum(dice))
-      }
-
-      return
-    }
-
-    if (countByDie['1'] && _.isNull(draft.ones)) {
-      draft.ones = String(countByDie['1'])
-    }
-
-    if (countByDie['2'] && _.isNull(draft.twos)) {
-      draft.twos = String(countByDie['2'] * 2)
-    }
-
-    if (countByDie['3'] && _.isNull(draft.threes)) {
-      draft.threes = String(countByDie['3'] * 3)
-    }
-
-    if (countByDie['4'] && _.isNull(draft.fours)) {
-      draft.fours = String(countByDie['4'] * 4)
-    }
-
-    if (countByDie['5'] && _.isNull(draft.fives)) {
-      draft.fives = String(countByDie['5'] * 5)
-    }
-
-    if (countByDie['6'] && _.isNull(draft.sixes)) {
-      draft.sixes = String(countByDie['6'] * 6)
-    }
-
-    if (
-      _.isNull(draft.threeOfAKind) &&
-      _.some(countByDie, (count) => count >= 3)
+    // Upperboard score isn't available, Lowerboard is full, force 0
+    else if (
+      [
+        scores.threeOfAKind,
+        scores.fourOfAKind,
+        scores.fullHouse,
+        scores.smallStraight,
+        scores.largeStraight,
+        scores.chance,
+      ].every((s) => _.isNumber(s))
     ) {
-      draft.threeOfAKind = String(sumOfAllDie)
-    }
-
-    if (
-      _.isNull(draft.fourOfAKind) &&
-      _.some(countByDie, (count) => count === 4)
-    ) {
-      draft.fourOfAKind = String(sumOfAllDie)
-    }
-
-    if (
-      _.isNull(draft.fullHouse) &&
-      _.includes(countByDie, 2) &&
-      _.includes(countByDie, 3)
-    ) {
-      draft.fullHouse = '25'
-    }
-
-    if (_.isNull(draft.smallStraight) && isStraight(dice, 4)) {
-      draft.smallStraight = '30'
-    }
-
-    if (_.isNull(draft.largeStraight) && isStraight(dice, 5)) {
-      draft.largeStraight = '40'
-    }
-
-    if (_.isNull(draft.chance)) {
-      draft.chance = String(sumOfAllDie)
-    }
-
-    // At least one potential score
-    const canScore = Object.values(draft).some((value) => _.isString(value))
-
-    // No potential scores
-    if (!canScore) {
-      for (const id of toKeys(draft)) {
-        if (!_.isNumber(draft[id])) {
-          draft[id] = '0'
+      for (const scoreId of toKeys(scores)) {
+        if (_.isUndefined(scores[scoreId])) {
+          potential[scoreId] = 0
         }
       }
     }
-  })
+    // Lowerboard score
+    else {
+      if (_.isUndefined(scores.threeOfAKind)) {
+        potential.threeOfAKind = sumOfAllDie
+      }
+
+      if (_.isUndefined(scores.fourOfAKind)) {
+        potential.fourOfAKind = sumOfAllDie
+      }
+
+      if (_.isUndefined(scores.fullHouse)) {
+        potential.fullHouse = 25
+      }
+
+      if (_.isUndefined(scores.smallStraight)) {
+        potential.smallStraight = 30
+      }
+
+      if (_.isUndefined(scores.largeStraight)) {
+        potential.largeStraight = 40
+      }
+
+      if (_.isUndefined(scores.chance)) {
+        potential.chance = sumOfAllDie
+      }
+    }
+
+    return potential
+  }
+
+  if (_.isUndefined(scores.ones) && countByDie['1']) {
+    potential.ones = toNumberAlways(countByDie['1'])
+  }
+
+  if (_.isUndefined(scores.twos) && countByDie['2']) {
+    potential.twos = toNumberAlways(countByDie['2']) * 2
+  }
+
+  if (_.isUndefined(scores.threes) && countByDie['3']) {
+    potential.threes = toNumberAlways(countByDie['3']) * 3
+  }
+
+  if (_.isUndefined(scores.fours) && countByDie['4']) {
+    potential.fours = toNumberAlways(countByDie['4']) * 4
+  }
+
+  if (_.isUndefined(scores.fives) && countByDie['5']) {
+    potential.fives = toNumberAlways(countByDie['5']) * 5
+  }
+
+  if (_.isUndefined(scores.sixes) && countByDie['6']) {
+    potential.sixes = toNumberAlways(countByDie['6']) * 6
+  }
+
+  if (
+    _.isUndefined(scores.threeOfAKind) &&
+    _.some(countByDie, (count) => count >= 3)
+  ) {
+    potential.threeOfAKind = sumOfAllDie
+  }
+
+  if (
+    _.isUndefined(scores.fourOfAKind) &&
+    _.some(countByDie, (count) => count >= 4)
+  ) {
+    potential.fourOfAKind = sumOfAllDie
+  }
+
+  if (
+    _.isUndefined(scores.fullHouse) &&
+    _.includes(countByDie, 2) &&
+    _.includes(countByDie, 3)
+  ) {
+    potential.fullHouse = 25
+  }
+
+  if (_.isUndefined(scores.smallStraight) && isStraight(dice, 4)) {
+    potential.smallStraight = 30
+  }
+
+  if (_.isUndefined(scores.largeStraight) && isStraight(dice, 5)) {
+    potential.largeStraight = 40
+  }
+
+  if (_.isUndefined(scores.chance)) {
+    potential.chance = sumOfAllDie
+  }
+
+  if (_.isUndefined(scores.fiveDice) && _.includes(countByDie, 5)) {
+    potential.fiveDice = 50
+  }
+
+  // Cannot score
+  if (_.isEmpty(Object.values(potential).filter((x) => !_.isUndefined(x)))) {
+    for (const scoreId of toKeys(potential)) {
+      if (_.isUndefined(scores[scoreId])) {
+        potential[scoreId] = 0
+      }
+    }
+  }
+
+  return potential
 }

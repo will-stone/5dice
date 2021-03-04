@@ -72,6 +72,7 @@ const LabelBox: React.FC<{ label: string; width: number }> = ({
 const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   const {
     scores,
+    potential,
     turn,
     upperBoardSum,
     upperBoardBonus,
@@ -82,6 +83,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     canRoll,
     isGameOver,
     jokerCount,
+    potentialHasJoker,
   } = game
   const { exit } = useApp()
 
@@ -189,13 +191,29 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           <LabelBox label="Upper Board" width={25}>
             {toPairs(upperBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
-                <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
-                <Text dimColor={!_.isString(scores[id])}>
+                <Text
+                  dimColor={
+                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                  }
+                >
+                  {hotkey}{' '}
+                </Text>
+                <Text
+                  dimColor={
+                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                  }
+                >
                   {_.startCase(id)}
                 </Text>
                 <Spacer />
                 <Box justifyContent="flex-end" minWidth={2}>
-                  <Text dimColor={_.isNumber(scores[id])}>{scores[id]}</Text>
+                  <Text
+                    dimColor={
+                      !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    }
+                  >
+                    {scores[id] ?? potential[id]}
+                  </Text>
                 </Box>
               </Box>
             ))}
@@ -213,8 +231,18 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           <LabelBox label="Lower Board" width={25}>
             {toPairs(lowerBoard).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
-                <Text dimColor={!_.isString(scores[id])}>{hotkey} </Text>
-                <Text dimColor={!_.isString(scores[id])}>
+                <Text
+                  dimColor={
+                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                  }
+                >
+                  {hotkey}{' '}
+                </Text>
+                <Text
+                  dimColor={
+                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                  }
+                >
                   {_.startCase(id)}
                 </Text>
                 {id === 'fiveDice' &&
@@ -225,7 +253,15 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   ))}
                 <Spacer />
                 <Box justifyContent="flex-end" minWidth={2}>
-                  <Text dimColor={_.isNumber(scores[id])}>{scores[id]}</Text>
+                  <Text
+                    dimColor={
+                      !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    }
+                  >
+                    {potentialHasJoker
+                      ? potential[id]
+                      : scores[id] ?? potential[id]}
+                  </Text>
                 </Box>
               </Box>
             ))}
