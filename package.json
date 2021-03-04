@@ -46,7 +46,6 @@
     }
   },
   "dependencies": {
-    "immer": "^8.0.1",
     "ink": "^3.0.8",
     "ink-divider": "^3.0.0",
     "ink-gradient": "^2.0.0",
