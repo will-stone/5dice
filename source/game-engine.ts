@@ -4,7 +4,7 @@ import sleep from 'tings/sleep'
 import toNumberAlways from 'tings/toNumberAlways'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
-import type { DieId, ScoreIds, State } from './model'
+import type { State } from './model'
 import { d6 } from './utils'
 
 const initialState: State = {
@@ -125,13 +125,13 @@ export class GameEngine {
     }
   }
 
-  hold(dieId: DieId): void {
+  hold(dieId: keyof State['dice']): void {
     if (!this.rolling && this.turn > 0) {
       this.dice[dieId].held = !this.dice[dieId].held
     }
   }
 
-  score(scoreId: ScoreIds): void {
+  score(scoreId: keyof State['scores']): void {
     if (!this.rolling && _.isNumber(this.potential[scoreId])) {
       this.scores[scoreId] = this.potential[scoreId]
 

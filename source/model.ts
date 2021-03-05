@@ -1,38 +1,48 @@
-export interface Scores {
-  ones?: number
-  twos?: number
-  threes?: number
-  fours?: number
-  fives?: number
-  sixes?: number
-  threeOfAKind?: number
-  fourOfAKind?: number
-  fullHouse?: number
-  smallStraight?: number
-  largeStraight?: number
-  chance?: number
-  fiveDice?: number
-}
+import * as z from 'zod'
 
-export type ScoreIds = keyof Scores
+const dieSchema = z.object({
+  value: z.union([
+    z.literal(1),
+    z.literal(2),
+    z.literal(3),
+    z.literal(4),
+    z.literal(5),
+    z.literal(6),
+  ]),
+  held: z.boolean(),
+})
 
-export type DieId = 'a' | 'd' | 'f' | 'g' | 's'
+export type Die = z.infer<typeof dieSchema>
 
-export type DieNumber = 1 | 2 | 3 | 4 | 5 | 6
-export type Dice = [DieNumber, DieNumber, DieNumber, DieNumber, DieNumber]
+const scoreSchema = z.object({
+  ones: z.number().optional(),
+  twos: z.number().optional(),
+  threes: z.number().optional(),
+  fours: z.number().optional(),
+  fives: z.number().optional(),
+  sixes: z.number().optional(),
+  threeOfAKind: z.number().optional(),
+  fourOfAKind: z.number().optional(),
+  fullHouse: z.number().optional(),
+  smallStraight: z.number().optional(),
+  largeStraight: z.number().optional(),
+  chance: z.number().optional(),
+  fiveDice: z.number().optional(),
+})
 
-export interface TopScore {
-  timestamp: number
-  score: number
-}
+export const stateSchema = z.object({
+  rolling: z.boolean(),
+  dice: z.object({
+    a: dieSchema,
+    s: dieSchema,
+    d: dieSchema,
+    f: dieSchema,
+    g: dieSchema,
+  }),
+  scores: scoreSchema,
+  potential: scoreSchema,
+  turn: z.number().min(0).max(3).int(),
+  topScores: z.array(z.object({ timestamp: z.number(), score: z.number() })),
+})
 
-export interface State {
-  rolling: boolean
-  dice: {
-    [key in DieId]: { value: DieNumber; held: boolean }
-  }
-  scores: Scores
-  potential: Scores
-  turn: number
-  topScores: TopScore[]
-}
+export type State = z.infer<typeof stateSchema>

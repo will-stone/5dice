@@ -1,8 +1,16 @@
 import _ from 'lodash'
 import toNumberAlways from 'tings/toNumberAlways'
 
-import type { Dice, DieNumber, Scores } from './model'
+import type { Die, State } from './model'
 import { toKeys } from './utils'
+
+type Dice = [
+  Die['value'],
+  Die['value'],
+  Die['value'],
+  Die['value'],
+  Die['value'],
+]
 
 const isStraight = (dice: Dice, size: number) => {
   const uniqSortedArray = _.uniq(dice).sort()
@@ -35,7 +43,7 @@ const isStraight = (dice: Dice, size: number) => {
   return false
 }
 
-const dieNumberToId = (number: DieNumber) => {
+const dieNumberToId = (number: Die['value']) => {
   if (number === 1) return 'ones'
   if (number === 2) return 'twos'
   if (number === 3) return 'threes'
@@ -44,11 +52,14 @@ const dieNumberToId = (number: DieNumber) => {
   return 'sixes'
 }
 
-export function calculatePotentialScores(dice: Dice, scores: Scores): Scores {
+export function calculatePotentialScores(
+  dice: Dice,
+  scores: State['scores'],
+): State['potential'] {
   const countByDie = _.countBy(dice)
   const sumOfAllDie = _.sum(dice)
 
-  const potential: Scores = {
+  const potential: State['potential'] = {
     ones: undefined,
     twos: undefined,
     threes: undefined,
