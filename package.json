@@ -46,6 +46,7 @@
     }
   },
   "dependencies": {
+    "chalk": "^4.1.0",
     "ink": "^3.0.8",
     "ink-divider": "^3.0.0",
     "ink-gradient": "^2.0.0",
@@ -55,7 +56,8 @@
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",
     "react": "^16.14.0",
-    "tings": "^0.0.26"
+    "tings": "^0.0.26",
+    "zod": "^3.0.0-alpha.4"
   },
   "devDependencies": {
     "@types/ink-divider": "^2.0.1",

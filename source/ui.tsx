@@ -8,11 +8,11 @@ import _ from 'lodash'
 import React from 'react'
 
 import type { GameEngine } from './game-engine'
-import { ScoreIds } from './model'
+import { State } from './model'
 import { observer } from './observer'
 import { toPairs } from './utils'
 
-const upperBoard: { [key: string]: ScoreIds } = {
+const upperBoard: { [key: string]: keyof State['scores'] } = {
   1: 'ones',
   2: 'twos',
   3: 'threes',
@@ -21,7 +21,7 @@ const upperBoard: { [key: string]: ScoreIds } = {
   6: 'sixes',
 }
 
-const lowerBoard: { [key: string]: ScoreIds } = {
+const lowerBoard: { [key: string]: keyof State['scores'] } = {
   Q: 'threeOfAKind',
   W: 'fourOfAKind',
   E: 'fullHouse',
