@@ -7,11 +7,13 @@ import Link from 'ink-link'
 import _ from 'lodash'
 import React from 'react'
 
-import packageJson from '../package.json'
 import type { GameEngine } from './game-engine'
 import { State } from './model'
 import { observer } from './observer'
 import { toPairs } from './utils'
+
+// eslint-disable-next-line @typescript-eslint/no-var-requires -- this does not include
+const packageJson = require('../package.json')
 
 const upperBoard: { [key: string]: keyof State['scores'] } = {
   1: 'ones',
