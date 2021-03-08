@@ -6,7 +6,6 @@ import Gradient from 'ink-gradient'
 import Link from 'ink-link'
 import _ from 'lodash'
 import React from 'react'
-import readPkgUp from 'read-pkg-up'
 
 import type { GameEngine } from './game-engine'
 import { State } from './model'
@@ -187,7 +186,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Text dimColor>{readPkgUp.sync()?.packageJson.version}</Text>
+              <Text dimColor>{process.env.npm_package_version}</Text>
             </Box>
           </Box>
         </Box>
