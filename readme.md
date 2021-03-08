@@ -1,3 +1,5 @@
+<img src="./designs/5dice.png" alt="logo" width="100" height="100" align="right" />
+
 # 5Dice
 
 A 5 dice game to play in the terminal. Any similaraites with Yahtzee are
