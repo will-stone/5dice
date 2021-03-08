@@ -9,23 +9,25 @@
     "g": { "value": 1, "held": false }
   },
   "scores": {
-    "smallStraight": 30,
-    "fullHouse": 25,
     "largeStraight": 40,
-    "fours": 16,
-    "threes": 3,
+    "fullHouse": 25,
     "fives": 20,
-    "ones": 1,
-    "threeOfAKind": 21,
-    "twos": 4,
-    "chance": 12,
-    "sixes": 6,
-    "fourOfAKind": 26,
-    "fiveDice": 0
+    "smallStraight": 30,
+    "twos": 6,
+    "fours": 8,
+    "ones": 3,
+    "threes": 9,
+    "threeOfAKind": 18,
+    "chance": 19,
+    "sixes": 18,
+    "fiveDice": 0,
+    "fourOfAKind": 0
   },
   "potential": {},
   "topScores": [
+    { "timestamp": 1615195548920, "score": 231 },
     { "timestamp": 1615192663758, "score": 214 },
-    { "timestamp": 1615192820351, "score": 204 }
+    { "timestamp": 1615192820351, "score": 204 },
+    { "timestamp": 1615194376979, "score": 202 }
   ]
 }
