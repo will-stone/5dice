@@ -7,6 +7,7 @@ import Link from 'ink-link'
 import _ from 'lodash'
 import React from 'react'
 
+import packageJson from '../package.json'
 import type { GameEngine } from './game-engine'
 import { State } from './model'
 import { observer } from './observer'
@@ -186,7 +187,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Text dimColor>{process.env.npm_package_version}</Text>
+              <Text dimColor>{packageJson.version}</Text>
             </Box>
           </Box>
         </Box>
