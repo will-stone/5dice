@@ -6,6 +6,7 @@ import Gradient from 'ink-gradient'
 import Link from 'ink-link'
 import _ from 'lodash'
 import React from 'react'
+import readPkg from 'read-pkg'
 
 import type { GameEngine } from './game-engine'
 import { State } from './model'
@@ -183,6 +184,10 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Link fallback={false} url="https://wstone.io">
                 <Gradient name="atlas">wstone.io</Gradient>
               </Link>
+            </Box>
+
+            <Box justifyContent="center">
+              <Text dimColor>{readPkg.sync().version}</Text>
             </Box>
           </Box>
         </Box>
