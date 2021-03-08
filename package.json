@@ -1,6 +1,6 @@
 {
   "name": "5dice",
-  "version": "1.8.4",
+  "version": "1.8.5",
   "description": "Terminal dice game. In no way related to Yahtzee ;-)",
   "bugs": {
     "url": "https://github.com/will-stone/5dice/issues"
