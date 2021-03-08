@@ -61,6 +61,7 @@
     "mobx": "^6.1.7",
     "mobx-react-lite": "^3.2.0",
     "react": "^16.14.0",
+    "read-pkg-up": "^7.0.1",
     "tings": "^0.0.26",
     "zod": "^3.0.0-alpha.4"
   },
