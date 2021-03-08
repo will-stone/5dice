@@ -1,4 +1,10 @@
-<img src="designs/5dice.png" alt="logo" width="100" height="100" align="right" />
+<div align="center">
+	<br>
+	<img width="200" height="200" src="designs/5dice.png" alt="logo">
+	<br>
+	<br>
+	<br>
+</div>
 
 # 5Dice
 
