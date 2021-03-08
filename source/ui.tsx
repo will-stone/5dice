@@ -226,12 +226,12 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             ))}
             <Text dimColor>─────────────────────</Text>
             <Box flexGrow={1} justifyContent="space-between">
-              <Text dimColor={upperBoardSum === 0}>Sum</Text>
-              <Text dimColor={upperBoardSum === 0}>{upperBoardSum}</Text>
+              <Text dimColor>Sum</Text>
+              <Text dimColor>{upperBoardSum}</Text>
             </Box>
             <Box flexGrow={1} justifyContent="space-between">
-              <Text dimColor={upperBoardBonus < 35}>Bonus</Text>
-              <Text dimColor={upperBoardBonus < 35}>{upperBoardBonus}</Text>
+              <Text dimColor>Bonus</Text>
+              <Text dimColor>{upperBoardBonus}</Text>
             </Box>
           </LabelBox>
 
@@ -274,8 +274,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             ))}
             <Text dimColor>═════════════════════</Text>
             <Box flexGrow={1} justifyContent="space-between">
-              <Text dimColor={total === 0}>Total</Text>
-              <Text dimColor={total === 0}>{total}</Text>
+              <Text dimColor>Total</Text>
+              <Text dimColor>{total}</Text>
             </Box>
           </LabelBox>
         </Box>
