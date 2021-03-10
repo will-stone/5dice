@@ -3,7 +3,6 @@
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
-import Link from 'ink-link'
 import _ from 'lodash'
 import React from 'react'
 
@@ -183,9 +182,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Link fallback={false} url="https://wstone.io">
-                <Gradient name="atlas">wstone.io</Gradient>
-              </Link>
+              <Gradient name="atlas">wstone.io</Gradient>
             </Box>
 
             <Box justifyContent="center">
