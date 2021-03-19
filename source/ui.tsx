@@ -148,7 +148,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           </LabelBox>
 
           <LabelBox label="Dice" width={13}>
-            <Text dimColor>A S D F G</Text>
+            <Text dimColor={turn === 0 || !canRoll}>A S D F G</Text>
             <Box flexGrow={1} justifyContent="space-between">
               {toPairs(dice).map(([id, { value, held }]) => (
                 <Text
@@ -166,28 +166,28 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
           <Box flexDirection="column" paddingBottom={1} paddingX={1}>
             <Box>
-              <Box marginLeft={2} marginRight={1}>
-                <Text dimColor>↵</Text>
+              <Box marginBottom={1} marginLeft={2} marginRight={1}>
+                <Text dimColor={!canRoll}>↵</Text>
               </Box>
               <Text dimColor={!canRoll}>Roll</Text>
             </Box>
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
-                <Text dimColor>L</Text>
+                <Text>L</Text>
               </Box>
-              <Text dimColor>Restart</Text>
+              <Text>Restart</Text>
             </Box>
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
-                <Text dimColor>P</Text>
+                <Text>P</Text>
               </Box>
-              <Text dimColor>Rules</Text>
+              <Text>Rules</Text>
             </Box>
 
             <Box marginBottom={1}>
-              <Text dimColor>esc </Text>
+              <Text>esc </Text>
               <Text>Quit</Text>
             </Box>
 
