@@ -111,7 +111,7 @@ export class GameEngine {
   }
 
   hold(dieId: keyof State['dice']): void {
-    if (!this.rolling && this.turn > 0) {
+    if (!this.rolling && (this.turn === 1 || this.turn === 2)) {
       this.dice[dieId].held = !this.dice[dieId].held
     }
   }
