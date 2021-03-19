@@ -65,7 +65,6 @@
     "zod": "^3.0.0-alpha.4"
   },
   "devDependencies": {
-    "@types/ink-divider": "^2.0.1",
     "@types/ink-gradient": "^2.0.1",
     "@types/jest": "^26.0.20",
     "@types/jsonfile": "^6.0.0",
