@@ -85,6 +85,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     canRoll,
     jokerCount,
     potentialHasJoker,
+    isGameStart,
   } = game
   const { exit } = useApp()
 
@@ -174,9 +175,9 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
-                <Text>L</Text>
+                <Text dimColor={isGameStart}>L</Text>
               </Box>
-              <Text>Restart</Text>
+              <Text dimColor={isGameStart}>Restart</Text>
             </Box>
 
             <Box>

@@ -155,6 +155,25 @@ export class GameEngine {
     return !this.isGameOver && !this.rolling && this.turn < 3
   }
 
+  get isGameStart(): boolean {
+    return (
+      this.turn === 0 &&
+      _.isUndefined(this.scores.ones) &&
+      _.isUndefined(this.scores.twos) &&
+      _.isUndefined(this.scores.threes) &&
+      _.isUndefined(this.scores.fours) &&
+      _.isUndefined(this.scores.fives) &&
+      _.isUndefined(this.scores.sixes) &&
+      _.isUndefined(this.scores.threeOfAKind) &&
+      _.isUndefined(this.scores.fourOfAKind) &&
+      _.isUndefined(this.scores.fullHouse) &&
+      _.isUndefined(this.scores.smallStraight) &&
+      _.isUndefined(this.scores.largeStraight) &&
+      _.isUndefined(this.scores.chance) &&
+      _.isUndefined(this.scores.fiveDice)
+    )
+  }
+
   get isGameOver(): boolean {
     return (
       _.isNumber(this.scores.ones) &&
