@@ -83,7 +83,6 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     rolling,
     topScores,
     canRoll,
-    isGameOver,
     jokerCount,
     potentialHasJoker,
   } = game
@@ -177,9 +176,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box marginLeft={2} marginRight={1}>
                 <Text dimColor>L</Text>
               </Box>
-              <Text dimColor={!isGameOver}>
-                {isGameOver ? 'Start' : 'Restart'}
-              </Text>
+              <Text dimColor>Restart</Text>
             </Box>
 
             <Box>

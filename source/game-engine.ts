@@ -140,6 +140,7 @@ export class GameEngine {
         .reverse()
         .slice(0, 20)
       set(this.topScores, updatedTopScores)
+      this.restart()
     }
   }
 
