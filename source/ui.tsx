@@ -1,7 +1,6 @@
 /* eslint-disable react/jsx-newline */
 
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
-import Divider from 'ink-divider'
 import Gradient from 'ink-gradient'
 import _ from 'lodash'
 import React from 'react'
@@ -133,7 +132,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   return (
     <Box flexDirection="column" width={58}>
       <Box justifyContent="center" marginY={1}>
-        <Divider dividerColor="grey" title="5Dice" titleColor="brightWhite" />
+        <Gradient colors={['#9C53F6', '#6FB5F9']}>5Dice</Gradient>
       </Box>
 
       <Box>
@@ -182,7 +181,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Gradient name="atlas">wstone.io</Gradient>
+              <Gradient colors={['#9C53F6', '#6FB5F9']}>wstone.io</Gradient>
             </Box>
 
             <Box justifyContent="center">
