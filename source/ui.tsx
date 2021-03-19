@@ -3,6 +3,7 @@
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import Gradient from 'ink-gradient'
 import _ from 'lodash'
+import open from 'open'
 import React from 'react'
 
 import type { GameEngine } from './game-engine'
@@ -106,6 +107,12 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
       return game.roll()
     }
 
+    // Open rules
+    if (lowerInput === 'p') {
+      open('http://www.yahtzee.org.uk/rules.html')
+      return
+    }
+
     // Scores
 
     for (const [hotkey, id] of Object.entries(upperBoard)) {
@@ -173,6 +180,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Text dimColor={!isGameOver}>
                 {isGameOver ? 'Start' : 'Restart'}
               </Text>
+            </Box>
+
+            <Box>
+              <Box marginLeft={2} marginRight={1}>
+                <Text dimColor>P</Text>
+              </Box>
+              <Text dimColor>Rules</Text>
             </Box>
 
             <Box marginBottom={1}>
