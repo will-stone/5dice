@@ -26,19 +26,13 @@ const scoreSchema = z.object({
   fullHouse: z.number().optional(),
   smallStraight: z.number().optional(),
   largeStraight: z.number().optional(),
-  chance: z.number().optional(),
-  fiveDice: z.number().optional(),
+  gamble: z.number().optional(),
+  '5Dice': z.number().optional(),
 })
 
 export const stateSchema = z.object({
   rolling: z.boolean(),
-  dice: z.object({
-    a: dieSchema,
-    s: dieSchema,
-    d: dieSchema,
-    f: dieSchema,
-    g: dieSchema,
-  }),
+  dice: z.tuple([dieSchema, dieSchema, dieSchema, dieSchema, dieSchema]),
   scores: scoreSchema,
   potential: scoreSchema,
   turn: z.number().min(0).max(3).int(),

@@ -71,17 +71,17 @@ export function calculatePotentialScores(
     fullHouse: undefined,
     smallStraight: undefined,
     largeStraight: undefined,
-    chance: undefined,
-    fiveDice: undefined,
+    gamble: undefined,
+    '5Dice': undefined,
   }
 
   // joker
   if (
     _.includes(countByDie, 5) &&
-    _.isNumber(scores.fiveDice) &&
-    scores.fiveDice >= 50
+    _.isNumber(scores['5Dice']) &&
+    scores['5Dice'] >= 50
   ) {
-    potential.fiveDice = scores.fiveDice + 100
+    potential['5Dice'] = scores['5Dice'] + 100
 
     const dieScoreId = dieNumberToId(dice[0])
 
@@ -97,7 +97,7 @@ export function calculatePotentialScores(
         scores.fullHouse,
         scores.smallStraight,
         scores.largeStraight,
-        scores.chance,
+        scores.gamble,
       ].every((s) => _.isNumber(s))
     ) {
       for (const scoreId of toKeys(scores)) {
@@ -128,8 +128,8 @@ export function calculatePotentialScores(
         potential.largeStraight = 40
       }
 
-      if (_.isUndefined(scores.chance)) {
-        potential.chance = sumOfAllDie
+      if (_.isUndefined(scores.gamble)) {
+        potential.gamble = sumOfAllDie
       }
     }
 
@@ -190,12 +190,12 @@ export function calculatePotentialScores(
     potential.largeStraight = 40
   }
 
-  if (_.isUndefined(scores.chance)) {
-    potential.chance = sumOfAllDie
+  if (_.isUndefined(scores.gamble)) {
+    potential.gamble = sumOfAllDie
   }
 
-  if (_.isUndefined(scores.fiveDice) && _.includes(countByDie, 5)) {
-    potential.fiveDice = 50
+  if (_.isUndefined(scores['5Dice']) && _.includes(countByDie, 5)) {
+    potential['5Dice'] = 50
   }
 
   // Cannot score

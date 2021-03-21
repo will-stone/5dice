@@ -9,13 +9,13 @@ import { biasedD6, d6 } from './utils'
 
 const initialState: State = {
   rolling: false,
-  dice: {
-    a: { value: 1, held: false },
-    s: { value: 1, held: false },
-    d: { value: 1, held: false },
-    f: { value: 1, held: false },
-    g: { value: 1, held: false },
-  },
+  dice: [
+    { value: 1, held: false },
+    { value: 1, held: false },
+    { value: 1, held: false },
+    { value: 1, held: false },
+    { value: 1, held: false },
+  ],
   scores: {},
   potential: {},
   turn: 0,
@@ -59,29 +59,15 @@ export class GameEngine {
       for (const iteration of ['first', 2, 3, 4, 5, 6, 7, 'last'] as const) {
         // A real roll
         if (iteration === 'first' || iteration === 'last') {
-          this.dice.a.value = this.dice.a.held ? this.dice.a.value : d6()
-          this.dice.s.value = this.dice.s.held ? this.dice.s.value : d6()
-          this.dice.d.value = this.dice.d.held ? this.dice.d.value : d6()
-          this.dice.f.value = this.dice.f.held ? this.dice.f.value : d6()
-          this.dice.g.value = this.dice.g.held ? this.dice.g.value : d6()
+          for (const die of this.dice) {
+            die.value = die.held ? die.value : d6()
+          }
         }
         // Fake roll
         else {
-          this.dice.a.value = this.dice.a.held
-            ? this.dice.a.value
-            : biasedD6(this.dice.a.value)
-          this.dice.s.value = this.dice.s.held
-            ? this.dice.s.value
-            : biasedD6(this.dice.s.value)
-          this.dice.d.value = this.dice.d.held
-            ? this.dice.d.value
-            : biasedD6(this.dice.d.value)
-          this.dice.f.value = this.dice.f.held
-            ? this.dice.f.value
-            : biasedD6(this.dice.f.value)
-          this.dice.g.value = this.dice.g.held
-            ? this.dice.g.value
-            : biasedD6(this.dice.g.value)
+          for (const die of this.dice) {
+            die.value = die.held ? die.value : biasedD6(die.value)
+          }
         }
 
         // Allow value to be displayed
@@ -98,11 +84,11 @@ export class GameEngine {
         this.potential,
         calculatePotentialScores(
           [
-            this.dice.a.value,
-            this.dice.s.value,
-            this.dice.d.value,
-            this.dice.f.value,
-            this.dice.g.value,
+            this.dice[0].value,
+            this.dice[1].value,
+            this.dice[2].value,
+            this.dice[3].value,
+            this.dice[4].value,
           ],
           this.scores,
         ),
@@ -110,9 +96,9 @@ export class GameEngine {
     }
   }
 
-  hold(dieId: keyof State['dice']): void {
+  hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
     if (!this.rolling && (this.turn === 1 || this.turn === 2)) {
-      this.dice[dieId].held = !this.dice[dieId].held
+      this.dice[dieIndex].held = !this.dice[dieIndex].held
     }
   }
 
@@ -120,8 +106,8 @@ export class GameEngine {
     if (!this.rolling && _.isNumber(this.potential[scoreId])) {
       this.scores[scoreId] = this.potential[scoreId]
 
-      if (this.potential.fiveDice && this.potential.fiveDice > 50) {
-        this.scores.fiveDice = this.potential.fiveDice
+      if (this.potential['5Dice'] && this.potential['5Dice'] > 50) {
+        this.scores['5Dice'] = this.potential['5Dice']
       }
 
       // Reset for next turn
@@ -169,8 +155,8 @@ export class GameEngine {
       _.isUndefined(this.scores.fullHouse) &&
       _.isUndefined(this.scores.smallStraight) &&
       _.isUndefined(this.scores.largeStraight) &&
-      _.isUndefined(this.scores.chance) &&
-      _.isUndefined(this.scores.fiveDice)
+      _.isUndefined(this.scores.gamble) &&
+      _.isUndefined(this.scores['5Dice'])
     )
   }
 
@@ -187,8 +173,8 @@ export class GameEngine {
       _.isNumber(this.scores.fullHouse) &&
       _.isNumber(this.scores.smallStraight) &&
       _.isNumber(this.scores.largeStraight) &&
-      _.isNumber(this.scores.chance) &&
-      _.isNumber(this.scores.fiveDice)
+      _.isNumber(this.scores.gamble) &&
+      _.isNumber(this.scores['5Dice'])
     )
   }
 
@@ -214,22 +200,22 @@ export class GameEngine {
       this.scores.fullHouse || 0,
       this.scores.smallStraight || 0,
       this.scores.largeStraight || 0,
-      this.scores.chance || 0,
-      this.scores.fiveDice || 0,
+      this.scores.gamble || 0,
+      this.scores['5Dice'] || 0,
     ])
   }
 
   get potentialHasJoker(): boolean {
     return (
-      _.isNumber(this.scores.fiveDice) &&
-      this.scores.fiveDice > 0 &&
-      _.isNumber(this.potential.fiveDice) &&
-      this.potential.fiveDice > this.scores.fiveDice
+      _.isNumber(this.scores['5Dice']) &&
+      this.scores['5Dice'] > 0 &&
+      _.isNumber(this.potential['5Dice']) &&
+      this.potential['5Dice'] > this.scores['5Dice']
     )
   }
 
   get jokerCount(): number {
-    return _.floor(toNumberAlways(this.scores.fiveDice) / 100)
+    return _.floor(toNumberAlways(this.scores['5Dice']) / 100)
   }
 
   get total(): number {

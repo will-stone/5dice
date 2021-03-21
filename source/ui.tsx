@@ -14,7 +14,18 @@ import { toPairs } from './utils'
 // eslint-disable-next-line @typescript-eslint/no-var-requires -- this does not include
 const packageJson = require('../package.json')
 
-const upperBoard: { [key: string]: keyof State['scores'] } = {
+const rulesKey = 'P'
+const restartKey = 'L'
+
+const diceKeys: { [key: string]: 0 | 1 | 2 | 3 | 4 } = {
+  A: 0,
+  S: 1,
+  D: 2,
+  F: 3,
+  G: 4,
+}
+
+const upperBoardKeys: { [key: string]: keyof State['scores'] } = {
   1: 'ones',
   2: 'twos',
   3: 'threes',
@@ -23,14 +34,14 @@ const upperBoard: { [key: string]: keyof State['scores'] } = {
   6: 'sixes',
 }
 
-const lowerBoard: { [key: string]: keyof State['scores'] } = {
+const lowerBoardKeys: { [key: string]: keyof State['scores'] } = {
   Q: 'threeOfAKind',
   W: 'fourOfAKind',
   E: 'fullHouse',
   R: 'smallStraight',
   T: 'largeStraight',
-  Y: 'chance',
-  U: 'fiveDice',
+  Y: 'gamble',
+  U: '5Dice',
 }
 
 const LabelBox: React.FC<{ label: string; width: number }> = ({
@@ -92,14 +103,10 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   useInput((input, key) => {
     const lowerInput = input.toLowerCase()
     // Hold
-    if (
-      lowerInput === 'a' ||
-      lowerInput === 's' ||
-      lowerInput === 'd' ||
-      lowerInput === 'f' ||
-      lowerInput === 'g'
-    ) {
-      return game.hold(lowerInput)
+    for (const [diceKey, index] of Object.entries(diceKeys)) {
+      if (lowerInput === diceKey.toLowerCase()) {
+        return game.hold(index)
+      }
     }
 
     // Roll
@@ -108,26 +115,26 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     }
 
     // Open rules
-    if (lowerInput === 'p') {
+    if (lowerInput === rulesKey.toLowerCase()) {
       open('http://www.yahtzee.org.uk/rules.html')
       return
     }
 
     // Scores
 
-    for (const [hotkey, id] of Object.entries(upperBoard)) {
+    for (const [hotkey, id] of Object.entries(upperBoardKeys)) {
       if (lowerInput === hotkey.toLowerCase()) {
         return game.score(id)
       }
     }
 
-    for (const [hotkey, id] of Object.entries(lowerBoard)) {
+    for (const [hotkey, id] of Object.entries(lowerBoardKeys)) {
       if (lowerInput === hotkey.toLowerCase()) {
         return game.score(id)
       }
     }
 
-    if (lowerInput === 'l') {
+    if (lowerInput === restartKey.toLowerCase()) {
       return game.restart()
     }
 
@@ -149,11 +156,14 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           </LabelBox>
 
           <LabelBox label="Dice" width={13}>
-            <Text dimColor={turn === 0 || !canRoll}>A S D F G</Text>
+            <Text dimColor={turn === 0 || !canRoll}>
+              {Object.keys(diceKeys).join(' ')}
+            </Text>
             <Box flexGrow={1} justifyContent="space-between">
-              {toPairs(dice).map(([id, { value, held }]) => (
+              {dice.map(({ value, held }, index) => (
                 <Text
-                  key={id}
+                  // eslint-disable-next-line react/no-array-index-key
+                  key={index}
                   dimColor={turn === 0 || (rolling && !held)}
                   inverse={held}
                 >
@@ -175,14 +185,14 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
-                <Text dimColor={isGameStart}>L</Text>
+                <Text dimColor={isGameStart}>{restartKey}</Text>
               </Box>
               <Text dimColor={isGameStart}>Restart</Text>
             </Box>
 
             <Box>
               <Box marginLeft={2} marginRight={1}>
-                <Text>P</Text>
+                <Text>{rulesKey}</Text>
               </Box>
               <Text>Rules</Text>
             </Box>
@@ -204,7 +214,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
         <Box flexDirection="column">
           <LabelBox label="Upper Board" width={25}>
-            {toPairs(upperBoard).map(([hotkey, id]) => (
+            {toPairs(upperBoardKeys).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text
                   dimColor={
@@ -244,7 +254,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           </LabelBox>
 
           <LabelBox label="Lower Board" width={25}>
-            {toPairs(lowerBoard).map(([hotkey, id]) => (
+            {toPairs(lowerBoardKeys).map(([hotkey, id]) => (
               <Box key={id} flexGrow={1}>
                 <Text
                   dimColor={
@@ -260,7 +270,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 >
                   {_.startCase(id)}
                 </Text>
-                {id === 'fiveDice' &&
+                {id === '5Dice' &&
                   _.times(jokerCount, (index) => (
                     <Text key={index} dimColor>
                       *
