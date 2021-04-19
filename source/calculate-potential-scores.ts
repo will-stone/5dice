@@ -60,18 +60,18 @@ export function calculatePotentialScores(
   const sumOfAllDie = _.sum(dice)
 
   const potential: State['potential'] = {
-    ones: undefined,
-    twos: undefined,
-    threes: undefined,
-    fours: undefined,
-    fives: undefined,
-    sixes: undefined,
-    threeOfAKind: undefined,
-    fourOfAKind: undefined,
-    fullHouse: undefined,
-    smallStraight: undefined,
-    largeStraight: undefined,
-    gamble: undefined,
+    'ones': undefined,
+    'twos': undefined,
+    'threes': undefined,
+    'fours': undefined,
+    'fives': undefined,
+    'sixes': undefined,
+    'threeOfAKind': undefined,
+    'fourOfAKind': undefined,
+    'fullHouse': undefined,
+    'smallStraight': undefined,
+    'largeStraight': undefined,
+    'gamble': undefined,
     '5Dice': undefined,
   }
 

@@ -5,7 +5,7 @@ test.each`
   ${[1, 2, 3, 4, 5]} | ${{}}            | ${{ ones: 1, twos: 2, threes: 3, fours: 4, fives: 5, smallStraight: 30, largeStraight: 40, gamble: 15 }}
   ${[1, 1, 3, 4, 5]} | ${{}}            | ${{ ones: 2, threes: 3, fours: 4, fives: 5, gamble: 14 }}
   ${[1, 1, 1, 1, 5]} | ${{}}            | ${{ ones: 4, fives: 5, threeOfAKind: 9, fourOfAKind: 9, gamble: 9 }}
-  ${[1, 1, 1, 1, 1]} | ${{}}            | ${{ ones: 5, threeOfAKind: 5, fourOfAKind: 5, gamble: 5, '5Dice': 50 }}
+  ${[1, 1, 1, 1, 1]} | ${{}}            | ${{ 'ones': 5, 'threeOfAKind': 5, 'fourOfAKind': 5, 'gamble': 5, '5Dice': 50 }}
   ${[6, 3, 6, 2, 2]} | ${{}}            | ${{ twos: 4, threes: 3, sixes: 12, gamble: 19 }}
   ${[1, 2, 2, 2, 2]} | ${{ ones: 2 }}   | ${{ twos: 8, threeOfAKind: 9, fourOfAKind: 9, gamble: 9 }}
   ${[3, 2, 2, 2, 2]} | ${{ twos: 4 }}   | ${{ threes: 3, threeOfAKind: 11, fourOfAKind: 11, gamble: 11 }}
@@ -23,7 +23,7 @@ test.each`
   dice               | scores                 | expected
   ${[3, 3, 3, 1, 2]} | ${{}}                  | ${{ ones: 1, twos: 2, threes: 9, threeOfAKind: 12, gamble: 12 }}
   ${[3, 3, 3, 3, 2]} | ${{}}                  | ${{ twos: 2, threes: 12, threeOfAKind: 14, fourOfAKind: 14, gamble: 14 }}
-  ${[3, 3, 3, 3, 3]} | ${{}}                  | ${{ threes: 15, threeOfAKind: 15, fourOfAKind: 15, gamble: 15, '5Dice': 50 }}
+  ${[3, 3, 3, 3, 3]} | ${{}}                  | ${{ 'threes': 15, 'threeOfAKind': 15, 'fourOfAKind': 15, 'gamble': 15, '5Dice': 50 }}
   ${[5, 5, 3, 5, 3]} | ${{}}                  | ${{ threes: 6, fives: 15, threeOfAKind: 21, fullHouse: 25, gamble: 21 }}
   ${[5, 5, 3, 5, 3]} | ${{ threeOfAKind: 3 }} | ${{ threes: 6, fives: 15, fullHouse: 25, gamble: 21 }}
 `('three of a kind', ({ dice, scores, expected }) => {
@@ -75,12 +75,12 @@ test.each`
 })
 
 test.each`
-  dice               | scores                       | expected
-  ${[2, 2, 2, 2, 2]} | ${{}}                        | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, '5Dice': 50, gamble: 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}            | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}           | ${{ twos: 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ twos: 4, '5Dice': 50 }}  | ${{ threeOfAKind: 10, fourOfAKind: 10, fullHouse: 25, smallStraight: 30, largeStraight: 40, gamble: 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ twos: 4, '5Dice': 150 }} | ${{ threeOfAKind: 10, fourOfAKind: 10, fullHouse: 25, smallStraight: 30, largeStraight: 40, gamble: 10, '5Dice': 250 }}
+  dice               | scores                         | expected
+  ${[2, 2, 2, 2, 2]} | ${{}}                          | ${{ 'twos': 10, 'threeOfAKind': 10, 'fourOfAKind': 10, '5Dice': 50, 'gamble': 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}              | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}             | ${{ 'twos': 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 50 }}  | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 150 }} | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 250 }}
 `('Five Dice', ({ dice, scores, expected }) => {
   expect(calculatePotentialScores(dice, scores)).toEqual(expected)
 })
@@ -95,13 +95,13 @@ test('cannot score', () => {
       gamble: 0,
     }),
   ).toEqual({
-    threes: 0,
-    fours: 0,
-    fives: 0,
-    sixes: 0,
-    fullHouse: 0,
-    smallStraight: 0,
-    largeStraight: 0,
+    'threes': 0,
+    'fours': 0,
+    'fives': 0,
+    'sixes': 0,
+    'fullHouse': 0,
+    'smallStraight': 0,
+    'largeStraight': 0,
     '5Dice': 0,
   })
 })
@@ -110,18 +110,18 @@ test('full score', () => {
   expect(
     calculatePotentialScores([1, 1, 2, 1, 2], { fives: 10 }),
   ).toStrictEqual({
-    ones: 3,
-    twos: 4,
-    threes: undefined,
-    fours: undefined,
-    fives: undefined,
-    sixes: undefined,
-    threeOfAKind: 7,
-    fourOfAKind: undefined,
-    fullHouse: 25,
-    smallStraight: undefined,
-    largeStraight: undefined,
-    gamble: 7,
+    'ones': 3,
+    'twos': 4,
+    'threes': undefined,
+    'fours': undefined,
+    'fives': undefined,
+    'sixes': undefined,
+    'threeOfAKind': 7,
+    'fourOfAKind': undefined,
+    'fullHouse': 25,
+    'smallStraight': undefined,
+    'largeStraight': undefined,
+    'gamble': 7,
     '5Dice': undefined,
   })
 })
