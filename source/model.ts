@@ -15,18 +15,18 @@ const dieSchema = z.object({
 export type Die = z.infer<typeof dieSchema>
 
 const scoreSchema = z.object({
-  ones: z.number().optional(),
-  twos: z.number().optional(),
-  threes: z.number().optional(),
-  fours: z.number().optional(),
-  fives: z.number().optional(),
-  sixes: z.number().optional(),
-  threeOfAKind: z.number().optional(),
-  fourOfAKind: z.number().optional(),
-  fullHouse: z.number().optional(),
-  smallStraight: z.number().optional(),
-  largeStraight: z.number().optional(),
-  gamble: z.number().optional(),
+  'ones': z.number().optional(),
+  'twos': z.number().optional(),
+  'threes': z.number().optional(),
+  'fours': z.number().optional(),
+  'fives': z.number().optional(),
+  'sixes': z.number().optional(),
+  'threeOfAKind': z.number().optional(),
+  'fourOfAKind': z.number().optional(),
+  'fullHouse': z.number().optional(),
+  'smallStraight': z.number().optional(),
+  'largeStraight': z.number().optional(),
+  'gamble': z.number().optional(),
   '5Dice': z.number().optional(),
 })
 
