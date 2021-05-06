@@ -8,7 +8,7 @@ import type { State } from './model'
 import { biasedD6, d6 } from './utils'
 
 const initialState: State = {
-  rolling: false,
+  isRolling: false,
   dice: [
     { value: 1, held: false },
     { value: 1, held: false },
@@ -23,7 +23,7 @@ const initialState: State = {
 }
 
 export class GameEngine {
-  rolling = initialState.rolling
+  isRolling = initialState.isRolling
 
   turn = initialState.turn
 
@@ -54,7 +54,7 @@ export class GameEngine {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
-      this.rolling = true
+      this.isRolling = true
 
       for (const iteration of ['first', 2, 3, 4, 5, 6, 7, 'last'] as const) {
         // A real roll
@@ -76,7 +76,7 @@ export class GameEngine {
         }
       }
 
-      this.rolling = false
+      this.isRolling = false
 
       // Replacing the whole object means computeds are no longer updated.
       // By using `set` we force all observables to be replaced by new observables.
@@ -97,13 +97,13 @@ export class GameEngine {
   }
 
   hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
-    if (!this.rolling && (this.turn === 1 || this.turn === 2)) {
+    if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
       this.dice[dieIndex].held = !this.dice[dieIndex].held
     }
   }
 
   score(scoreId: keyof State['scores']): void {
-    if (!this.rolling && _.isNumber(this.potential[scoreId])) {
+    if (!this.isRolling && _.isNumber(this.potential[scoreId])) {
       this.scores[scoreId] = this.potential[scoreId]
 
       if (this.potential['5Dice'] && this.potential['5Dice'] > 50) {
@@ -138,7 +138,7 @@ export class GameEngine {
   }
 
   get canRoll(): boolean {
-    return !this.isGameOver && !this.rolling && this.turn < 3
+    return !this.isGameOver && !this.isRolling && this.turn < 3
   }
 
   get isGameStart(): boolean {

@@ -31,7 +31,7 @@ const scoreSchema = z.object({
 })
 
 export const stateSchema = z.object({
-  rolling: z.boolean(),
+  isRolling: z.boolean(),
   dice: z.tuple([dieSchema, dieSchema, dieSchema, dieSchema, dieSchema]),
   scores: scoreSchema,
   potential: scoreSchema,
