@@ -91,7 +91,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     upperBoardBonus,
     total,
     dice,
-    rolling,
+    isRolling,
     topScores,
     canRoll,
     jokerCount,
@@ -100,48 +100,51 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   } = game
   const { exit } = useApp()
 
-  useInput((input, key) => {
-    const lowerInput = input.toLowerCase()
-    // Hold
-    for (const [diceKey, index] of Object.entries(diceKeys)) {
-      if (lowerInput === diceKey.toLowerCase()) {
-        return game.hold(index)
+  useInput(
+    (input, key) => {
+      const lowerInput = input.toLowerCase()
+      // Hold
+      for (const [diceKey, index] of Object.entries(diceKeys)) {
+        if (lowerInput === diceKey.toLowerCase()) {
+          return game.hold(index)
+        }
       }
-    }
 
-    // Roll
-    if (key.return) {
-      return game.roll()
-    }
-
-    // Open rules
-    if (lowerInput === rulesKey.toLowerCase()) {
-      open('http://www.yahtzee.org.uk/rules.html')
-      return
-    }
-
-    // Scores
-
-    for (const [hotkey, id] of Object.entries(upperBoardKeys)) {
-      if (lowerInput === hotkey.toLowerCase()) {
-        return game.score(id)
+      // Roll
+      if (key.return) {
+        return game.roll()
       }
-    }
 
-    for (const [hotkey, id] of Object.entries(lowerBoardKeys)) {
-      if (lowerInput === hotkey.toLowerCase()) {
-        return game.score(id)
+      // Open rules
+      if (lowerInput === rulesKey.toLowerCase()) {
+        open('http://www.yahtzee.org.uk/rules.html')
+        return
       }
-    }
 
-    if (lowerInput === restartKey.toLowerCase()) {
-      return game.restart()
-    }
+      // Scores
 
-    if (key.escape) {
-      return exit()
-    }
-  })
+      for (const [hotkey, id] of Object.entries(upperBoardKeys)) {
+        if (lowerInput === hotkey.toLowerCase()) {
+          return game.score(id)
+        }
+      }
+
+      for (const [hotkey, id] of Object.entries(lowerBoardKeys)) {
+        if (lowerInput === hotkey.toLowerCase()) {
+          return game.score(id)
+        }
+      }
+
+      if (lowerInput === restartKey.toLowerCase()) {
+        return game.restart()
+      }
+
+      if (key.escape) {
+        return exit()
+      }
+    },
+    { isActive: !isRolling },
+  )
 
   return (
     <Box flexDirection="column" width={58}>
@@ -164,7 +167,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
-                  dimColor={turn === 0 || (rolling && !held)}
+                  dimColor={turn === 0 || (isRolling && !held)}
                   inverse={held}
                 >
                   {turn > 0 ? value : '-'}
