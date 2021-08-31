@@ -8,7 +8,7 @@
 
 # 5Dice
 
-A 5 dice game to play in the terminal. Any similaraites with Yahtzee are
+A 5 dice game to play in the terminal. Any similarities with Yahtzee are
 completely coincidental.
 
 NB: this saves your scores to a `5dice.json` file in the directory it is run.
