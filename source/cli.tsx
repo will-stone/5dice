@@ -7,6 +7,7 @@ import { render } from 'ink'
 import jsonfile from 'jsonfile'
 import { autorun, toJS } from 'mobx'
 import React from 'react'
+import type { ZodError } from 'zod'
 
 import { GameEngine } from './game-engine'
 import { stateSchema } from './model'
@@ -20,7 +21,7 @@ if (savedFile) {
   } catch (error) {
     console.error(chalk.red('Error reading your 5dice.json file'))
 
-    for (const issue of error.issues) {
+    for (const issue of (error as ZodError).issues) {
       console.log(
         `${chalk.blue(issue.path.join(' > '))} ${chalk.bold(
           issue.message.toUpperCase(),
