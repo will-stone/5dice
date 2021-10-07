@@ -23,19 +23,19 @@ const initialState: State = {
 }
 
 export class GameEngine {
-  isRolling = initialState.isRolling
+  public isRolling = initialState.isRolling
 
-  turn = initialState.turn
+  public turn = initialState.turn
 
-  dice = initialState.dice
+  public dice = initialState.dice
 
-  scores = initialState.scores
+  public scores = initialState.scores
 
-  potential = initialState.potential
+  public potential = initialState.potential
 
-  topScores = initialState.topScores
+  public topScores = initialState.topScores
 
-  constructor(savedState?: State) {
+  public constructor(savedState?: State) {
     makeAutoObservable(this, { roll: flow })
 
     if (savedState) {
@@ -50,7 +50,7 @@ export class GameEngine {
   /**
    * Advance turn and roll all unheld dice
    */
-  *roll(): Generator<Promise<void>, void, unknown> {
+  public *roll(): Generator<Promise<void>, void, unknown> {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
@@ -96,13 +96,13 @@ export class GameEngine {
     }
   }
 
-  hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
+  public hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
     if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
       this.dice[dieIndex].held = !this.dice[dieIndex].held
     }
   }
 
-  score(scoreId: keyof State['scores']): void {
+  public score(scoreId: keyof State['scores']): void {
     if (!this.isRolling && _.isNumber(this.potential[scoreId])) {
       this.scores[scoreId] = this.potential[scoreId]
 
@@ -130,18 +130,18 @@ export class GameEngine {
     }
   }
 
-  restart(): void {
+  public restart(): void {
     this.dice = initialState.dice
     this.scores = initialState.scores
     this.potential = initialState.potential
     this.turn = initialState.turn
   }
 
-  get canRoll(): boolean {
+  public get canRoll(): boolean {
     return !this.isGameOver && !this.isRolling && this.turn < 3
   }
 
-  get isGameStart(): boolean {
+  public get isGameStart(): boolean {
     return (
       this.turn === 0 &&
       _.isUndefined(this.scores.ones) &&
@@ -160,7 +160,7 @@ export class GameEngine {
     )
   }
 
-  get isGameOver(): boolean {
+  public get isGameOver(): boolean {
     return (
       _.isNumber(this.scores.ones) &&
       _.isNumber(this.scores.twos) &&
@@ -178,7 +178,7 @@ export class GameEngine {
     )
   }
 
-  get upperBoardSum(): number {
+  public get upperBoardSum(): number {
     return _.sum([
       this.scores.ones || 0,
       this.scores.twos || 0,
@@ -189,11 +189,11 @@ export class GameEngine {
     ])
   }
 
-  get upperBoardBonus(): number {
+  public get upperBoardBonus(): number {
     return this.upperBoardSum >= 63 ? 35 : 0
   }
 
-  get lowerBoardSum(): number {
+  public get lowerBoardSum(): number {
     return _.sum([
       this.scores.threeOfAKind || 0,
       this.scores.fourOfAKind || 0,
@@ -205,7 +205,7 @@ export class GameEngine {
     ])
   }
 
-  get potentialHasJoker(): boolean {
+  public get potentialHasJoker(): boolean {
     return (
       _.isNumber(this.scores['5Dice']) &&
       this.scores['5Dice'] > 0 &&
@@ -214,11 +214,11 @@ export class GameEngine {
     )
   }
 
-  get jokerCount(): number {
+  public get jokerCount(): number {
     return _.floor(toNumberAlways(this.scores['5Dice']) / 100)
   }
 
-  get total(): number {
+  public get total(): number {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
   }
 }

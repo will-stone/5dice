@@ -18,7 +18,7 @@ const savedFile = jsonfile.readFileSync('5dice.json', { throws: false })
 if (savedFile) {
   try {
     stateSchema.parse(savedFile)
-  } catch (error) {
+  } catch (error: unknown) {
     console.error(chalk.red('Error reading your 5dice.json file'))
 
     for (const issue of (error as ZodError).issues) {

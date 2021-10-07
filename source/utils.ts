@@ -1,4 +1,4 @@
-import { Die } from './model'
+import type { Die } from './model'
 
 export const toPairs = Object.entries as <T>(o: T) => [keyof T, T[keyof T]][]
 
