@@ -1,5 +1,3 @@
-/* eslint-disable react/jsx-newline */
-
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import Gradient from 'ink-gradient'
 import _ from 'lodash'
@@ -7,17 +5,17 @@ import open from 'open'
 import React from 'react'
 
 import type { GameEngine } from './game-engine'
-import { State } from './model'
+import type { State } from './model'
 import { observer } from './observer'
 import { toPairs } from './utils'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires -- this does not include
+// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- this does not import
 const packageJson = require('../package.json')
 
 const rulesKey = 'P'
 const restartKey = 'L'
 
-const diceKeys: { [key: string]: 0 | 1 | 2 | 3 | 4 } = {
+const diceKeys: Record<string, 0 | 1 | 2 | 3 | 4> = {
   A: 0,
   S: 1,
   D: 2,
@@ -25,7 +23,7 @@ const diceKeys: { [key: string]: 0 | 1 | 2 | 3 | 4 } = {
   G: 4,
 }
 
-const upperBoardKeys: { [key: string]: keyof State['scores'] } = {
+const upperBoardKeys: Record<string, keyof State['scores']> = {
   1: 'ones',
   2: 'twos',
   3: 'threes',
@@ -34,7 +32,7 @@ const upperBoardKeys: { [key: string]: keyof State['scores'] } = {
   6: 'sixes',
 }
 
-const lowerBoardKeys: { [key: string]: keyof State['scores'] } = {
+const lowerBoardKeys: Record<string, keyof State['scores']> = {
   Q: 'threeOfAKind',
   W: 'fourOfAKind',
   E: 'fullHouse',
@@ -168,8 +166,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   dimColor={turn === 0 || (isRolling && !held)}
-                  inverse={held}
-                >
+                  inverse={held}>
                   {turn > 0 ? value : '-'}
                 </Text>
               ))}
@@ -222,15 +219,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }
-                >
+                  }>
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }
-                >
+                  }>
                   {_.startCase(id)}
                 </Text>
                 <Spacer />
@@ -238,8 +233,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   <Text
                     dimColor={
                       !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                    }
-                  >
+                    }>
                     {scores[id] ?? potential[id]}
                   </Text>
                 </Box>
@@ -262,15 +256,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }
-                >
+                  }>
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }
-                >
+                  }>
                   {_.startCase(id)}
                 </Text>
                 {id === '5Dice' &&
@@ -284,8 +276,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   <Text
                     dimColor={
                       !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                    }
-                  >
+                    }>
                     {potentialHasJoker
                       ? potential[id]
                       : scores[id] ?? potential[id]}
@@ -309,8 +300,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Box
                   key={topScore.timestamp}
                   flexGrow={1}
-                  justifyContent="space-between"
-                >
+                  justifyContent="space-between">
                   <Text dimColor={!isRecent}>
                     {new Intl.DateTimeFormat().format(topScore.timestamp)}
                   </Text>
