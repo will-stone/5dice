@@ -2,7 +2,7 @@ import _ from 'lodash'
 import { flow, makeAutoObservable, set } from 'mobx'
 import { sleep, toNumber } from 'tings'
 
-import { calculatePotentialScores } from './calculate-potential-scores'
+import { calculatePotentialScore } from './calculate-potential-score'
 import type { State } from './model'
 import { biasedD6, d6 } from './utils'
 
@@ -166,7 +166,7 @@ export class GameEngine {
       // By using `set` we force all observables to be replaced by new observables.
       set(
         this.potential,
-        calculatePotentialScores(
+        calculatePotentialScore(
           [
             this.dice[0].value,
             this.dice[1].value,
