@@ -1,5 +1,5 @@
 import _ from 'lodash'
-import toNumberAlways from 'tings/toNumberAlways'
+import { toNumber } from 'tings'
 
 import type { Die, State } from './model'
 import { toKeys } from './utils'
@@ -137,27 +137,27 @@ export function calculatePotentialScores(
   }
 
   if (_.isUndefined(scores.ones) && countByDie['1']) {
-    potential.ones = toNumberAlways(countByDie['1'])
+    potential.ones = toNumber(countByDie['1'])
   }
 
   if (_.isUndefined(scores.twos) && countByDie['2']) {
-    potential.twos = toNumberAlways(countByDie['2']) * 2
+    potential.twos = toNumber(countByDie['2']) * 2
   }
 
   if (_.isUndefined(scores.threes) && countByDie['3']) {
-    potential.threes = toNumberAlways(countByDie['3']) * 3
+    potential.threes = toNumber(countByDie['3']) * 3
   }
 
   if (_.isUndefined(scores.fours) && countByDie['4']) {
-    potential.fours = toNumberAlways(countByDie['4']) * 4
+    potential.fours = toNumber(countByDie['4']) * 4
   }
 
   if (_.isUndefined(scores.fives) && countByDie['5']) {
-    potential.fives = toNumberAlways(countByDie['5']) * 5
+    potential.fives = toNumber(countByDie['5']) * 5
   }
 
   if (_.isUndefined(scores.sixes) && countByDie['6']) {
-    potential.sixes = toNumberAlways(countByDie['6']) * 6
+    potential.sixes = toNumber(countByDie['6']) * 6
   }
 
   if (

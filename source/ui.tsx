@@ -2,6 +2,7 @@ import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import Gradient from 'ink-gradient'
 import _ from 'lodash'
 import open from 'open'
+import type { ReactNode } from 'react'
 import React from 'react'
 
 import type { GameEngine } from './game-engine'
@@ -42,11 +43,11 @@ const lowerBoardKeys: Record<string, keyof State['scores']> = {
   U: '5Dice',
 }
 
-const LabelBox: React.FC<{ label: string; width: number }> = ({
-  children,
-  label,
-  width,
-}) => {
+const LabelBox: React.FC<{
+  label: string
+  width: number
+  children: ReactNode
+}> = ({ children, label, width }) => {
   if (width > 0) {
     return (
       <Box flexDirection="column" width={width}>
@@ -168,7 +169,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
                   dimColor={turn === 0 || (isRolling && !held)}
-                  inverse={held}>
+                  inverse={held}
+                >
                   {turn > 0 ? value : '-'}
                 </Text>
               ))}
@@ -221,13 +223,15 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }>
+                  }
+                >
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }>
+                  }
+                >
                   {_.startCase(id)}
                 </Text>
                 <Spacer />
@@ -235,7 +239,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   <Text
                     dimColor={
                       !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                    }>
+                    }
+                  >
                     {scores[id] ?? potential[id]}
                   </Text>
                 </Box>
@@ -258,13 +263,15 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }>
+                  }
+                >
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
                     !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                  }>
+                  }
+                >
                   {_.startCase(id)}
                 </Text>
                 {id === '5Dice' &&
@@ -278,7 +285,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   <Text
                     dimColor={
                       !_.isNumber(potential[id]) || _.isNumber(scores[id])
-                    }>
+                    }
+                  >
                     {potentialHasJoker
                       ? potential[id]
                       : scores[id] ?? potential[id]}
@@ -302,7 +310,8 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Box
                   key={topScore.timestamp}
                   flexGrow={1}
-                  justifyContent="space-between">
+                  justifyContent="space-between"
+                >
                   <Text dimColor={!isRecent}>
                     {new Intl.DateTimeFormat().format(topScore.timestamp)}
                   </Text>
