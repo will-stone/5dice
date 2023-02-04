@@ -96,11 +96,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
     potentialHasJoker,
     isGameStart,
   } = game
+
   const { exit } = useApp()
 
   useInput(
     (input, key) => {
       const lowerInput = input.toLowerCase()
+
       // Hold
       for (const [diceKey, index] of Object.entries(diceKeys)) {
         if (lowerInput === diceKey.toLowerCase()) {
