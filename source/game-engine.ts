@@ -6,7 +6,7 @@ import { calculatePotentialScore } from './calculate-potential-score'
 import type { State } from './model'
 import { biasedD6, d6 } from './utils'
 
-const initialState: State = {
+export const initialState: State = {
   isRolling: false,
   dice: [
     { value: 1, held: false },
@@ -15,8 +15,36 @@ const initialState: State = {
     { value: 1, held: false },
     { value: 1, held: false },
   ],
-  scores: {},
-  potential: {},
+  scores: {
+    'ones': undefined,
+    'twos': undefined,
+    'threes': undefined,
+    'fours': undefined,
+    'fives': undefined,
+    'sixes': undefined,
+    'threeOfAKind': undefined,
+    'fourOfAKind': undefined,
+    'fullHouse': undefined,
+    'smallStraight': undefined,
+    'largeStraight': undefined,
+    'gamble': undefined,
+    '5Dice': undefined,
+  },
+  potential: {
+    'ones': undefined,
+    'twos': undefined,
+    'threes': undefined,
+    'fours': undefined,
+    'fives': undefined,
+    'sixes': undefined,
+    'threeOfAKind': undefined,
+    'fourOfAKind': undefined,
+    'fullHouse': undefined,
+    'smallStraight': undefined,
+    'largeStraight': undefined,
+    'gamble': undefined,
+    '5Dice': undefined,
+  },
   turn: 0,
   topScores: [],
 }
@@ -140,9 +168,9 @@ export class GameEngine {
 
       this.isRolling = true
 
-      for (const iteration of ['first', 2, 3, 4, 5, 6, 7, 'last'] as const) {
+      for (const iteration of [1, 2, 3, 4, 5, 6, 7, 'last'] as const) {
         // A real roll
-        if (iteration === 'first' || iteration === 'last') {
+        if (iteration === 'last') {
           for (const die of this.dice) {
             die.value = die.held ? die.value : d6()
           }
@@ -152,10 +180,8 @@ export class GameEngine {
           for (const die of this.dice) {
             die.value = die.held ? die.value : biasedD6(die.value)
           }
-        }
 
-        // Allow value to be displayed
-        if (iteration !== 'last') {
+          // Allow value to be displayed
           yield sleep(50)
         }
       }
