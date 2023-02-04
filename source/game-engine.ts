@@ -47,96 +47,6 @@ export class GameEngine {
     }
   }
 
-  /**
-   * Advance turn and roll all unheld dice
-   */
-  public *roll(): Generator<Promise<void>, void, unknown> {
-    if (this.canRoll) {
-      this.turn = this.turn + 1
-
-      this.isRolling = true
-
-      for (const iteration of ['first', 2, 3, 4, 5, 6, 7, 'last'] as const) {
-        // A real roll
-        if (iteration === 'first' || iteration === 'last') {
-          for (const die of this.dice) {
-            die.value = die.held ? die.value : d6()
-          }
-        }
-        // Fake roll
-        else {
-          for (const die of this.dice) {
-            die.value = die.held ? die.value : biasedD6(die.value)
-          }
-        }
-
-        // Allow value to be displayed
-        if (iteration !== 'last') {
-          yield sleep(50)
-        }
-      }
-
-      this.isRolling = false
-
-      // Replacing the whole object means computeds are no longer updated.
-      // By using `set` we force all observables to be replaced by new observables.
-      set(
-        this.potential,
-        calculatePotentialScores(
-          [
-            this.dice[0].value,
-            this.dice[1].value,
-            this.dice[2].value,
-            this.dice[3].value,
-            this.dice[4].value,
-          ],
-          this.scores,
-        ),
-      )
-    }
-  }
-
-  public hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
-    if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
-      this.dice[dieIndex].held = !this.dice[dieIndex].held
-    }
-  }
-
-  public score(scoreId: keyof State['scores']): void {
-    if (!this.isRolling && _.isNumber(this.potential[scoreId])) {
-      this.scores[scoreId] = this.potential[scoreId]
-
-      if (this.potential['5Dice'] && this.potential['5Dice'] > 50) {
-        this.scores['5Dice'] = this.potential['5Dice']
-      }
-
-      // Reset for next turn
-      this.potential = {}
-
-      // Reset
-      this.dice = initialState.dice
-      this.turn = initialState.turn
-    }
-
-    if (this.isGameOver) {
-      const updatedTopScores = _.sortBy(
-        [...this.topScores, { timestamp: Date.now(), score: this.total }],
-        ['score'],
-      )
-        .reverse()
-        .slice(0, 20)
-      set(this.topScores, updatedTopScores)
-      this.restart()
-    }
-  }
-
-  public restart(): void {
-    this.dice = initialState.dice
-    this.scores = initialState.scores
-    this.potential = initialState.potential
-    this.turn = initialState.turn
-  }
-
   public get canRoll(): boolean {
     return !this.isGameOver && !this.isRolling && this.turn < 3
   }
@@ -220,5 +130,96 @@ export class GameEngine {
 
   public get total(): number {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
+  }
+
+  /**
+   * Advance turn and roll all unheld dice
+   */
+  public *roll(): Generator<Promise<void>, void, unknown> {
+    if (this.canRoll) {
+      this.turn = this.turn + 1
+
+      this.isRolling = true
+
+      for (const iteration of ['first', 2, 3, 4, 5, 6, 7, 'last'] as const) {
+        // A real roll
+        if (iteration === 'first' || iteration === 'last') {
+          for (const die of this.dice) {
+            die.value = die.held ? die.value : d6()
+          }
+        }
+        // Fake roll
+        else {
+          for (const die of this.dice) {
+            die.value = die.held ? die.value : biasedD6(die.value)
+          }
+        }
+
+        // Allow value to be displayed
+        if (iteration !== 'last') {
+          yield sleep(50)
+        }
+      }
+
+      this.isRolling = false
+
+      // Replacing the whole object means computeds are no longer updated.
+      // By using `set` we force all observables to be replaced by new observables.
+      set(
+        this.potential,
+        calculatePotentialScores(
+          [
+            this.dice[0].value,
+            this.dice[1].value,
+            this.dice[2].value,
+            this.dice[3].value,
+            this.dice[4].value,
+          ],
+          this.scores,
+        ),
+      )
+    }
+  }
+
+  public hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
+    if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
+      this.dice[dieIndex].held = !this.dice[dieIndex].held
+    }
+  }
+
+  public score(scoreId: keyof State['scores']): void {
+    if (!this.isRolling && _.isNumber(this.potential[scoreId])) {
+      this.scores[scoreId] = this.potential[scoreId]
+
+      if (this.potential['5Dice'] && this.potential['5Dice'] > 50) {
+        this.scores['5Dice'] = this.potential['5Dice']
+      }
+
+      // Reset for next turn
+      this.potential = {}
+
+      // Reset
+      this.dice = initialState.dice
+      this.turn = initialState.turn
+    }
+
+    if (this.isGameOver) {
+      const updatedTopScores = _.sortBy(
+        [...this.topScores, { timestamp: Date.now(), score: this.total }],
+        ['score'],
+      )
+        .reverse()
+        .slice(0, 20)
+
+      set(this.topScores, updatedTopScores)
+      this.restart()
+    }
+  }
+
+  public restart(): void {
+    this.dice = initialState.dice
+    this.scores = initialState.scores
+    this.potential = initialState.potential
+    this.turn = initialState.turn
   }
 }
