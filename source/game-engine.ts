@@ -132,7 +132,7 @@ export class GameEngine {
   }
 
   /**
-   * Advance turn and roll all unheld dice
+   * Advance turn and roll all non-held dice
    */
   public *roll(): Generator<Promise<void>, void, unknown> {
     if (this.canRoll) {
@@ -162,7 +162,7 @@ export class GameEngine {
 
       this.isRolling = false
 
-      // Replacing the whole object means computeds are no longer updated.
+      // Replacing the whole object means computed's are no longer updated.
       // By using `set` we force all observables to be replaced by new observables.
       set(
         this.potential,
