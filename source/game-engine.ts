@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { flow, makeAutoObservable, set } from 'mobx'
-import sleep from 'tings/sleep'
-import toNumberAlways from 'tings/toNumberAlways'
+import { sleep, toNumber } from 'tings'
 
 import { calculatePotentialScores } from './calculate-potential-scores'
 import type { State } from './model'
@@ -125,7 +124,7 @@ export class GameEngine {
   }
 
   public get jokerCount(): number {
-    return _.floor(toNumberAlways(this.scores['5Dice']) / 100)
+    return _.floor(toNumber(this.scores['5Dice']) / 100)
   }
 
   public get total(): number {
