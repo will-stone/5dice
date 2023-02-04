@@ -52,7 +52,7 @@ const dieNumberToId = (number: Die['value']) => {
   return 'sixes'
 }
 
-export function calculatePotentialScores(
+export function calculatePotentialScore(
   dice: Dice,
   scores: State['scores'],
 ): State['potential'] {
@@ -85,11 +85,11 @@ export function calculatePotentialScores(
 
     const dieScoreId = dieNumberToId(dice[0])
 
-    // Upperboard score
+    // Upper-board score
     if (_.isUndefined(scores[dieScoreId])) {
       potential[dieScoreId] = sumOfAllDie
     }
-    // Upperboard score isn't available, Lowerboard is full, force 0
+    // Upper-board score isn't available, Lower-board is full, force 0
     else if (
       [
         scores.threeOfAKind,
@@ -106,7 +106,7 @@ export function calculatePotentialScores(
         }
       }
     }
-    // Lowerboard score
+    // Lower-board score
     else {
       if (_.isUndefined(scores.threeOfAKind)) {
         potential.threeOfAKind = sumOfAllDie
