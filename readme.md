@@ -4,6 +4,7 @@
 	<br>
 	<br>
 	<br>
+	<img src="./screenshot.png" style="max-width: 500px" />
 </div>
 
 # 5Dice

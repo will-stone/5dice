@@ -18,7 +18,8 @@
     "5dice": "dist/cli.js"
   },
   "files": [
-    "dist/*"
+    "dist/*",
+    "screenshot.png"
   ],
   "scripts": {
     "build": "tsc",
