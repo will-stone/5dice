@@ -207,7 +207,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Gradient colors={['#9C53F6', '#6FB5F9']}>wstone.io</Gradient>
+              <Gradient colors={['#9C53F6', '#6FB5F9']}>wstone.uk</Gradient>
             </Box>
 
             <Box justifyContent="center">
