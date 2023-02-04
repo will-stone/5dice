@@ -118,7 +118,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
       // Open rules
       if (lowerInput === rulesKey.toLowerCase()) {
-        open('http://www.yahtzee.org.uk/rules.html')
+        open('https://en.wikipedia.org/wiki/Yahtzee#Rules')
         return
       }
 
