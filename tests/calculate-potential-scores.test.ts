@@ -1,20 +1,5 @@
 import { calculatePotentialScore } from '../source/calculate-potential-score'
-
-const emptyScore = {
-  'ones': undefined,
-  'twos': undefined,
-  'threes': undefined,
-  'fours': undefined,
-  'fives': undefined,
-  'sixes': undefined,
-  'threeOfAKind': undefined,
-  'fourOfAKind': undefined,
-  'fullHouse': undefined,
-  'smallStraight': undefined,
-  'largeStraight': undefined,
-  'gamble': undefined,
-  '5Dice': undefined,
-}
+import { initialState } from '../source/game-engine'
 
 test.each`
   dice               | score            | expected
@@ -33,7 +18,7 @@ test.each`
   ${[6, 2, 2, 2, 2]} | ${{ sixes: 0 }}  | ${{ twos: 8, threeOfAKind: 14, fourOfAKind: 14, gamble: 14 }}
 `('[upperboard] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     ...expected,
   })
 })
@@ -49,7 +34,7 @@ test.each`
   '[three of a kind] dice: $dice, score: $score',
   ({ dice, score, expected }) => {
     expect(calculatePotentialScore(dice, score)).toStrictEqual({
-      ...emptyScore,
+      ...initialState.potential,
       ...expected,
     })
   },
@@ -64,7 +49,7 @@ test.each`
   '[four of a kind] dice: $dice, score: $score',
   ({ dice, score, expected }) => {
     expect(calculatePotentialScore(dice, score)).toStrictEqual({
-      ...emptyScore,
+      ...initialState.potential,
       ...expected,
     })
   },
@@ -77,7 +62,7 @@ test.each`
   ${[3, 3, 3, 1, 1]} | ${{ fullHouse: 0 }}  | ${{ ones: 2, threes: 9, threeOfAKind: 11, gamble: 11 }}
 `('[full house] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     ...expected,
   })
 })
@@ -96,7 +81,7 @@ test.each`
   ${[1, 2, 3, 4, 5]} | ${{ smallStraight: 0, largeStraight: 0 }} | ${{ ones: 1, twos: 2, threes: 3, fours: 4, fives: 5, gamble: 15 }}
 `('[straights] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     ...expected,
   })
 })
@@ -109,7 +94,7 @@ test.each`
   ${[2, 4, 4, 5, 1]} | ${{ gamble: 23 }} | ${{ ones: 1, twos: 2, fours: 8, fives: 5 }}
 `('[gamble] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     ...expected,
   })
 })
@@ -123,7 +108,7 @@ test.each`
   ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 150 }} | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 250 }}
 `('[Five Dice] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     ...expected,
   })
 })
@@ -138,7 +123,7 @@ test('cannot score', () => {
       gamble: 0,
     }),
   ).toStrictEqual({
-    ...emptyScore,
+    ...initialState.potential,
     'threes': 0,
     'fours': 0,
     'fives': 0,
@@ -153,7 +138,7 @@ test('cannot score', () => {
 test('full score', () => {
   expect(calculatePotentialScore([1, 1, 2, 1, 2], { fives: 10 })).toStrictEqual(
     {
-      ...emptyScore,
+      ...initialState.potential,
       ones: 3,
       twos: 4,
       threeOfAKind: 7,
