@@ -3,6 +3,11 @@ import * as tings from 'tings'
 import { GameEngine, initialState } from '../source/game-engine'
 import * as utils from '../source/utils'
 
+let d6Spy: jest.SpyInstance<1 | 2 | 3 | 4 | 5 | 6, [], unknown>
+
+jest.useFakeTimers()
+jest.setSystemTime(0)
+
 // Make Tings' sleep function return immediately so tests run quicker
 jest.spyOn(tings, 'sleep').mockImplementation(
   () =>
@@ -13,6 +18,14 @@ jest.spyOn(tings, 'sleep').mockImplementation(
 
 // Overwrite biasedD6 as it will get stuck if d6 is mocked and cannot change
 jest.spyOn(utils, 'biasedD6').mockImplementation(() => 1)
+
+beforeEach(() => {
+  d6Spy = jest.spyOn(utils, 'd6')
+})
+
+afterEach(() => {
+  d6Spy.mockRestore()
+})
 
 test('should report game as started after first roll, or a score in the scoreboard', async () => {
   const game1 = new GameEngine(initialState)
@@ -97,7 +110,6 @@ test('should only show rolling during rolls', async () => {
 })
 
 test('should update dice', async () => {
-  const d6Spy = jest.spyOn(utils, 'd6')
   const game = new GameEngine(initialState)
   expect(game.dice).toStrictEqual(initialState.dice)
   d6Spy
@@ -114,11 +126,9 @@ test('should update dice', async () => {
     { value: 4, held: false },
     { value: 3, held: false },
   ])
-  d6Spy.mockRestore()
 })
 
 test('should hold dice', async () => {
-  const d6Spy = jest.spyOn(utils, 'd6')
   const game = new GameEngine(initialState)
   expect(game.dice).toStrictEqual(initialState.dice)
   d6Spy
@@ -137,22 +147,18 @@ test('should hold dice', async () => {
     { value: 4, held: false },
     { value: 3, held: true },
   ])
-  d6Spy.mockRestore()
 })
 
 test('should not hold dice before first roll', () => {
-  const d6Spy = jest.spyOn(utils, 'd6')
   const game = new GameEngine(initialState)
   expect(game.dice).toStrictEqual(initialState.dice)
   game.hold(0)
   game.hold(1)
   game.hold(3)
   expect(game.dice).toStrictEqual(initialState.dice)
-  d6Spy.mockRestore()
 })
 
 test('should score', async () => {
-  const d6Spy = jest.spyOn(utils, 'd6')
   const game = new GameEngine(initialState)
   expect(game.dice).toStrictEqual(initialState.dice)
   d6Spy
@@ -172,5 +178,72 @@ test('should score', async () => {
   })
   game.score('fullHouse')
   expect(game.scores).toStrictEqual({ ...initialState.scores, fullHouse: 25 })
-  d6Spy.mockRestore()
+})
+
+test('should end game and restart', async () => {
+  d6Spy
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+
+  const game = new GameEngine({
+    ...initialState,
+    scores: {
+      'ones': 2,
+      'twos': 6,
+      'threes': 12,
+      'fours': 4,
+      'fives': 0,
+      'sixes': 6,
+      'threeOfAKind': 8,
+      'fourOfAKind': 22,
+      'fullHouse': 25,
+      'smallStraight': 0,
+      'largeStraight': 30,
+      'gamble': 16,
+      '5Dice': undefined,
+    },
+  })
+
+  expect(game.isGameOver).toBe(false)
+  await game.roll()
+  expect(game.potential).toStrictEqual({
+    ...initialState.potential,
+    '5Dice': 50,
+  })
+  game.score('5Dice')
+  expect(game.topScores).toStrictEqual([{ score: 181, timestamp: 0 }])
+  expect(game.dice).toStrictEqual(initialState.dice)
+  expect(game.scores).toStrictEqual(initialState.scores)
+  expect(game.potential).toStrictEqual(initialState.potential)
+  expect(game.turn).toStrictEqual(initialState.turn)
+})
+
+test('should show potential jokers', async () => {
+  const game = new GameEngine(initialState)
+  expect(game.potentialHasJoker).toBe(false)
+  d6Spy
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+    .mockReturnValueOnce(3)
+  await game.roll()
+  expect(game.potentialHasJoker).toBe(false)
+  game.score('5Dice')
+  expect(game.scores).toStrictEqual({
+    ...initialState.scores,
+    '5Dice': 50,
+  })
+  expect(game.potentialHasJoker).toBe(false)
+  d6Spy
+    .mockReturnValueOnce(6)
+    .mockReturnValueOnce(6)
+    .mockReturnValueOnce(6)
+    .mockReturnValueOnce(6)
+    .mockReturnValueOnce(6)
+  await game.roll()
+  expect(game.potentialHasJoker).toBe(true)
 })
