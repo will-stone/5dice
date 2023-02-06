@@ -1,5 +1,36 @@
-import { calculatePotentialScore } from '../source/calculate-potential-score'
+import type { Dice } from '../source/calculate-potential-score'
+import {
+  calculatePotentialScore,
+  dieNumberToId,
+  isStraight,
+} from '../source/calculate-potential-score'
 import { initialState } from '../source/game-engine'
+import type { Die } from '../source/model'
+
+test.each([
+  [[1, 1, 1, 1, 1], 2, false],
+  [[1, 1, 1, 2, 1], 2, true],
+  [[1, 2, 4, 5, 6], 4, false],
+  [[1, 2, 4, 5, 1], 5, false],
+  [[3, 2, 4, 5, 6], 4, true],
+  [[3, 2, 4, 5, 6], 5, true],
+] satisfies [Dice, number, boolean][])(
+  'isStraight(%d)',
+  (input, size, expected) => {
+    expect(isStraight(input, size)).toBe(expected)
+  },
+)
+
+test.each([
+  [1, 'ones'],
+  [2, 'twos'],
+  [3, 'threes'],
+  [4, 'fours'],
+  [5, 'fives'],
+  [6, 'sixes'],
+] satisfies [Die['value'], string][])('isStraight(%d)', (input, expected) => {
+  expect(dieNumberToId(input)).toBe(expected)
+})
 
 test.each`
   dice               | score            | expected
@@ -100,12 +131,13 @@ test.each`
 })
 
 test.each`
-  dice               | score                          | expected
-  ${[2, 2, 2, 2, 2]} | ${{}}                          | ${{ 'twos': 10, 'threeOfAKind': 10, 'fourOfAKind': 10, '5Dice': 50, 'gamble': 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}              | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}             | ${{ 'twos': 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 50 }}  | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 150 }} | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 250 }}
+  dice               | score                                                                                                                                   | expected
+  ${[2, 2, 2, 2, 2]} | ${{}}                                                                                                                                   | ${{ 'twos': 10, 'threeOfAKind': 10, 'fourOfAKind': 10, '5Dice': 50, 'gamble': 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}                                                                                                                       | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}                                                                                                                      | ${{ 'twos': 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 50 }}                                                                                                           | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 150 }}                                                                                                          | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 250 }}
+  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, 'threeOfAKind': 1, 'fourOfAKind': 1, 'fullHouse': 1, 'smallStraight': 1, 'largeStraight': 1, 'gamble': 1, '5Dice': 50 }} | ${{ 'ones': 0, 'threes': 0, 'fours': 0, 'fives': 0, 'sixes': 0, '5Dice': 150 }}
 `('[Five Dice] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
     ...initialState.potential,
