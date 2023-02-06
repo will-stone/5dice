@@ -207,6 +207,10 @@ test('should end game and restart', async () => {
     },
   })
 
+  expect(game.upperBoardSum).toBe(30)
+  expect(game.lowerBoardSum).toBe(101)
+  expect(game.total).toBe(131)
+
   expect(game.isGameOver).toBe(false)
   await game.roll()
   expect(game.potential).toStrictEqual({
@@ -224,6 +228,7 @@ test('should end game and restart', async () => {
 test('should show potential jokers', async () => {
   const game = new GameEngine(initialState)
   expect(game.potentialHasJoker).toBe(false)
+  expect(game.jokerCount).toBe(0)
   d6Spy
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
@@ -246,4 +251,7 @@ test('should show potential jokers', async () => {
     .mockReturnValueOnce(6)
   await game.roll()
   expect(game.potentialHasJoker).toBe(true)
+  expect(game.jokerCount).toBe(0)
+  game.score('5Dice')
+  expect(game.jokerCount).toBe(1)
 })
