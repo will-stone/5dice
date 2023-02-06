@@ -1,10 +1,11 @@
 import _ from 'lodash'
 import { toNumber } from 'tings'
 
+import { initialState } from './game-engine'
 import type { Die, State } from './model'
 import { toKeys } from './utils'
 
-type Dice = [
+export type Dice = [
   Die['value'],
   Die['value'],
   Die['value'],
@@ -12,7 +13,7 @@ type Dice = [
   Die['value'],
 ]
 
-const isStraight = (dice: Dice, size: number) => {
+export const isStraight = (dice: Dice, size: number): boolean => {
   const uniqSortedArray = _.uniq(dice).sort()
 
   if (uniqSortedArray.length < size) {
@@ -22,16 +23,9 @@ const isStraight = (dice: Dice, size: number) => {
   let last = null
   let hits = 1
 
-  for (const [index, element] of uniqSortedArray.entries()) {
-    const iteration = index + 1
-
+  for (const element of uniqSortedArray.values()) {
     const isSequential = last && element === last + 1
     hits = isSequential ? hits + 1 : 1
-
-    // Short-circuit if there are not enough items left to ever satisfy straight
-    if (uniqSortedArray.length - iteration + hits < size) {
-      return false
-    }
 
     if (hits === size) {
       return true
@@ -43,7 +37,9 @@ const isStraight = (dice: Dice, size: number) => {
   return false
 }
 
-const dieNumberToId = (number: Die['value']) => {
+export const dieNumberToId = (
+  number: Die['value'],
+): 'fives' | 'fours' | 'ones' | 'sixes' | 'threes' | 'twos' => {
   if (number === 1) return 'ones'
   if (number === 2) return 'twos'
   if (number === 3) return 'threes'
@@ -54,8 +50,9 @@ const dieNumberToId = (number: Die['value']) => {
 
 export function calculatePotentialScore(
   dice: Dice,
-  scores: State['scores'],
+  inputScores: State['scores'],
 ): State['potential'] {
+  const scores = { ...initialState.scores, ...inputScores }
   const countByDie = _.countBy(dice)
   const sumOfAllDie = _.sum(dice)
 
