@@ -51,12 +51,14 @@ export const dieNumberToId = (
 export function calculatePotentialScore(
   dice: Dice,
   inputScores: State['scores'],
-): State['potential'] {
+): State['scores'] {
+  const isNotARoll = dice.includes(null)
+  if (isNotARoll) return {}
   const scores = { ...initialState.scores, ...inputScores }
   const countByDie = _.countBy(dice)
   const sumOfAllDie = _.sum(dice)
 
-  const potential: State['potential'] = {
+  const potential: State['scores'] = {
     'ones': undefined,
     'twos': undefined,
     'threes': undefined,

@@ -3,7 +3,7 @@ import * as tings from 'tings'
 import { GameEngine, initialState } from '../source/game-engine'
 import * as utils from '../source/utils'
 
-let d6Spy: jest.SpyInstance<1 | 2 | 3 | 4 | 5 | 6, [], unknown>
+let d6Spy: jest.SpyInstance<1 | 2 | 3 | 4 | 5 | 6 | null, [], unknown>
 
 jest.useFakeTimers()
 jest.setSystemTime(0)
@@ -76,6 +76,7 @@ test('should only show rolling during rolls', async () => {
   const roll1 = game.roll()
   expect(game.turn).toBe(1)
   expect(game.isRolling).toBe(true)
+  expect(game.potentialScoreboard).toStrictEqual({})
   await roll1
   expect(game.turn).toBe(1)
   expect(game.isRolling).toBe(false)
@@ -177,8 +178,8 @@ test('should score', async () => {
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
   await game.roll()
-  expect(game.potential).toStrictEqual({
-    ...initialState.potential,
+  expect(game.potentialScoreboard).toStrictEqual({
+    ...initialState.scores,
     fullHouse: 25,
     gamble: 21,
     sixes: 12,
@@ -320,15 +321,15 @@ test('should end game and restart', async () => {
 
   expect(game.isGameOver).toBe(false)
   await game.roll()
-  expect(game.potential).toStrictEqual({
-    ...initialState.potential,
+  expect(game.potentialScoreboard).toStrictEqual({
+    ...initialState.scores,
     '5Dice': 50,
   })
   game.score('5Dice')
   expect(game.topScores).toStrictEqual([{ score: 181, timestamp: 0 }])
   expect(game.dice).toStrictEqual(initialState.dice)
   expect(game.scores).toStrictEqual(initialState.scores)
-  expect(game.potential).toStrictEqual(initialState.potential)
+  expect(game.potentialScoreboard).toStrictEqual({})
   expect(game.turn).toStrictEqual(initialState.turn)
 })
 

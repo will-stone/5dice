@@ -9,28 +9,13 @@ import { biasedD6, d6 } from './utils'
 export const initialState: State = {
   isRolling: false,
   dice: [
-    { value: 1, held: false },
-    { value: 1, held: false },
-    { value: 1, held: false },
-    { value: 1, held: false },
-    { value: 1, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
   ],
   scores: {
-    'ones': undefined,
-    'twos': undefined,
-    'threes': undefined,
-    'fours': undefined,
-    'fives': undefined,
-    'sixes': undefined,
-    'threeOfAKind': undefined,
-    'fourOfAKind': undefined,
-    'fullHouse': undefined,
-    'smallStraight': undefined,
-    'largeStraight': undefined,
-    'gamble': undefined,
-    '5Dice': undefined,
-  },
-  potential: {
     'ones': undefined,
     'twos': undefined,
     'threes': undefined,
@@ -58,8 +43,6 @@ export class GameEngine {
 
   public scores = initialState.scores
 
-  public potential = initialState.potential
-
   public topScores = initialState.topScores
 
   public constructor(savedState?: State) {
@@ -69,9 +52,23 @@ export class GameEngine {
       this.turn = savedState.turn
       this.dice = savedState.dice
       this.scores = savedState.scores
-      this.potential = savedState.potential
       this.topScores = savedState.topScores
     }
+  }
+
+  public get potentialScoreboard(): State['scores'] {
+    return this.isRolling
+      ? {}
+      : calculatePotentialScore(
+          [
+            this.dice[0].value,
+            this.dice[1].value,
+            this.dice[2].value,
+            this.dice[3].value,
+            this.dice[4].value,
+          ],
+          this.scores,
+        )
   }
 
   public get canRoll(): boolean {
@@ -146,8 +143,8 @@ export class GameEngine {
     return (
       _.isNumber(this.scores['5Dice']) &&
       this.scores['5Dice'] > 0 &&
-      _.isNumber(this.potential['5Dice']) &&
-      this.potential['5Dice'] > this.scores['5Dice']
+      _.isNumber(this.potentialScoreboard['5Dice']) &&
+      this.potentialScoreboard['5Dice'] > this.scores['5Dice']
     )
   }
 
@@ -187,22 +184,6 @@ export class GameEngine {
       }
 
       this.isRolling = false
-
-      // Replacing the whole object means computed's are no longer updated.
-      // By using `set` we force all observables to be replaced by new observables.
-      set(
-        this.potential,
-        calculatePotentialScore(
-          [
-            this.dice[0].value,
-            this.dice[1].value,
-            this.dice[2].value,
-            this.dice[3].value,
-            this.dice[4].value,
-          ],
-          this.scores,
-        ),
-      )
     }
   }
 
@@ -213,15 +194,8 @@ export class GameEngine {
   }
 
   public score(scoreId: keyof State['scores']): void {
-    if (!this.isRolling && _.isNumber(this.potential[scoreId])) {
-      this.scores[scoreId] = this.potential[scoreId]
-
-      if (this.potential['5Dice'] && this.potential['5Dice'] > 50) {
-        this.scores['5Dice'] = this.potential['5Dice']
-      }
-
-      // Reset for next turn
-      this.potential = {}
+    if (!this.isRolling && _.isNumber(this.potentialScoreboard[scoreId])) {
+      this.scores[scoreId] = this.potentialScoreboard[scoreId]
 
       // Reset
       this.dice = initialState.dice
@@ -244,7 +218,6 @@ export class GameEngine {
   public restart(): void {
     this.dice = initialState.dice
     this.scores = initialState.scores
-    this.potential = initialState.potential
     this.turn = initialState.turn
   }
 }
