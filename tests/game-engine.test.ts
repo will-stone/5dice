@@ -147,6 +147,15 @@ test('should hold dice', async () => {
     { value: 4, held: false },
     { value: 3, held: true },
   ])
+  d6Spy.mockReturnValueOnce(2).mockReturnValueOnce(6).mockReturnValueOnce(5)
+  await game.roll()
+  expect(game.dice).toStrictEqual([
+    { value: 2, held: false },
+    { value: 6, held: false },
+    { value: 2, held: true },
+    { value: 5, held: false },
+    { value: 3, held: true },
+  ])
 })
 
 test('should not hold dice before first roll', () => {
@@ -178,6 +187,104 @@ test('should score', async () => {
   })
   game.score('fullHouse')
   expect(game.scores).toStrictEqual({ ...initialState.scores, fullHouse: 25 })
+})
+
+test.each([
+  [{}, 0],
+  [{ ones: 2 }, 2],
+  [{ ones: 2, twos: 2 }, 4],
+  [{ ones: 2, twos: 2, threes: 9 }, 13],
+  [{ ones: 2, twos: 2, threes: 9, fours: 4 }, 17],
+  [{ ones: 2, twos: 2, threes: 9, fours: 4, fives: 10 }, 27],
+  [{ ones: 2, twos: 2, threes: 9, fours: 4, fives: 10, sixes: 18 }, 45],
+  [{ ones: 0, twos: 0, threes: 0, fours: 0, fives: 0, sixes: 0 }, 0],
+])('should total upper board with scoreboard of %o', (scores, expected) => {
+  const game = new GameEngine({
+    ...initialState,
+    scores: { ...initialState.scores, ...scores },
+  })
+
+  expect(game.upperBoardSum).toBe(expected)
+})
+
+test.each([
+  [{ ones: 0, twos: 0, threes: 0, fours: 0, fives: 0, sixes: 0 }, 0],
+  [{ ones: 0, twos: 0, threes: 9, fours: 0, fives: 0, sixes: 0 }, 0],
+  [{ ones: 5, twos: 8, threes: 9, fours: 12, fives: 0, sixes: 0 }, 0],
+  [{ ones: 5, twos: 8, threes: 9, fours: 16, fives: 0, sixes: 0 }, 0],
+  [{ ones: 4, twos: 8, threes: 9, fours: 16, fives: 25, sixes: 0 }, 0],
+  [{ ones: 5, twos: 8, threes: 9, fours: 16, fives: 25, sixes: 0 }, 35],
+  [{ ones: 5, twos: 8, threes: 9, fours: 16, fives: 25, sixes: 6 }, 35],
+])(
+  'should calculate upper board bonus with scoreboard of %o',
+  (scores, expected) => {
+    const game = new GameEngine({
+      ...initialState,
+      scores: { ...initialState.scores, ...scores },
+    })
+
+    expect(game.upperBoardBonus).toBe(expected)
+  },
+)
+
+test.each([
+  [{}, 0],
+  [{ threeOfAKind: 8 }, 8],
+  [{ threeOfAKind: 8, fourOfAKind: 18 }, 26],
+  [{ threeOfAKind: 8, fourOfAKind: 18, fullHouse: 25 }, 51],
+  [{ threeOfAKind: 8, fourOfAKind: 18, fullHouse: 25, smallStraight: 30 }, 81],
+  [
+    {
+      threeOfAKind: 8,
+      fourOfAKind: 18,
+      fullHouse: 25,
+      smallStraight: 30,
+      largeStraight: 40,
+    },
+    121,
+  ],
+  [
+    {
+      threeOfAKind: 8,
+      fourOfAKind: 18,
+      fullHouse: 25,
+      smallStraight: 30,
+      largeStraight: 40,
+      gamble: 18,
+    },
+    139,
+  ],
+  [
+    {
+      'threeOfAKind': 8,
+      'fourOfAKind': 18,
+      'fullHouse': 25,
+      'smallStraight': 30,
+      'largeStraight': 40,
+      'gamble': 18,
+      '5Dice': 50,
+    },
+    189,
+  ],
+  [
+    {
+      'threeOfAKind': 0,
+      'fourOfAKind': 0,
+      'fullHouse': 0,
+      'smallStraight': 0,
+      'largeStraight': 0,
+      'gamble': 0,
+      '5Dice': 0,
+    },
+    0,
+  ],
+])('should total lower board with scoreboard of %o', (scores, expected) => {
+  const game = new GameEngine({
+    ...initialState,
+    scores: { ...initialState.scores, ...scores },
+  })
+
+  expect(game.lowerBoardSum).toBe(expected)
 })
 
 test('should end game and restart', async () => {
