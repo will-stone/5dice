@@ -84,7 +84,7 @@ const LabelBox: React.FC<{
 const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   const {
     scores,
-    potential,
+    potentialScoreboard,
     turn,
     upperBoardSum,
     upperBoardBonus,
@@ -171,7 +171,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   dimColor={turn === 0 || (isRolling && !held)}
                   inverse={held}
                 >
-                  {turn > 0 ? value : '-'}
+                  {value || '-'}
                 </Text>
               ))}
             </Box>
@@ -222,14 +222,16 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box key={id} flexGrow={1}>
                 <Text
                   dimColor={
-                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    !_.isNumber(potentialScoreboard[id]) ||
+                    _.isNumber(scores[id])
                   }
                 >
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
-                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    !_.isNumber(potentialScoreboard[id]) ||
+                    _.isNumber(scores[id])
                   }
                 >
                   {_.startCase(id)}
@@ -238,10 +240,11 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Box justifyContent="flex-end" minWidth={2}>
                   <Text
                     dimColor={
-                      !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                      !_.isNumber(potentialScoreboard[id]) ||
+                      _.isNumber(scores[id])
                     }
                   >
-                    {scores[id] ?? potential[id]}
+                    {scores[id] ?? potentialScoreboard[id]}
                   </Text>
                 </Box>
               </Box>
@@ -262,14 +265,16 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Box key={id} flexGrow={1}>
                 <Text
                   dimColor={
-                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    !_.isNumber(potentialScoreboard[id]) ||
+                    _.isNumber(scores[id])
                   }
                 >
                   {hotkey}{' '}
                 </Text>
                 <Text
                   dimColor={
-                    !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                    !_.isNumber(potentialScoreboard[id]) ||
+                    _.isNumber(scores[id])
                   }
                 >
                   {_.startCase(id)}
@@ -284,12 +289,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                 <Box justifyContent="flex-end" minWidth={2}>
                   <Text
                     dimColor={
-                      !_.isNumber(potential[id]) || _.isNumber(scores[id])
+                      !_.isNumber(potentialScoreboard[id]) ||
+                      _.isNumber(scores[id])
                     }
                   >
                     {potentialHasJoker
-                      ? potential[id]
-                      : scores[id] ?? potential[id]}
+                      ? potentialScoreboard[id]
+                      : scores[id] ?? potentialScoreboard[id]}
                   </Text>
                 </Box>
               </Box>
@@ -323,6 +329,9 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             <Text dimColor>----------------</Text>
           )}
         </LabelBox>
+      </Box>
+      <Box>
+        <Text>{JSON.stringify(potentialScoreboard, null, 2)}</Text>
       </Box>
     </Box>
   )
