@@ -1,5 +1,15 @@
 # 5dice
 
+## 1.12.2
+
+### Patch Changes
+
+- 319aad1: Rolling state is no longer saved to file. It was redundant as the
+  file would only be saved if `isRolling` was false, so the saved state would
+  always be false.
+- fea1795: Potential score after each roll is now computed, rather than stored
+  in 5dice.json.
+
 ## 1.12.1
 
 ### Patch Changes
