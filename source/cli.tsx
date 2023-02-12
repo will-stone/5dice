@@ -37,7 +37,7 @@ const game = new GameEngine(savedFile)
 
 autorun(() => {
   if (game.isRolling === false) {
-    jsonfile.writeFileSync('5dice.json', toJS(game))
+    jsonfile.writeFileSync('5dice.json', toJS(game.gameState))
   }
 })
 

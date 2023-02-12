@@ -7,7 +7,6 @@ import type { State } from './model'
 import { biasedD6, d6 } from './utils'
 
 export const initialState: State = {
-  isRolling: false,
   dice: [
     { value: null, held: false },
     { value: null, held: false },
@@ -35,7 +34,7 @@ export const initialState: State = {
 }
 
 export class GameEngine {
-  public isRolling = initialState.isRolling
+  public isRolling = false
 
   public turn = initialState.turn
 
@@ -154,6 +153,16 @@ export class GameEngine {
 
   public get total(): number {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
+  }
+
+  // Used for saving
+  public get gameState(): Omit<State, 'isRolling'> {
+    return {
+      dice: this.dice,
+      scores: this.scores,
+      topScores: this.topScores,
+      turn: this.turn,
+    }
   }
 
   /**
