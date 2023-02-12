@@ -171,6 +171,12 @@ test('should not hold dice before first roll', () => {
 test('should score', async () => {
   const game = new GameEngine(initialState)
   expect(game.dice).toStrictEqual(initialState.dice)
+  expect(game.gameState).toStrictEqual({
+    dice: initialState.dice,
+    scores: initialState.scores,
+    topScores: initialState.topScores,
+    turn: initialState.turn,
+  })
   d6Spy
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(6)
@@ -186,8 +192,32 @@ test('should score', async () => {
     threes: 9,
     threeOfAKind: 21,
   })
+  expect(game.gameState).toStrictEqual({
+    dice: [
+      { value: 6, held: false },
+      { value: 6, held: false },
+      { value: 3, held: false },
+      { value: 3, held: false },
+      { value: 3, held: false },
+    ],
+    scores: initialState.scores,
+    topScores: initialState.topScores,
+    turn: 1,
+  })
   game.score('fullHouse')
   expect(game.scores).toStrictEqual({ ...initialState.scores, fullHouse: 25 })
+  expect(game.gameState).toStrictEqual({
+    dice: [
+      { value: null, held: false },
+      { value: null, held: false },
+      { value: null, held: false },
+      { value: null, held: false },
+      { value: null, held: false },
+    ],
+    scores: { ...initialState.scores, fullHouse: 25 },
+    topScores: initialState.topScores,
+    turn: 0,
+  })
 })
 
 test.each([
@@ -331,6 +361,12 @@ test('should end game and restart', async () => {
   expect(game.scores).toStrictEqual(initialState.scores)
   expect(game.potentialScoreboard).toStrictEqual({})
   expect(game.turn).toStrictEqual(initialState.turn)
+  expect(game.gameState).toStrictEqual({
+    dice: initialState.dice,
+    scores: initialState.scores,
+    topScores: [{ score: 181, timestamp: 0 }],
+    turn: initialState.turn,
+  })
 })
 
 test('should show potential jokers', async () => {

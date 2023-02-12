@@ -330,9 +330,6 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
           )}
         </LabelBox>
       </Box>
-      <Box>
-        <Text>{JSON.stringify(potentialScoreboard, null, 2)}</Text>
-      </Box>
     </Box>
   )
 })
