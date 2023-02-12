@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.3
+
+### Patch Changes
+
+- 5cbfe23: Reduce install size by squooshing screenshot.
+
 ## 1.12.2
 
 ### Patch Changes
