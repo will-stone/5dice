@@ -9,9 +9,9 @@ import pc from 'picocolors'
 import React from 'react'
 import type { ZodError } from 'zod'
 
-import { GameEngine } from './game-engine'
-import { stateSchema } from './model'
-import App from './ui'
+import { GameEngine } from './game-engine.js'
+import { stateSchema } from './model.js'
+import App from './ui.js'
 
 const savedFile = jsonfile.readFileSync('5dice.json', { throws: false })
 

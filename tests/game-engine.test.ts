@@ -1,12 +1,14 @@
 import * as tings from 'tings'
 
-import { GameEngine, initialState } from '../source/game-engine'
-import * as utils from '../source/utils'
+import { GameEngine, initialState } from '../source/game-engine.js'
+import * as utils from '../source/utils.js'
 
 let d6Spy: jest.SpyInstance<1 | 2 | 3 | 4 | 5 | 6 | null, [], unknown>
 
 jest.useFakeTimers()
 jest.setSystemTime(0)
+
+jest.mock('tings', () => ({ __esModule: true, ...jest.requireActual('tings') }))
 
 // Make Tings' sleep function return immediately so tests run quicker
 jest.spyOn(tings, 'sleep').mockImplementation(
