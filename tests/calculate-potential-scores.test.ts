@@ -1,11 +1,11 @@
-import type { Dice } from '../source/calculate-potential-score'
+import type { Dice } from '../source/calculate-potential-score.js'
 import {
   calculatePotentialScore,
   dieNumberToId,
   isStraight,
-} from '../source/calculate-potential-score'
-import { initialState } from '../source/game-engine'
-import type { Die } from '../source/model'
+} from '../source/calculate-potential-score.js'
+import { initialState } from '../source/game-engine.js'
+import type { Die } from '../source/model.js'
 
 test.each([
   [[1, 1, 1, 1, 1], 2, false],

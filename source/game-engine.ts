@@ -2,9 +2,9 @@ import _ from 'lodash'
 import { flow, makeAutoObservable, set } from 'mobx'
 import { sleep, toNumber } from 'tings'
 
-import { calculatePotentialScore } from './calculate-potential-score'
-import type { State } from './model'
-import { biasedD6, d6 } from './utils'
+import { calculatePotentialScore } from './calculate-potential-score.js'
+import type { State } from './model.js'
+import { biasedD6, d6 } from './utils.js'
 
 export const initialState: State = {
   dice: [
@@ -220,6 +220,7 @@ export class GameEngine {
         .slice(0, 20)
 
       set(this.topScores, updatedTopScores)
+      // TODO should this restart?
       this.restart()
     }
   }
