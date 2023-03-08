@@ -1,9 +1,9 @@
 import _ from 'lodash'
 import { toNumber } from 'tings'
 
-import { initialState } from './game-engine'
-import type { Die, State } from './model'
-import { toKeys } from './utils'
+import { initialState } from './game-engine.js'
+import type { Die, State } from './model.js'
+import { toKeys } from './utils.js'
 
 export type Dice = [
   Die['value'],

@@ -1,17 +1,16 @@
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
-import Gradient from 'ink-gradient'
 import _ from 'lodash'
 import open from 'open'
 import type { ReactNode } from 'react'
 import React from 'react'
+import { readPackage } from 'read-pkg'
 
-import type { GameEngine } from './game-engine'
-import type { State } from './model'
-import { observer } from './observer'
-import { toPairs } from './utils'
+import type { GameEngine } from './game-engine.js'
+import type { State } from './model.js'
+import { observer } from './observer.js'
+import { toPairs } from './utils.js'
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires, @typescript-eslint/no-require-imports -- this does not import
-const packageJson = require('../package.json')
+const packageJson = await readPackage()
 
 const rulesKey = 'P'
 const restartKey = 'L'
@@ -150,7 +149,11 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
   return (
     <Box flexDirection="column" width={58}>
       <Box justifyContent="center" marginY={1}>
-        <Gradient colors={['#9C53F6', '#6FB5F9']}>5Dice</Gradient>
+        <Text color="#9C53F6">5</Text>
+        <Text color="#916DF6">D</Text>
+        <Text color="#8684F9">i</Text>
+        <Text color="#7A9CF7">c</Text>
+        <Text color="#6FB5F9">e</Text>
       </Box>
 
       <Box>
@@ -207,7 +210,15 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
             </Box>
 
             <Box justifyContent="center">
-              <Gradient colors={['#9C53F6', '#6FB5F9']}>wstone.uk</Gradient>
+              <Text color="#9C53F6">w</Text>
+              <Text color="#955FF4">s</Text>
+              <Text color="#7F60D7">t</Text>
+              <Text color="#8A77F5">o</Text>
+              <Text color="#7C7BE5">n</Text>
+              <Text color="#8091F8">e</Text>
+              <Text color="#7A9DF9">.</Text>
+              <Text color="#74A6F6">u</Text>
+              <Text color="#6FB5F9">k</Text>
             </Box>
 
             <Box justifyContent="center">

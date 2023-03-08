@@ -1,4 +1,4 @@
-import { biasedD6, d6, toKeys, toPairs } from '../source/utils'
+import { biasedD6, d6, toKeys, toPairs } from '../source/utils.js'
 
 test('should convert to pairs', () => {
   expect(toPairs({ a: 1, b: 2 })).toStrictEqual([
