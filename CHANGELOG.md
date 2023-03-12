@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.8
+
+### Patch Changes
+
+- 7a8bf70: Just get it working without showing package version.
+
 ## 1.12.7
 
 ### Patch Changes
