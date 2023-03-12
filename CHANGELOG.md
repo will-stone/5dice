@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.4
+
+### Patch Changes
+
+- a105a19: Refactor to ESM.
+
 ## 1.12.3
 
 ### Patch Changes
