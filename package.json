@@ -1,6 +1,6 @@
 {
   "name": "5dice",
-  "version": "1.12.3",
+  "version": "1.12.4",
   "description": "Terminal dice game. In no way related to Yahtzee ;-)",
   "bugs": {
     "url": "https://github.com/will-stone/5dice/issues"
@@ -8,13 +8,13 @@
   "repository": {
     "url": "https://github.com/will-stone/5dice"
   },
-  "type": "module",
   "license": "MIT",
   "author": {
     "name": "Will Stone",
     "email": "hello@wstone.io",
     "url": "https://wstone.io"
   },
+  "type": "module",
   "bin": {
     "5dice": "dist/cli.js"
   },
