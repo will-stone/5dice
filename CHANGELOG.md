@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.7
+
+### Patch Changes
+
+- a3a8c72: Re-release.
+
 ## 1.12.6
 
 ### Patch Changes
