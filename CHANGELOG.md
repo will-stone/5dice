@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.6
+
+### Patch Changes
+
+- 3017c37: Fix unable to read package.json.
+
 ## 1.12.5
 
 ### Patch Changes
