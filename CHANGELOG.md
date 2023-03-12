@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.5
+
+### Patch Changes
+
+- fb94de6: Re-release due to broken build.
+
 ## 1.12.4
 
 ### Patch Changes
