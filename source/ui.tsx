@@ -4,7 +4,6 @@ import open from 'open'
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import packageJson from '../package.json'
 import type { GameEngine } from './game-engine.js'
 import type { State } from './model.js'
 import { observer } from './observer.js'
@@ -219,9 +218,10 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Text color="#6FB5F9">k</Text>
             </Box>
 
-            <Box justifyContent="center">
+            {/* FIXME How to read package.json in ESM? */}
+            {/* <Box justifyContent="center">
               <Text dimColor>{packageJson.version}</Text>
-            </Box>
+            </Box> */}
           </Box>
         </Box>
 
