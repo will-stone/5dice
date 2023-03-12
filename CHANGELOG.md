@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.12.9
+
+### Patch Changes
+
+- e5877f5: Release test.
+
 ## 1.12.8
 
 ### Patch Changes
