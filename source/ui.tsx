@@ -3,14 +3,12 @@ import _ from 'lodash'
 import open from 'open'
 import type { ReactNode } from 'react'
 import React from 'react'
-import { readPackage } from 'read-pkg'
 
+import packageJson from '../package.json'
 import type { GameEngine } from './game-engine.js'
 import type { State } from './model.js'
 import { observer } from './observer.js'
 import { toPairs } from './utils.js'
-
-const packageJson = await readPackage()
 
 const rulesKey = 'P'
 const restartKey = 'L'
