@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.13.1
+
+### Patch Changes
+
+- beb1e57: Upgraded to TypeScript 5.
+
 ## 1.13.0
 
 ### Minor Changes
