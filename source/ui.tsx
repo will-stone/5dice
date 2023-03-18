@@ -1,3 +1,7 @@
+import path from 'node:path'
+import url from 'node:url'
+
+import fs from 'fs-extra'
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import _ from 'lodash'
 import open from 'open'
@@ -8,6 +12,10 @@ import type { GameEngine } from './game-engine.js'
 import type { State } from './model.js'
 import { observer } from './observer.js'
 import { toPairs } from './utils.js'
+
+const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+
+const packageJson = fs.readJSONSync(path.join(__dirname, '..', 'package.json'))
 
 const rulesKey = 'P'
 const restartKey = 'L'
@@ -218,10 +226,9 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
               <Text color="#6FB5F9">k</Text>
             </Box>
 
-            {/* FIXME How to read package.json in ESM? */}
-            {/* <Box justifyContent="center">
+            <Box justifyContent="center">
               <Text dimColor>{packageJson.version}</Text>
-            </Box> */}
+            </Box>
           </Box>
         </Box>
 
