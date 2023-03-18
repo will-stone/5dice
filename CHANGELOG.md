@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.13.0
+
+### Minor Changes
+
+- b2ef92d: Return version number to UI.
+
 ## 1.12.9
 
 ### Patch Changes
