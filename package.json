@@ -23,13 +23,13 @@
     "screenshot.png"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsup source/cli.tsx --format esm --target node18",
     "postinstall": "husky install",
     "lint": "eslint . --ignore-path .gitignore",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "prepublishOnly": "npm run build",
-    "start": "tsc-watch --onSuccess \"node ./dist/cli.js\"",
+    "start": "npm run build -- --watch --onSuccess \"node ./dist/cli.js\"",
     "test": "jest",
     "typecheck": "tsc --noEmit"
   },
@@ -48,10 +48,7 @@
       "@will-stone/eslint-config/node",
       "@will-stone/eslint-config/react",
       "@will-stone/eslint-config/prettier"
-    ],
-    "rules": {
-      "unicorn/no-null": "off"
-    }
+    ]
   },
   "dependencies": {
     "@types/fs-extra": "^11.0.1",
@@ -94,7 +91,7 @@
     "pinst": "^3.0.0",
     "prettier": "^2.8.8",
     "ts-jest": "^29.1.0",
-    "tsc-watch": "^6.0.4",
+    "tsup": "^6.7.0",
     "typescript": "^5.0.4"
   },
   "engines": {
