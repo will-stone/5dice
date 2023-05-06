@@ -1,3 +1,5 @@
+import { expect, test } from 'vitest'
+
 import type { Dice } from '../source/calculate-potential-score.js'
 import {
   calculatePotentialScore,
