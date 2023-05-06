@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.13.2
+
+### Patch Changes
+
+- 2301dc5: Updated repo author details.
+
 ## 1.13.1
 
 ### Patch Changes
