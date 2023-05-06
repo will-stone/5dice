@@ -1,28 +1,29 @@
-import * as tings from 'tings'
+import type * as tings from 'tings'
+import type { SpyInstance } from 'vitest'
+import { afterEach, beforeAll, expect, test, vi } from 'vitest'
 
 import { GameEngine, initialState } from '../source/game-engine.js'
+import type { Die } from '../source/model.js'
 import * as utils from '../source/utils.js'
 
-let d6Spy: jest.SpyInstance<1 | 2 | 3 | 4 | 5 | 6 | null, [], unknown>
-
-jest.useFakeTimers()
-jest.setSystemTime(0)
-
-jest.mock('tings', () => ({ __esModule: true, ...jest.requireActual('tings') }))
+let d6Spy: SpyInstance<[], Die['value']>
 
 // Make Tings' sleep function return immediately so tests run quicker
-jest.spyOn(tings, 'sleep').mockImplementation(
-  () =>
-    new Promise((resolve) => {
+vi.mock('tings', async () => ({
+  ...(await vi.importActual<typeof tings>('tings')),
+  sleep: () =>
+    new Promise<void>((resolve) => {
       resolve()
     }),
-)
+}))
 
-// Overwrite biasedD6 as it will get stuck if d6 is mocked and cannot change
-jest.spyOn(utils, 'biasedD6').mockImplementation(() => 1)
-
-beforeEach(() => {
-  d6Spy = jest.spyOn(utils, 'd6')
+beforeAll(() => {
+  // Set all timestamps to 0
+  vi.useFakeTimers()
+  vi.setSystemTime(0)
+  // Overwrite biasedD6 as it will get stuck if d6 is mocked and cannot change
+  vi.spyOn(utils, 'biasedD6').mockImplementation(() => 1 as Die['value'])
+  d6Spy = vi.spyOn(utils, 'd6')
 })
 
 afterEach(() => {
@@ -31,29 +32,29 @@ afterEach(() => {
 
 test('should report game as started after first roll, or a score in the scoreboard', async () => {
   const game1 = new GameEngine(initialState)
-  expect(game1.isGameStart).toBe(true)
+  expect(game1.isGameStart).toBeTruthy()
   await game1.roll()
-  expect(game1.isGameStart).toBe(false)
+  expect(game1.isGameStart).toBeFalsy()
 
   const game2 = new GameEngine({
     ...initialState,
     scores: { ...initialState.scores, gamble: 5 },
   })
 
-  expect(game2.isGameStart).toBe(false)
+  expect(game2.isGameStart).toBeFalsy()
 })
 
 test('should only allow three rolls', async () => {
   const game = new GameEngine(initialState)
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   await game.roll()
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   await game.roll()
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   await game.roll()
-  expect(game.canRoll).toBe(false)
+  expect(game.canRoll).toBeFalsy()
   await game.roll()
-  expect(game.canRoll).toBe(false)
+  expect(game.canRoll).toBeFalsy()
 })
 
 test('should advance turn on roll', async () => {
@@ -72,42 +73,42 @@ test('should advance turn on roll', async () => {
 test('should only show rolling during rolls', async () => {
   const game = new GameEngine(initialState)
   expect(game.turn).toBe(0)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
 
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   const roll1 = game.roll()
   expect(game.turn).toBe(1)
-  expect(game.isRolling).toBe(true)
+  expect(game.isRolling).toBeTruthy()
   expect(game.potentialScoreboard).toStrictEqual({})
   await roll1
   expect(game.turn).toBe(1)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
 
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   const roll2 = game.roll()
   expect(game.turn).toBe(2)
-  expect(game.isRolling).toBe(true)
+  expect(game.isRolling).toBeTruthy()
   await roll2
   expect(game.turn).toBe(2)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
 
-  expect(game.canRoll).toBe(true)
+  expect(game.canRoll).toBeTruthy()
   const roll3 = game.roll()
   expect(game.turn).toBe(3)
-  expect(game.isRolling).toBe(true)
+  expect(game.isRolling).toBeTruthy()
   await roll3
   const roll3Dice = game.dice
   expect(game.turn).toBe(3)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
 
-  expect(game.canRoll).toBe(false)
+  expect(game.canRoll).toBeFalsy()
   const roll4 = game.roll()
   expect(game.turn).toBe(3)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
   await roll4
   const roll4Dice = game.dice
   expect(game.turn).toBe(3)
-  expect(game.isRolling).toBe(false)
+  expect(game.isRolling).toBeFalsy()
 
   expect(roll3Dice).toStrictEqual(roll4Dice)
 })
@@ -351,7 +352,7 @@ test('should end game and restart', async () => {
   expect(game.lowerBoardSum).toBe(101)
   expect(game.total).toBe(131)
 
-  expect(game.isGameOver).toBe(false)
+  expect(game.isGameOver).toBeFalsy()
   await game.roll()
   expect(game.potentialScoreboard).toStrictEqual({
     ...initialState.scores,
@@ -373,7 +374,7 @@ test('should end game and restart', async () => {
 
 test('should show potential jokers', async () => {
   const game = new GameEngine(initialState)
-  expect(game.potentialHasJoker).toBe(false)
+  expect(game.potentialHasJoker).toBeFalsy()
   expect(game.jokerCount).toBe(0)
   d6Spy
     .mockReturnValueOnce(3)
@@ -382,13 +383,13 @@ test('should show potential jokers', async () => {
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
   await game.roll()
-  expect(game.potentialHasJoker).toBe(false)
+  expect(game.potentialHasJoker).toBeFalsy()
   game.score('5Dice')
   expect(game.scores).toStrictEqual({
     ...initialState.scores,
     '5Dice': 50,
   })
-  expect(game.potentialHasJoker).toBe(false)
+  expect(game.potentialHasJoker).toBeFalsy()
   d6Spy
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(6)
@@ -396,7 +397,7 @@ test('should show potential jokers', async () => {
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(6)
   await game.roll()
-  expect(game.potentialHasJoker).toBe(true)
+  expect(game.potentialHasJoker).toBeTruthy()
   expect(game.jokerCount).toBe(0)
   game.score('5Dice')
   expect(game.jokerCount).toBe(1)
