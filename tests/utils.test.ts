@@ -1,3 +1,5 @@
+import { expect, test, vi } from 'vitest'
+
 import { biasedD6, d6, toKeys, toPairs } from '../source/utils.js'
 
 test('should convert to pairs', () => {
@@ -12,7 +14,7 @@ test('should convert to keys', () => {
 })
 
 test('should roll a d6', () => {
-  const randomSpy = jest.spyOn(global.Math, 'random')
+  const randomSpy = vi.spyOn(global.Math, 'random')
   randomSpy.mockReturnValueOnce(0.123)
   expect(d6()).toBe(1)
   randomSpy.mockReturnValueOnce(0.422)
@@ -23,7 +25,7 @@ test('should roll a d6', () => {
 })
 
 test('should roll a biased d6', () => {
-  const randomSpy = jest.spyOn(global.Math, 'random')
+  const randomSpy = vi.spyOn(global.Math, 'random')
   randomSpy.mockReturnValueOnce(0.123)
   randomSpy.mockReturnValueOnce(0.152)
   randomSpy.mockReturnValueOnce(0.522)
