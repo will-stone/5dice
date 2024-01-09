@@ -79,7 +79,7 @@
     "@will-stone/eslint-config-node": "^2.0.2",
     "@will-stone/eslint-config-prettier": "^3.0.1",
     "@will-stone/eslint-config-react": "^3.0.2",
-    "@will-stone/eslint-config-typescript": "^7.0.0",
+    "@will-stone/eslint-config-typescript": "^8.0.2",
     "@will-stone/prettier-config": "^7.0.2",
     "eslint": "^8.56.0",
     "eslint-plugin-vitest": "^0.3.20",
