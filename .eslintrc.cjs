@@ -18,6 +18,7 @@ module.exports = {
       files: ['**/*.{test,spec}.{js,ts,jsx,tsx}'],
       extends: ['plugin:vitest/all'],
       rules: {
+        'vitest/prefer-expect-assertions': 'off',
         'vitest/max-expects': 'off',
         'vitest/no-hooks': 'off',
         'vitest/require-top-level-describe': 'off',
