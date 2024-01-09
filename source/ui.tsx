@@ -48,9 +48,9 @@ const lowerBoardKeys: Record<string, keyof State['scores']> = {
 }
 
 const LabelBox: React.FC<{
-  label: string
-  width: number
-  children: ReactNode
+  readonly label: string
+  readonly width: number
+  readonly children: ReactNode
 }> = ({ children, label, width }) => {
   if (width > 0) {
     return (
