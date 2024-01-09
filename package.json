@@ -30,7 +30,7 @@
     "postpack": "pinst --enable",
     "prepublishOnly": "npm run build",
     "start": "npm run build -- --watch --onSuccess \"node ./dist/cli.js\"",
-    "test": "vitest --watch=false",
+    "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
   "lint-staged": {
@@ -82,7 +82,7 @@
     "@will-stone/eslint-config-typescript": "^7.0.0",
     "@will-stone/prettier-config": "^6.0.4",
     "eslint": "^8.56.0",
-    "eslint-plugin-vitest": "^0.1.5",
+    "eslint-plugin-vitest": "^0.3.20",
     "husky": "^8.0.3",
     "ink-testing-library": "^3.0.0",
     "lint-staged": "^13.2.2",
@@ -90,8 +90,8 @@
     "prettier": "^2.8.8",
     "tsup": "^6.7.0",
     "typescript": "^5.3.3",
-    "vite": "^4.3.5",
-    "vitest": "^0.31.0"
+    "vite": "^5.0.11",
+    "vitest": "^1.1.3"
   },
   "engines": {
     "node": ">=18"

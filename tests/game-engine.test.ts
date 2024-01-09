@@ -1,12 +1,12 @@
 import type * as tings from 'tings'
-import type { SpyInstance } from 'vitest'
-import { afterEach, beforeAll, expect, test, vi } from 'vitest'
+import type { MockInstance } from 'vitest'
+import { beforeEach, expect, test, vi } from 'vitest'
 
 import { GameEngine, initialState } from '../source/game-engine.js'
 import type { Die } from '../source/model.js'
 import * as utils from '../source/utils.js'
 
-let d6Spy: SpyInstance<[], Die['value']>
+let d6Spy: MockInstance<[], Die['value']>
 
 // Make Tings' sleep function return immediately so tests run quicker
 vi.mock('tings', async () => ({
@@ -17,17 +17,13 @@ vi.mock('tings', async () => ({
     }),
 }))
 
-beforeAll(() => {
+beforeEach(() => {
   // Set all timestamps to 0
   vi.useFakeTimers()
   vi.setSystemTime(0)
   // Overwrite biasedD6 as it will get stuck if d6 is mocked and cannot change
   vi.spyOn(utils, 'biasedD6').mockImplementation(() => 1 as Die['value'])
   d6Spy = vi.spyOn(utils, 'd6')
-})
-
-afterEach(() => {
-  d6Spy.mockRestore()
 })
 
 test('should report game as started after first roll, or a score in the scoreboard', async () => {
