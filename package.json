@@ -24,14 +24,15 @@
   ],
   "scripts": {
     "build": "tsup source/cli.tsx --format esm --target node20",
-    "postinstall": "husky",
     "lint": "eslint .",
-    "prepack": "pinst --disable",
-    "postpack": "pinst --enable",
+    "prepare": "simple-git-hooks",
     "prepublishOnly": "npm run build",
     "start": "npm run build -- --watch --onSuccess \"node ./dist/cli.js\"",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "npx --no lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -68,10 +69,9 @@
     "@will-stone/prettier-config": "^8.0.0",
     "eslint": "^8.57.0",
     "eslint-plugin-vitest": "^0.5.4",
-    "husky": "^9.0.11",
     "lint-staged": "^15.2.5",
-    "pinst": "^3.0.0",
     "prettier": "^3.2.5",
+    "simple-git-hooks": "^2.11.1",
     "tsup": "^8.0.2",
     "typescript": "^5.4.5",
     "vite": "^5.2.11",
