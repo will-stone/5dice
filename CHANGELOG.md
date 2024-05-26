@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.13.3
+
+### Patch Changes
+
+- 0fe242a: Upgrade all deps in the hope this will work with node 20 and 22.
+
 ## 1.13.2
 
 ### Patch Changes
