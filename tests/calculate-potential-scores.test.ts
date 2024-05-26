@@ -45,7 +45,7 @@ test.each`
   ${[1, 2, 3, 4, 5]} | ${{}}            | ${{ ones: 1, twos: 2, threes: 3, fours: 4, fives: 5, smallStraight: 30, largeStraight: 40, gamble: 15 }}
   ${[1, 1, 3, 4, 5]} | ${{}}            | ${{ ones: 2, threes: 3, fours: 4, fives: 5, gamble: 14 }}
   ${[1, 1, 1, 1, 5]} | ${{}}            | ${{ ones: 4, fives: 5, threeOfAKind: 9, fourOfAKind: 9, gamble: 9 }}
-  ${[1, 1, 1, 1, 1]} | ${{}}            | ${{ 'ones': 5, 'threeOfAKind': 5, 'fourOfAKind': 5, 'gamble': 5, '5Dice': 50 }}
+  ${[1, 1, 1, 1, 1]} | ${{}}            | ${{ ones: 5, threeOfAKind: 5, fourOfAKind: 5, gamble: 5, '5Dice': 50 }}
   ${[6, 3, 6, 2, 2]} | ${{}}            | ${{ twos: 4, threes: 3, sixes: 12, gamble: 19 }}
   ${[1, 2, 2, 2, 2]} | ${{ ones: 2 }}   | ${{ twos: 8, threeOfAKind: 9, fourOfAKind: 9, gamble: 9 }}
   ${[3, 2, 2, 2, 2]} | ${{ twos: 4 }}   | ${{ threes: 3, threeOfAKind: 11, fourOfAKind: 11, gamble: 11 }}
@@ -66,7 +66,7 @@ test.each`
   dice               | score                  | expected
   ${[3, 3, 3, 1, 2]} | ${{}}                  | ${{ ones: 1, twos: 2, threes: 9, threeOfAKind: 12, gamble: 12 }}
   ${[3, 3, 3, 3, 2]} | ${{}}                  | ${{ twos: 2, threes: 12, threeOfAKind: 14, fourOfAKind: 14, gamble: 14 }}
-  ${[3, 3, 3, 3, 3]} | ${{}}                  | ${{ 'threes': 15, 'threeOfAKind': 15, 'fourOfAKind': 15, 'gamble': 15, '5Dice': 50 }}
+  ${[3, 3, 3, 3, 3]} | ${{}}                  | ${{ threes: 15, threeOfAKind: 15, fourOfAKind: 15, gamble: 15, '5Dice': 50 }}
   ${[5, 5, 3, 5, 3]} | ${{}}                  | ${{ threes: 6, fives: 15, threeOfAKind: 21, fullHouse: 25, gamble: 21 }}
   ${[5, 5, 3, 5, 3]} | ${{ threeOfAKind: 3 }} | ${{ threes: 6, fives: 15, fullHouse: 25, gamble: 21 }}
 `(
@@ -139,13 +139,13 @@ test.each`
 })
 
 test.each`
-  dice               | score                                                                                                                                   | expected
-  ${[2, 2, 2, 2, 2]} | ${{}}                                                                                                                                   | ${{ 'twos': 10, 'threeOfAKind': 10, 'fourOfAKind': 10, '5Dice': 50, 'gamble': 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}                                                                                                                       | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
-  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}                                                                                                                      | ${{ 'twos': 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 50 }}                                                                                                           | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 150 }}
-  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, '5Dice': 150 }}                                                                                                          | ${{ 'threeOfAKind': 10, 'fourOfAKind': 10, 'fullHouse': 25, 'smallStraight': 30, 'largeStraight': 40, 'gamble': 10, '5Dice': 250 }}
-  ${[2, 2, 2, 2, 2]} | ${{ 'twos': 4, 'threeOfAKind': 1, 'fourOfAKind': 1, 'fullHouse': 1, 'smallStraight': 1, 'largeStraight': 1, 'gamble': 1, '5Dice': 50 }} | ${{ 'ones': 0, 'threes': 0, 'fours': 0, 'fives': 0, 'sixes': 0, '5Dice': 150 }}
+  dice               | score                                                                                                                     | expected
+  ${[2, 2, 2, 2, 2]} | ${{}}                                                                                                                     | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, '5Dice': 50, gamble: 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 0 }}                                                                                                         | ${{ twos: 10, threeOfAKind: 10, fourOfAKind: 10, gamble: 10 }}
+  ${[2, 2, 2, 2, 2]} | ${{ '5Dice': 50 }}                                                                                                        | ${{ twos: 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ twos: 4, '5Dice': 50 }}                                                                                               | ${{ threeOfAKind: 10, fourOfAKind: 10, fullHouse: 25, smallStraight: 30, largeStraight: 40, gamble: 10, '5Dice': 150 }}
+  ${[2, 2, 2, 2, 2]} | ${{ twos: 4, '5Dice': 150 }}                                                                                              | ${{ threeOfAKind: 10, fourOfAKind: 10, fullHouse: 25, smallStraight: 30, largeStraight: 40, gamble: 10, '5Dice': 250 }}
+  ${[2, 2, 2, 2, 2]} | ${{ twos: 4, threeOfAKind: 1, fourOfAKind: 1, fullHouse: 1, smallStraight: 1, largeStraight: 1, gamble: 1, '5Dice': 50 }} | ${{ ones: 0, threes: 0, fours: 0, fives: 0, sixes: 0, '5Dice': 150 }}
 `('[Five Dice] dice: $dice, score: $score', ({ dice, score, expected }) => {
   expect(calculatePotentialScore(dice, score)).toStrictEqual({
     ...initialState.scores,
@@ -164,13 +164,13 @@ test('cannot score', () => {
     }),
   ).toStrictEqual({
     ...initialState.scores,
-    'threes': 0,
-    'fours': 0,
-    'fives': 0,
-    'sixes': 0,
-    'fullHouse': 0,
-    'smallStraight': 0,
-    'largeStraight': 0,
+    threes: 0,
+    fours: 0,
+    fives: 0,
+    sixes: 0,
+    fullHouse: 0,
+    smallStraight: 0,
+    largeStraight: 0,
     '5Dice': 0,
   })
 })
