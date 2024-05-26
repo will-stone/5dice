@@ -1,5 +1,11 @@
 # 5dice
 
+## 1.13.4
+
+### Patch Changes
+
+- eb735db: Dummy commit to attempt to get node 20/22 working.
+
 ## 1.13.3
 
 ### Patch Changes
