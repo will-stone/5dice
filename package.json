@@ -24,7 +24,7 @@
   ],
   "scripts": {
     "build": "tsup source/cli.tsx --format esm --target node20",
-    "postinstall": "husky install",
+    "postinstall": "husky",
     "lint": "eslint .",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
