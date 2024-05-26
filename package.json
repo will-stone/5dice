@@ -25,7 +25,7 @@
   "scripts": {
     "build": "tsup source/cli.tsx --format esm --target node20",
     "postinstall": "husky install",
-    "lint": "eslint . --ignore-path .gitignore",
+    "lint": "eslint .",
     "prepack": "pinst --disable",
     "postpack": "pinst --enable",
     "prepublishOnly": "npm run build",
@@ -42,14 +42,6 @@
     ]
   },
   "prettier": "@will-stone/prettier-config",
-  "eslintConfig": {
-    "extends": [
-      "@will-stone/eslint-config/typescript",
-      "@will-stone/eslint-config/node",
-      "@will-stone/eslint-config/react",
-      "@will-stone/eslint-config/prettier"
-    ]
-  },
   "dependencies": {
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
@@ -72,13 +64,9 @@
     "@types/lodash": "^4.17.4",
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.3",
-    "@will-stone/eslint-config-base": "^7.1.2",
-    "@will-stone/eslint-config-node": "^2.0.2",
-    "@will-stone/eslint-config-prettier": "^3.0.1",
-    "@will-stone/eslint-config-react": "^3.0.2",
-    "@will-stone/eslint-config-typescript": "^8.0.2",
+    "@will-stone/eslint-config": "^9.0.0",
     "@will-stone/prettier-config": "^8.0.0",
-    "eslint": "^8.56.0",
+    "eslint": "^8.57.0",
     "eslint-plugin-vitest": "^0.5.4",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.5",

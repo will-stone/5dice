@@ -41,7 +41,6 @@ autorun(() => {
   }
 })
 
-// eslint-disable-next-line no-console
 console.clear()
 
 render(<App game={game} />)
