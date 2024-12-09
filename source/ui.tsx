@@ -311,7 +311,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   >
                     {potentialHasJoker
                       ? potentialScoreboard[id]
-                      : scores[id] ?? potentialScoreboard[id]}
+                      : (scores[id] ?? potentialScoreboard[id])}
                   </Text>
                 </Box>
               </Box>
