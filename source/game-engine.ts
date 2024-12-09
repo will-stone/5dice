@@ -34,17 +34,17 @@ export const initialState: State = {
 }
 
 export class GameEngine {
-  public isRolling = false
+  isRolling = false
 
-  public turn = initialState.turn
+  turn = initialState.turn
 
-  public dice = initialState.dice
+  dice = initialState.dice
 
-  public scores = initialState.scores
+  scores = initialState.scores
 
-  public topScores = initialState.topScores
+  topScores = initialState.topScores
 
-  public constructor(savedState?: State) {
+  constructor(savedState?: State) {
     makeAutoObservable(this, { roll: flow })
 
     if (savedState) {
@@ -55,7 +55,7 @@ export class GameEngine {
     }
   }
 
-  public get potentialScoreboard(): State['scores'] {
+  get potentialScoreboard(): State['scores'] {
     return this.isRolling
       ? {}
       : calculatePotentialScore(
@@ -70,11 +70,11 @@ export class GameEngine {
         )
   }
 
-  public get canRoll(): boolean {
+  get canRoll(): boolean {
     return !this.isGameOver && !this.isRolling && this.turn < 3
   }
 
-  public get isGameStart(): boolean {
+  get isGameStart(): boolean {
     return (
       this.turn === 0 &&
       _.isUndefined(this.scores.ones) &&
@@ -93,7 +93,7 @@ export class GameEngine {
     )
   }
 
-  public get isGameOver(): boolean {
+  get isGameOver(): boolean {
     return (
       _.isNumber(this.scores.ones) &&
       _.isNumber(this.scores.twos) &&
@@ -111,7 +111,7 @@ export class GameEngine {
     )
   }
 
-  public get upperBoardSum(): number {
+  get upperBoardSum(): number {
     return _.sum([
       this.scores.ones || 0,
       this.scores.twos || 0,
@@ -122,11 +122,11 @@ export class GameEngine {
     ])
   }
 
-  public get upperBoardBonus(): number {
+  get upperBoardBonus(): number {
     return this.upperBoardSum >= 63 ? 35 : 0
   }
 
-  public get lowerBoardSum(): number {
+  get lowerBoardSum(): number {
     return _.sum([
       this.scores.threeOfAKind || 0,
       this.scores.fourOfAKind || 0,
@@ -138,7 +138,7 @@ export class GameEngine {
     ])
   }
 
-  public get potentialHasJoker(): boolean {
+  get potentialHasJoker(): boolean {
     return (
       _.isNumber(this.scores['5Dice']) &&
       this.scores['5Dice'] > 0 &&
@@ -147,16 +147,16 @@ export class GameEngine {
     )
   }
 
-  public get jokerCount(): number {
+  get jokerCount(): number {
     return _.floor(toNumber(this.scores['5Dice']) / 100)
   }
 
-  public get total(): number {
+  get total(): number {
     return _.sum([this.upperBoardSum, this.upperBoardBonus, this.lowerBoardSum])
   }
 
   // Used for saving
-  public get gameState(): Omit<State, 'isRolling'> {
+  get gameState(): Omit<State, 'isRolling'> {
     return {
       dice: this.dice,
       scores: this.scores,
@@ -168,7 +168,7 @@ export class GameEngine {
   /**
    * Advance turn and roll all non-held dice
    */
-  public *roll(): Generator<Promise<void>, void, unknown> {
+  *roll(): Generator<Promise<void>, void, unknown> {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
@@ -196,13 +196,13 @@ export class GameEngine {
     }
   }
 
-  public hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
+  hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
     if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
       this.dice[dieIndex].held = !this.dice[dieIndex].held
     }
   }
 
-  public score(scoreId: keyof State['scores']): void {
+  score(scoreId: keyof State['scores']): void {
     if (!this.isRolling && _.isNumber(this.potentialScoreboard[scoreId])) {
       this.scores[scoreId] = this.potentialScoreboard[scoreId]
 
@@ -225,7 +225,7 @@ export class GameEngine {
     }
   }
 
-  public restart(): void {
+  restart(): void {
     this.dice = initialState.dice
     this.scores = initialState.scores
     this.turn = initialState.turn
