@@ -1,20 +1,22 @@
+import { TwoAndEight } from '2n8'
 import _ from 'lodash'
-import { flow, makeAutoObservable, set } from 'mobx'
 import { sleep, toNumber } from 'tings'
 
 import { calculatePotentialScore } from './calculate-potential-score.js'
 import type { State } from './model.js'
 import { biasedD6, d6 } from './utils.js'
 
-export const initialState: State = {
-  dice: [
+export class GameEngine extends TwoAndEight {
+  isRolling = false
+  turn = 0
+  dice: State['dice'] = [
     { value: null, held: false },
     { value: null, held: false },
     { value: null, held: false },
     { value: null, held: false },
     { value: null, held: false },
-  ],
-  scores: {
+  ]
+  scores: State['scores'] = {
     ones: undefined,
     twos: undefined,
     threes: undefined,
@@ -28,32 +30,8 @@ export const initialState: State = {
     largeStraight: undefined,
     gamble: undefined,
     '5Dice': undefined,
-  },
-  turn: 0,
-  topScores: [],
-}
-
-export class GameEngine {
-  isRolling = false
-
-  turn = initialState.turn
-
-  dice = initialState.dice
-
-  scores = initialState.scores
-
-  topScores = initialState.topScores
-
-  constructor(savedState?: State) {
-    makeAutoObservable(this, { roll: flow })
-
-    if (savedState) {
-      this.turn = savedState.turn
-      this.dice = savedState.dice
-      this.scores = savedState.scores
-      this.topScores = savedState.topScores
-    }
   }
+  topScores: State['topScores'] = []
 
   get potentialScoreboard(): State['scores'] {
     return this.isRolling
@@ -165,16 +143,25 @@ export class GameEngine {
     }
   }
 
+  loadState(savedState?: State): void {
+    if (savedState) {
+      this.turn = savedState.turn
+      this.dice = savedState.dice
+      this.scores = savedState.scores
+      this.topScores = savedState.topScores
+    }
+  }
+
   /**
    * Advance turn and roll all non-held dice
    */
-  *roll(): Generator<Promise<void>, void, unknown> {
+  async roll(): Promise<void> {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
       this.isRolling = true
 
-      for (const iteration of [1, 2, 3, 4, 5, 6, 7, 'last'] as const) {
+      for await (const iteration of [1, 2, 3, 4, 5, 6, 7, 'last'] as const) {
         // A real roll
         if (iteration === 'last') {
           for (const die of this.dice) {
@@ -188,7 +175,8 @@ export class GameEngine {
           }
 
           // Allow value to be displayed
-          yield sleep(50)
+          this.$commit()
+          await sleep(50)
         }
       }
 
@@ -207,8 +195,8 @@ export class GameEngine {
       this.scores[scoreId] = this.potentialScoreboard[scoreId]
 
       // Reset
-      this.dice = initialState.dice
-      this.turn = initialState.turn
+      this.$reset('dice')
+      this.$reset('turn')
     }
 
     if (this.isGameOver) {
@@ -219,15 +207,15 @@ export class GameEngine {
         .reverse()
         .slice(0, 20)
 
-      set(this.topScores, updatedTopScores)
+      this.topScores = updatedTopScores
       // TODO should this restart?
       this.restart()
     }
   }
 
   restart(): void {
-    this.dice = initialState.dice
-    this.scores = initialState.scores
-    this.turn = initialState.turn
+    this.$reset('dice')
+    this.$reset('turn')
+    this.$reset('scores')
   }
 }

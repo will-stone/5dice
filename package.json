@@ -44,19 +44,19 @@
   },
   "prettier": "@will-stone/prettier-config",
   "dependencies": {
+    "2n8": "^0.5.1",
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
-    "ink": "^5.0.0",
+    "immer": "^10.1.1",
+    "ink": "^5.1.0",
     "ink-divider": "^3.0.0",
     "jsonfile": "^6.1.0",
     "lodash": "^4.17.21",
-    "mobx": "^6.12.3",
-    "mobx-react-lite": "^4.0.7",
     "open": "^10.1.0",
     "picocolors": "^1.0.1",
     "react": "^18.3.1",
     "tings": "^9.1.0",
-    "zod": "^3.23.8"
+    "zod": "^3.24.0"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.3",
@@ -72,7 +72,7 @@
     "prettier": "^3.4.1",
     "simple-git-hooks": "^2.11.1",
     "tsup": "^8.0.2",
-    "typescript": "^5.4.5",
+    "typescript": "^5.7.2",
     "vite": "^5.2.11",
     "vitest": "^1.6.0"
   },
