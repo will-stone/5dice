@@ -8,9 +8,8 @@ import open from 'open'
 import type { ReactNode } from 'react'
 import React from 'react'
 
-import type { GameEngine } from './game-engine.js'
 import type { State } from './model.js'
-import { observer } from './observer.js'
+import { useGame } from './use-game.js'
 import { toPairs } from './utils.js'
 
 const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
@@ -85,22 +84,24 @@ const LabelBox: React.FC<{
   return <Box />
 }
 
-const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
-  const {
-    scores,
-    potentialScoreboard,
-    turn,
-    upperBoardSum,
-    upperBoardBonus,
-    total,
-    dice,
-    isRolling,
-    topScores,
-    canRoll,
-    jokerCount,
-    potentialHasJoker,
-    isGameStart,
-  } = game
+const App: React.FC = () => {
+  const potentialScoreboard = useGame((s) => s.potentialScoreboard)
+  const scores = useGame((s) => s.scores)
+  const turn = useGame((s) => s.turn)
+  const upperBoardSum = useGame((s) => s.upperBoardSum)
+  const upperBoardBonus = useGame((s) => s.upperBoardBonus)
+  const total = useGame((s) => s.total)
+  const dice = useGame((s) => s.dice)
+  const isRolling = useGame((s) => s.isRolling)
+  const topScores = useGame((s) => s.topScores)
+  const canRoll = useGame((s) => s.canRoll)
+  const jokerCount = useGame((s) => s.jokerCount)
+  const potentialHasJoker = useGame((s) => s.potentialHasJoker)
+  const isGameStart = useGame((s) => s.isGameStart)
+  const hold = useGame((s) => s.hold)
+  const roll = useGame((s) => s.roll)
+  const score = useGame((s) => s.score)
+  const restart = useGame((s) => s.restart)
 
   const { exit } = useApp()
 
@@ -111,13 +112,13 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
       // Hold
       for (const [diceKey, index] of Object.entries(diceKeys)) {
         if (lowerInput === diceKey.toLowerCase()) {
-          return game.hold(index)
+          return hold(index)
         }
       }
 
       // Roll
       if (key.return) {
-        return game.roll()
+        return roll()
       }
 
       // Open rules
@@ -130,18 +131,18 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
 
       for (const [hotkey, id] of Object.entries(upperBoardKeys)) {
         if (lowerInput === hotkey.toLowerCase()) {
-          return game.score(id)
+          return score(id)
         }
       }
 
       for (const [hotkey, id] of Object.entries(lowerBoardKeys)) {
         if (lowerInput === hotkey.toLowerCase()) {
-          return game.score(id)
+          return score(id)
         }
       }
 
       if (lowerInput === restartKey.toLowerCase()) {
-        return game.restart()
+        return restart()
       }
 
       if (key.escape) {
@@ -311,7 +312,7 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
                   >
                     {potentialHasJoker
                       ? potentialScoreboard[id]
-                      : (scores[id] ?? potentialScoreboard[id])}
+                      : scores[id] ?? potentialScoreboard[id]}
                   </Text>
                 </Box>
               </Box>
@@ -348,6 +349,6 @@ const App: React.FC<{ game: GameEngine }> = observer(({ game }) => {
       </Box>
     </Box>
   )
-})
+}
 
 export default App

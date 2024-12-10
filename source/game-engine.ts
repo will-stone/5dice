@@ -1,5 +1,6 @@
+import { TwoAndEight } from '2n8'
+import { produce } from 'immer'
 import _ from 'lodash'
-import { flow, makeAutoObservable, set } from 'mobx'
 import { sleep, toNumber } from 'tings'
 
 import { calculatePotentialScore } from './calculate-potential-score.js'
@@ -33,19 +34,15 @@ export const initialState: State = {
   topScores: [],
 }
 
-export class GameEngine {
+export class GameEngine extends TwoAndEight {
   isRolling = false
-
   turn = initialState.turn
-
   dice = initialState.dice
-
   scores = initialState.scores
-
   topScores = initialState.topScores
 
   constructor(savedState?: State) {
-    makeAutoObservable(this, { roll: flow })
+    super()
 
     if (savedState) {
       this.turn = savedState.turn
@@ -168,27 +165,31 @@ export class GameEngine {
   /**
    * Advance turn and roll all non-held dice
    */
-  *roll(): Generator<Promise<void>, void, unknown> {
+  async roll(): Promise<void> {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
       this.isRolling = true
 
-      for (const iteration of [1, 2, 3, 4, 5, 6, 7, 'last'] as const) {
+      for await (const iteration of [1, 2, 3, 4, 5, 6, 7, 'last'] as const) {
         // A real roll
         if (iteration === 'last') {
-          for (const die of this.dice) {
-            die.value = die.held ? die.value : d6()
-          }
+          this.dice = produce(this.dice, (draft) => {
+            for (const die of draft) {
+              die.value = die.held ? die.value : d6()
+            }
+          })
         }
         // Fake roll
         else {
-          for (const die of this.dice) {
-            die.value = die.held ? die.value : biasedD6(die.value)
-          }
+          this.dice = produce(this.dice, (draft) => {
+            for (const die of draft) {
+              die.value = die.held ? die.value : biasedD6(die.value)
+            }
+          })
 
           // Allow value to be displayed
-          yield sleep(50)
+          await sleep(50)
         }
       }
 
@@ -198,13 +199,17 @@ export class GameEngine {
 
   hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
     if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
-      this.dice[dieIndex].held = !this.dice[dieIndex].held
+      this.dice = produce(this.dice, (draft) => {
+        draft[dieIndex].held = !draft[dieIndex].held
+      })
     }
   }
 
   score(scoreId: keyof State['scores']): void {
     if (!this.isRolling && _.isNumber(this.potentialScoreboard[scoreId])) {
-      this.scores[scoreId] = this.potentialScoreboard[scoreId]
+      this.scores = produce(this.scores, (draft) => {
+        draft[scoreId] = this.potentialScoreboard[scoreId]
+      })
 
       // Reset
       this.dice = initialState.dice
@@ -219,7 +224,7 @@ export class GameEngine {
         .reverse()
         .slice(0, 20)
 
-      set(this.topScores, updatedTopScores)
+      this.topScores = updatedTopScores
       // TODO should this restart?
       this.restart()
     }
