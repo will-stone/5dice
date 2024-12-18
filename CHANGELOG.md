@@ -1,5 +1,11 @@
 # 5dice
 
+## 2.0.0
+
+### Major Changes
+
+- d4f9dd6: Migrate internals to new state management system (made by me!).
+
 ## 1.13.4
 
 ### Patch Changes
