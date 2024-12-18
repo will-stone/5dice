@@ -6,8 +6,34 @@ import {
   dieNumberToId,
   isStraight,
 } from '../source/calculate-potential-score.js'
-import { initialState } from '../source/game-engine.js'
-import type { Die } from '../source/model.js'
+import type { Die, State } from '../source/model.js'
+
+const initialState: State = {
+  dice: [
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+    { value: null, held: false },
+  ],
+  scores: {
+    ones: undefined,
+    twos: undefined,
+    threes: undefined,
+    fours: undefined,
+    fives: undefined,
+    sixes: undefined,
+    threeOfAKind: undefined,
+    fourOfAKind: undefined,
+    fullHouse: undefined,
+    smallStraight: undefined,
+    largeStraight: undefined,
+    gamble: undefined,
+    '5Dice': undefined,
+  },
+  turn: 0,
+  topScores: [],
+}
 
 test.each([
   [[1, 1, 1, 1, 1], 2, false],

@@ -1,7 +1,6 @@
 import _ from 'lodash'
 import { toNumber } from 'tings'
 
-import { initialState } from './game-engine.js'
 import type { Die, State } from './model.js'
 import { toKeys } from './utils.js'
 
@@ -54,7 +53,22 @@ export function calculatePotentialScore(
 ): State['scores'] {
   const isNotARoll = dice.includes(null)
   if (isNotARoll) return {}
-  const scores = { ...initialState.scores, ...inputScores }
+  const scores = {
+    ones: undefined,
+    twos: undefined,
+    threes: undefined,
+    fours: undefined,
+    fives: undefined,
+    sixes: undefined,
+    threeOfAKind: undefined,
+    fourOfAKind: undefined,
+    fullHouse: undefined,
+    smallStraight: undefined,
+    largeStraight: undefined,
+    gamble: undefined,
+    '5Dice': undefined,
+    ...inputScores,
+  }
   const countByDie = _.countBy(dice)
   const sumOfAllDie = _.sum(dice)
 
