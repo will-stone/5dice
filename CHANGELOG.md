@@ -1,5 +1,11 @@
 # 5dice
 
+## 2.0.1
+
+### Patch Changes
+
+- 2b9f198: Upgraded internals to latest state management release.
+
 ## 2.0.0
 
 ### Major Changes
