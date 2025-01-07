@@ -85,23 +85,23 @@ const LabelBox: React.FC<{
 }
 
 const App: React.FC = () => {
-  const potentialScoreboard = useGame((s) => s.potentialScoreboard)
-  const scores = useGame((s) => s.scores)
-  const turn = useGame((s) => s.turn)
-  const upperBoardSum = useGame((s) => s.upperBoardSum)
-  const upperBoardBonus = useGame((s) => s.upperBoardBonus)
-  const total = useGame((s) => s.total)
-  const dice = useGame((s) => s.dice)
-  const isRolling = useGame((s) => s.isRolling)
-  const topScores = useGame((s) => s.topScores)
-  const canRoll = useGame((s) => s.canRoll)
-  const jokerCount = useGame((s) => s.jokerCount)
-  const potentialHasJoker = useGame((s) => s.potentialHasJoker)
-  const isGameStart = useGame((s) => s.isGameStart)
-  const hold = useGame((s) => s.hold)
-  const roll = useGame((s) => s.roll)
-  const score = useGame((s) => s.score)
-  const restart = useGame((s) => s.restart)
+  const potentialScoreboard = useGame('potentialScoreboard')
+  const scores = useGame('scores')
+  const turn = useGame('turn')
+  const upperBoardSum = useGame('upperBoardSum')
+  const upperBoardBonus = useGame('upperBoardBonus')
+  const total = useGame('total')
+  const dice = useGame('dice')
+  const isRolling = useGame('isRolling')
+  const topScores = useGame('topScores')
+  const canRoll = useGame('canRoll')
+  const jokerCount = useGame('jokerCount')
+  const potentialHasJoker = useGame('potentialHasJoker')
+  const isGameStart = useGame('isGameStart')
+  const hold = useGame('hold')
+  const roll = useGame('roll')
+  const score = useGame('score')
+  const restart = useGame('restart')
 
   const { exit } = useApp()
 
@@ -312,7 +312,7 @@ const App: React.FC = () => {
                   >
                     {potentialHasJoker
                       ? potentialScoreboard[id]
-                      : scores[id] ?? potentialScoreboard[id]}
+                      : (scores[id] ?? potentialScoreboard[id])}
                   </Text>
                 </Box>
               </Box>

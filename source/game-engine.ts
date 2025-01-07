@@ -175,7 +175,7 @@ export class GameEngine extends TwoAndEight {
           }
 
           // Allow value to be displayed
-          this.$commit()
+          this.$emit()
           await sleep(50)
         }
       }
