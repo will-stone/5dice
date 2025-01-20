@@ -31,7 +31,7 @@ if (savedFile) {
 
 export const useGame = createReactStore(new GameEngine())
 
-useGame.store.$subscribe(() => {
+useGame.subscribe(() => {
   if (useGame.store.isRolling === false) {
     jsonfile.writeFileSync('5dice.json', useGame.store.gameState)
   }
