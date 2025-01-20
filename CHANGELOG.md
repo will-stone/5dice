@@ -1,5 +1,11 @@
 # 5dice
 
+## 2.0.2
+
+### Patch Changes
+
+- aaed282: Upgraded internal state manager.
+
 ## 2.0.1
 
 ### Patch Changes
