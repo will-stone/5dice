@@ -1,7 +1,7 @@
 import config from '@will-stone/eslint-config'
 
 export default [
-  ...config({}),
+  ...(await config()),
   {
     rules: {
       'sort-keys': 'off',
