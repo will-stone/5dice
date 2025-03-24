@@ -47,7 +47,7 @@
     "fs-extra": "^11.2.0",
     "immer": "^10.1.1",
     "ink": "^5.1.0",
-    "ink-divider": "^3.0.0",
+    "ink-divider": "^4.1.0",
     "jsonfile": "^6.1.0",
     "lodash": "^4.17.21",
     "open": "^10.1.0",

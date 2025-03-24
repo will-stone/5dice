@@ -24,8 +24,8 @@ importers:
         specifier: ^5.1.0
         version: 5.2.0(@types/react@18.3.20)(react@18.3.1)
       ink-divider:
-        specifier: ^3.0.0
-        version: 3.0.0(ink@5.2.0(@types/react@18.3.20)(react@18.3.1))(react@18.3.1)
+        specifier: ^4.1.0
+        version: 4.1.0(@types/react@18.3.20)(react@18.3.1)
       jsonfile:
         specifier: ^6.1.0
         version: 6.1.0
@@ -2071,13 +2071,8 @@ packages:
     resolution: {integrity: sha512-QQnnxNyfvmHFIsj7gkPcYymR8Jdw/o7mp5ZFihxn6h8Ci6fh3Dx4E1gPjpQEpIuPo9XVNY/ZUwh4BPMjGyL01g==}
     engines: {node: ^14.17.0 || ^16.13.0 || >=18.0.0}
 
-  ink-divider@3.0.0:
-    resolution: {integrity: sha512-Mqb9WArtEZCtXw622aHhJqPK157QNc+8ssl9/RvAZlS6nZRCKyW4mYOYCudQh6dSuFGt9eG5yaqT1mJaGmwu+w==}
-    engines: {node: '>=6'}
-    deprecated: This version is outdated, upgrade to version 4.0.0 or higher to get better typing and new useful features (including automatic stretching of the Divider to the full width of the container)
-    peerDependencies:
-      ink: '>=3.0.0'
-      react: '>=16.8.0'
+  ink-divider@4.1.0:
+    resolution: {integrity: sha512-U8J8lNMahYh2ChNL7azeHASid7uA28OMHEqQ88Yw2CwzmShIkz0dcHVjLSCK9Dhx4YZ+r8WkZiV5T0KrnI1FnQ==}
 
   ink@5.2.0:
     resolution: {integrity: sha512-gHzSBBvsh/1ZYuGi+aKzU7RwnYIr6PSz56or9T90i4DDS99euhN7nYKOMR3OTev0dKIB6Zod3vSapYzqoilQcg==}
@@ -5790,12 +5785,15 @@ snapshots:
 
   ini@4.1.1: {}
 
-  ink-divider@3.0.0(ink@5.2.0(@types/react@18.3.20)(react@18.3.1))(react@18.3.1):
+  ink-divider@4.1.0(@types/react@18.3.20)(react@18.3.1):
     dependencies:
       ink: 5.2.0(@types/react@18.3.20)(react@18.3.1)
-      prop-types: 15.8.1
-      react: 18.3.1
-      string-width: 4.2.3
+    transitivePeerDependencies:
+      - '@types/react'
+      - bufferutil
+      - react
+      - react-devtools-core
+      - utf-8-validate
 
   ink@5.2.0(@types/react@18.3.20)(react@18.3.1):
     dependencies:
