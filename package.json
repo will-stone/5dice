@@ -25,15 +25,12 @@
   "scripts": {
     "build": "tsup source/cli.tsx --format esm --target node22",
     "lint": "eslint .",
-    "prepare": "simple-git-hooks",
+    "prepare": "husky",
     "prepublishOnly": "pnpm build",
     "release": "release-it",
     "start": "pnpm build --watch --onSuccess \"node ./dist/cli.js\"",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
-  },
-  "simple-git-hooks": {
-    "pre-commit": "npx --no lint-staged"
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": [
@@ -68,12 +65,12 @@
     "@types/node": "^20.12.12",
     "@types/react": "^18.3.3",
     "@will-stone/eslint-config": "^12.1.0",
-    "@will-stone/prettier-config": "^8.0.1",
+    "@will-stone/prettier-config": "^9.0.2",
     "eslint": "^9.16.0",
+    "husky": "^9.1.7",
     "lint-staged": "^15.2.5",
     "prettier": "^3.4.1",
     "release-it": "^18.1.2",
-    "simple-git-hooks": "^2.11.1",
     "tsup": "^8.0.2",
     "typescript": "^5.7.2",
     "vite": "^5.2.11",
@@ -81,6 +78,11 @@
   },
   "engines": {
     "node": ">=22"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   },
   "overrides": {
     "eslint": "$eslint"
