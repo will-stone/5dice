@@ -27,6 +27,7 @@
     "lint": "eslint .",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "pnpm build",
+    "release": "release-it",
     "start": "pnpm build --watch --onSuccess \"node ./dist/cli.js\"",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
@@ -44,7 +45,7 @@
   },
   "prettier": "@will-stone/prettier-config",
   "dependencies": {
-    "2n8": "^0.9.0",
+    "2n8": "^0.10.2",
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
     "immer": "^10.1.1",
@@ -59,7 +60,8 @@
     "zod": "^3.24.0"
   },
   "devDependencies": {
-    "@changesets/cli": "^2.27.3",
+    "@commits-with-character/conventional-changelog-preset": "^2.0.0",
+    "@release-it/conventional-changelog": "^10.0.0",
     "@types/ink-gradient": "^2.0.4",
     "@types/jsonfile": "^6.1.4",
     "@types/lodash": "^4.17.4",
@@ -70,6 +72,7 @@
     "eslint": "^9.16.0",
     "lint-staged": "^15.2.5",
     "prettier": "^3.4.1",
+    "release-it": "^18.1.2",
     "simple-git-hooks": "^2.11.1",
     "tsup": "^8.0.2",
     "typescript": "^5.7.2",
@@ -81,5 +84,19 @@
   },
   "overrides": {
     "eslint": "$eslint"
+  },
+  "release-it": {
+    "github": {
+      "release": true
+    },
+    "plugins": {
+      "@release-it/conventional-changelog": {
+        "preset": {
+          "name": "@commits-with-character/preset"
+        },
+        "infile": "CHANGELOG.md",
+        "header": "# Changelog"
+      }
+    }
   }
 }
