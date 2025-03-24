@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.3](https://github.com/will-stone/5dice/compare/v2.0.2...v2.0.3) (2025-03-24)
+
+### Patches
+
+* Migrate from Changesets to Commits With Character and Release-it, this is a test release ([32f6761](https://github.com/will-stone/5dice/commit/32f676178e88849f82dffbdd621334c530bcf34b))
+
 ## 2.0.2
 
 ### Patch Changes
