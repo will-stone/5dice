@@ -26,8 +26,8 @@
     "build": "tsup source/cli.tsx --format esm --target node20",
     "lint": "eslint .",
     "prepare": "simple-git-hooks",
-    "prepublishOnly": "npm run build",
-    "start": "npm run build -- --watch --onSuccess \"node ./dist/cli.js\"",
+    "prepublishOnly": "pnpm build",
+    "start": "pnpm build --watch --onSuccess \"node ./dist/cli.js\"",
     "test": "vitest",
     "typecheck": "tsc --noEmit"
   },
