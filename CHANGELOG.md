@@ -1,16 +1,26 @@
 # Changelog
 
+## [3.0.1](https://github.com/will-stone/5dice/compare/v3.0.0...v3.0.1) (2025-03-24)
+
+### Patches
+
+- Upgrade ink-divider dependency
+  ([c11fce3](https://github.com/will-stone/5dice/commit/c11fce3e2655a59dd2b1888ca30638e7f0718a08))
+
 ## [3.0.0](https://github.com/will-stone/5dice/compare/v2.0.3...v3.0.0) (2025-03-24)
 
 ### Major changes
 
-* Change minimum node version to 22 ([598c870](https://github.com/will-stone/5dice/commit/598c87012dc2c6e7510928433fdd91813c2502db))
+- Change minimum node version to 22
+  ([598c870](https://github.com/will-stone/5dice/commit/598c87012dc2c6e7510928433fdd91813c2502db))
 
 ## [2.0.3](https://github.com/will-stone/5dice/compare/v2.0.2...v2.0.3) (2025-03-24)
 
 ### Patches
 
-* Migrate from Changesets to Commits With Character and Release-it, this is a test release ([32f6761](https://github.com/will-stone/5dice/commit/32f676178e88849f82dffbdd621334c530bcf34b))
+- Migrate from Changesets to Commits With Character and Release-it, this is a
+  test release
+  ([32f6761](https://github.com/will-stone/5dice/commit/32f676178e88849f82dffbdd621334c530bcf34b))
 
 ## 2.0.2
 
