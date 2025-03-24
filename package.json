@@ -23,7 +23,7 @@
     "screenshot.png"
   ],
   "scripts": {
-    "build": "tsup source/cli.tsx --format esm --target node20",
+    "build": "tsup source/cli.tsx --format esm --target node22",
     "lint": "eslint .",
     "prepare": "simple-git-hooks",
     "prepublishOnly": "pnpm build",
@@ -80,7 +80,7 @@
     "vitest": "^1.6.0"
   },
   "engines": {
-    "node": ">=20"
+    "node": ">=22"
   },
   "overrides": {
     "eslint": "$eslint"
