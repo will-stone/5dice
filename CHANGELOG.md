@@ -1,5 +1,11 @@
 # Changelog
 
+## [3.0.0](https://github.com/will-stone/5dice/compare/v2.0.3...v3.0.0) (2025-03-24)
+
+### Major changes
+
+* Change minimum node version to 22 ([598c870](https://github.com/will-stone/5dice/commit/598c87012dc2c6e7510928433fdd91813c2502db))
+
 ## [2.0.3](https://github.com/will-stone/5dice/compare/v2.0.2...v2.0.3) (2025-03-24)
 
 ### Patches
