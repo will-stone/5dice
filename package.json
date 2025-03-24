@@ -62,7 +62,7 @@
     "@types/ink-gradient": "^2.0.4",
     "@types/jsonfile": "^6.1.4",
     "@types/lodash": "^4.17.4",
-    "@types/node": "^20.12.12",
+    "@types/node": "^22.13.13",
     "@types/react": "^18.3.3",
     "@will-stone/eslint-config": "^12.1.0",
     "@will-stone/prettier-config": "^9.0.2",
