@@ -42,7 +42,7 @@
   },
   "prettier": "@will-stone/prettier-config",
   "dependencies": {
-    "2n8": "^0.10.2",
+    "2n8": "^0.12.1",
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
     "immer": "^10.1.1",
@@ -85,7 +85,8 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "esbuild"
-    ]
+    ],
+    "overrides": {}
   },
   "overrides": {
     "eslint": "$eslint"
