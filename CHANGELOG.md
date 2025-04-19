@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.2](https://github.com/will-stone/5dice/compare/v3.0.1...v3.0.2) (2025-04-19)
+
+### Patches
+
+- Upgrade 2n8
+  ([bec7e9f](https://github.com/will-stone/5dice/commit/bec7e9f1ab288fe11e1abf4c86a4bab1f677426b))
+- Upgrade 2n8
+  ([8fa8791](https://github.com/will-stone/5dice/commit/8fa87918537bbe3eca363926c22f9add73e3a1c6))
+
 ## [3.0.1](https://github.com/will-stone/5dice/compare/v3.0.0...v3.0.1) (2025-03-24)
 
 ### Patches
