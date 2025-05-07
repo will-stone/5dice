@@ -1,5 +1,14 @@
 # Changelog
 
+## [3.0.3](https://github.com/will-stone/5dice/compare/v3.0.2...v3.0.3) (2025-05-07)
+
+### Patches
+
+- Update 2n8
+  ([438a6b8](https://github.com/will-stone/5dice/commit/438a6b842320a44b01bd9cb0bc0ed32d0ee82d5d))
+- Do not use 2n8's auto-bind
+  ([6018c83](https://github.com/will-stone/5dice/commit/6018c832aa49b697d0dba14f94016234fe9e9fb1))
+
 ## [3.0.2](https://github.com/will-stone/5dice/compare/v3.0.1...v3.0.2) (2025-04-19)
 
 ### Patches
