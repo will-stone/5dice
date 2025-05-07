@@ -143,7 +143,7 @@ export class GameEngine extends TwoAndEight {
     }
   }
 
-  loadState(savedState?: State): void {
+  loadState = (savedState?: State): void => {
     if (savedState) {
       this.turn = savedState.turn
       this.dice = savedState.dice
@@ -155,7 +155,7 @@ export class GameEngine extends TwoAndEight {
   /**
    * Advance turn and roll all non-held dice
    */
-  async roll(): Promise<void> {
+  roll = async (): Promise<void> => {
     if (this.canRoll) {
       this.turn = this.turn + 1
 
@@ -184,13 +184,13 @@ export class GameEngine extends TwoAndEight {
     }
   }
 
-  hold(dieIndex: 0 | 1 | 2 | 3 | 4): void {
+  hold = (dieIndex: 0 | 1 | 2 | 3 | 4): void => {
     if (!this.isRolling && (this.turn === 1 || this.turn === 2)) {
       this.dice[dieIndex].held = !this.dice[dieIndex].held
     }
   }
 
-  score(scoreId: keyof State['scores']): void {
+  score = (scoreId: keyof State['scores']): void => {
     if (!this.isRolling && _.isNumber(this.potentialScoreboard[scoreId])) {
       this.scores[scoreId] = this.potentialScoreboard[scoreId]
 
@@ -213,7 +213,7 @@ export class GameEngine extends TwoAndEight {
     }
   }
 
-  restart(): void {
+  restart = (): void => {
     this.$reset('dice')
     this.$reset('turn')
     this.$reset('scores')
