@@ -1,5 +1,16 @@
 # Changelog
 
+## [3.0.4](https://github.com/will-stone/5dice/compare/v3.0.3...v3.0.4) (2025-05-08)
+
+### Patches
+
+- Update to latest 2n8 API
+  ([c1a0c5e](https://github.com/will-stone/5dice/commit/c1a0c5e453b21cb0caa99dd45e7d0543590a2273))
+- Upgrade 2n8
+  ([d5af4ac](https://github.com/will-stone/5dice/commit/d5af4acd07d616796f31905ee805816c17ca92ab))
+- Upgrade 2n8
+  ([40cf697](https://github.com/will-stone/5dice/commit/40cf6973e64f18bfffc585eb8d5c51364ca0045f))
+
 ## [3.0.3](https://github.com/will-stone/5dice/compare/v3.0.2...v3.0.3) (2025-05-07)
 
 ### Patches
