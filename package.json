@@ -42,7 +42,7 @@
   },
   "prettier": "@will-stone/prettier-config",
   "dependencies": {
-    "2n8": "^0.16.0",
+    "2n8": "^0.17.0",
     "@types/fs-extra": "^11.0.4",
     "fs-extra": "^11.2.0",
     "ink": "^5.1.0",
