@@ -32,9 +32,9 @@ if (savedFile) {
 export const useGame = createReactStore(new GameEngine())
 
 useGame.subscribe(() => {
-  if (useGame.store.isRolling === false) {
-    jsonfile.writeFileSync('5dice.json', useGame.store.gameState)
+  if (useGame.getStateByField('isRolling') === false) {
+    jsonfile.writeFileSync('5dice.json', useGame.getStateByField('gameState'))
   }
 })
 
-useGame.store.loadState(savedFile)
+useGame.getStateByField('loadState')(savedFile)
