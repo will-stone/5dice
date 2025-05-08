@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       2n8:
-        specifier: ^0.18.0
-        version: 0.18.0(react@18.3.1)
+        specifier: ^0.18.1
+        version: 0.18.1(react@18.3.1)
       '@types/fs-extra':
         specifier: ^11.0.4
         version: 11.0.4
@@ -111,8 +111,8 @@ importers:
 
 packages:
 
-  2n8@0.18.0:
-    resolution: {integrity: sha512-D/pNtlBP+Xj9lRu3W/4OIMWr+Ql0EPPo0jEVXgsrZplu2ug+AeAzyIueuo4ks0gCMrlNCgEI0JDQgym+wtJ2uA==}
+  2n8@0.18.1:
+    resolution: {integrity: sha512-1TD3aZPPnSe7s+NoNPCsNofDg/yLTXFFpdttvR90303ACZ6YVEe/L4g+ilzQS7U+lDbBSnC4PkIVZvwtsebcQg==}
     peerDependencies:
       react: ^18.3.1 || ^19.0.0
     peerDependenciesMeta:
@@ -3634,7 +3634,7 @@ packages:
 
 snapshots:
 
-  2n8@0.18.0(react@18.3.1):
+  2n8@0.18.1(react@18.3.1):
     dependencies:
       '@ver0/deep-equal': 1.0.0
       auto-bind: 5.0.1
