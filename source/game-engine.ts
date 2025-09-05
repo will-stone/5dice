@@ -2,21 +2,23 @@ import { TwoAndEight } from '2n8'
 import _ from 'lodash'
 import { sleep, toNumber } from 'tings'
 
-import { calculatePotentialScore } from './calculate-potential-score.js'
 import type { State } from './model.js'
+
+import { calculatePotentialScore } from './calculate-potential-score.js'
 import { biasedD6, d6 } from './utils.js'
 
 export class GameEngine extends TwoAndEight {
   isRolling = false
   turn = 0
   dice: State['dice'] = [
-    { value: null, held: false },
-    { value: null, held: false },
-    { value: null, held: false },
-    { value: null, held: false },
-    { value: null, held: false },
+    { held: false, value: null },
+    { held: false, value: null },
+    { held: false, value: null },
+    { held: false, value: null },
+    { held: false, value: null },
   ]
   scores: State['scores'] = {
+    /* eslint-disable perfectionist/sort-objects */
     ones: undefined,
     twos: undefined,
     threes: undefined,
@@ -30,6 +32,7 @@ export class GameEngine extends TwoAndEight {
     largeStraight: undefined,
     gamble: undefined,
     '5Dice': undefined,
+    /* eslint-enable perfectionist/sort-objects */
   }
   topScores: State['topScores'] = []
 
@@ -153,7 +156,7 @@ export class GameEngine extends TwoAndEight {
   }
 
   /**
-   * Advance turn and roll all non-held dice
+   * Advance turn and roll all non-held dice.
    */
   roll = async (): Promise<void> => {
     if (this.canRoll) {
@@ -201,10 +204,10 @@ export class GameEngine extends TwoAndEight {
 
     if (this.isGameOver) {
       const updatedTopScores = _.sortBy(
-        [...this.topScores, { timestamp: Date.now(), score: this.total }],
+        [...this.topScores, { score: this.total, timestamp: Date.now() }],
         ['score'],
       )
-        .reverse()
+        .toReversed()
         .slice(0, 20)
 
       this.topScores = updatedTopScores

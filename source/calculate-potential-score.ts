@@ -2,6 +2,7 @@ import _ from 'lodash'
 import { toNumber } from 'tings'
 
 import type { Die, State } from './model.js'
+
 import { toKeys } from './utils.js'
 
 export type Dice = [
@@ -54,6 +55,7 @@ export function calculatePotentialScore(
   const isNotARoll = dice.includes(null)
   if (isNotARoll) return {}
   const scores = {
+    /* eslint-disable perfectionist/sort-objects */
     ones: undefined,
     twos: undefined,
     threes: undefined,
@@ -67,12 +69,14 @@ export function calculatePotentialScore(
     largeStraight: undefined,
     gamble: undefined,
     '5Dice': undefined,
+    /* eslint-enable perfectionist/sort-objects */
     ...inputScores,
   }
   const countByDie = _.countBy(dice)
   const sumOfAllDie = _.sum(dice)
 
   const potential: State['scores'] = {
+    /* eslint-disable perfectionist/sort-objects */
     ones: undefined,
     twos: undefined,
     threes: undefined,
@@ -86,6 +90,7 @@ export function calculatePotentialScore(
     largeStraight: undefined,
     gamble: undefined,
     '5Dice': undefined,
+    /* eslint-enable perfectionist/sort-objects */
   }
 
   // joker

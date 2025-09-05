@@ -1,7 +1,8 @@
+import type { ZodError } from 'zod'
+
 import { createReactStore } from '2n8'
 import jsonfile from 'jsonfile'
 import pc from 'picocolors'
-import type { ZodError } from 'zod'
 
 import { GameEngine } from './game-engine.js'
 import { stateSchema } from './model.js'

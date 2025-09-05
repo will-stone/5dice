@@ -1,12 +1,15 @@
+/* eslint-disable perfectionist/sort-objects */
+
 import { expect, test } from 'vitest'
 
 import type { Dice } from '../source/calculate-potential-score.js'
+import type { Die, State } from '../source/model.js'
+
 import {
   calculatePotentialScore,
   dieNumberToId,
   isStraight,
 } from '../source/calculate-potential-score.js'
-import type { Die, State } from '../source/model.js'
 
 const initialState: State = {
   dice: [

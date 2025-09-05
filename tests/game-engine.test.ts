@@ -1,12 +1,14 @@
-import { createStore } from '2n8'
+/* eslint-disable perfectionist/sort-objects */
 import type * as tings from 'tings'
 import type { MockInstance } from 'vitest'
+
+import { createStore } from '2n8'
 import { beforeEach, expect, test, vi } from 'vitest'
 
-import { GameEngine } from '../source/game-engine.js'
 import type { Die, State } from '../source/model.js'
-import * as utils from '../source/utils.js'
 
+import { GameEngine } from '../source/game-engine.js'
+import * as utils from '../source/utils.js'
 
 const getInitialState: () => State = () => ({
   dice: [
@@ -58,121 +60,121 @@ beforeEach(() => {
 test('should report game as started after first roll, or a score in the scoreboard', async () => {
   const game1 = createStore(new GameEngine())
 
-  expect(game1.store.isGameStart).toBe(true)
+  expect(game1.get('isGameStart')).toBe(true)
 
-  await game1.store.roll()
+  await game1.get('roll')()
 
-  expect(game1.store.isGameStart).toBe(false)
+  expect(game1.get('isGameStart')).toBe(false)
 
   const game2 = createStore(new GameEngine())
-  game2.store.loadState({
+  game2.get('loadState')({
     ...getInitialState(),
     scores: { ...getInitialState().scores, gamble: 5 },
   })
 
-  expect(game2.store.isGameStart).toBe(false)
+  expect(game2.get('isGameStart')).toBe(false)
 })
 
 test('should only allow three rolls', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.canRoll).toBe(false)
+  expect(game.get('canRoll')).toBe(false)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.canRoll).toBe(false)
+  expect(game.get('canRoll')).toBe(false)
 })
 
 test('should advance turn on roll', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.turn).toBe(0)
+  expect(game.get('turn')).toBe(0)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.turn).toBe(1)
+  expect(game.get('turn')).toBe(1)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.turn).toBe(2)
+  expect(game.get('turn')).toBe(2)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.turn).toBe(3)
+  expect(game.get('turn')).toBe(3)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.turn).toBe(3)
+  expect(game.get('turn')).toBe(3)
 })
 
 test('should only show rolling during rolls', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.turn).toBe(0)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(0)
+  expect(game.get('isRolling')).toBe(false)
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  const roll1 = game.store.roll()
+  const roll1 = game.get('roll')()
 
-  expect(game.store.turn).toBe(1)
-  expect(game.store.isRolling).toBe(true)
-  expect(game.store.potentialScoreboard).toStrictEqual({})
+  expect(game.get('turn')).toBe(1)
+  expect(game.get('isRolling')).toBe(true)
+  expect(game.get('potentialScoreboard')).toStrictEqual({})
 
   await roll1
 
-  expect(game.store.turn).toBe(1)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(1)
+  expect(game.get('isRolling')).toBe(false)
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  const roll2 = game.store.roll()
+  const roll2 = game.get('roll')()
 
-  expect(game.store.turn).toBe(2)
-  expect(game.store.isRolling).toBe(true)
+  expect(game.get('turn')).toBe(2)
+  expect(game.get('isRolling')).toBe(true)
 
   await roll2
 
-  expect(game.store.turn).toBe(2)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(2)
+  expect(game.get('isRolling')).toBe(false)
 
-  expect(game.store.canRoll).toBe(true)
+  expect(game.get('canRoll')).toBe(true)
 
-  const roll3 = game.store.roll()
+  const roll3 = game.get('roll')()
 
-  expect(game.store.turn).toBe(3)
-  expect(game.store.isRolling).toBe(true)
+  expect(game.get('turn')).toBe(3)
+  expect(game.get('isRolling')).toBe(true)
 
   await roll3
-  const roll3Dice = game.store.dice
+  const roll3Dice = game.get('dice')
 
-  expect(game.store.turn).toBe(3)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(3)
+  expect(game.get('isRolling')).toBe(false)
 
-  expect(game.store.canRoll).toBe(false)
+  expect(game.get('canRoll')).toBe(false)
 
-  const roll4 = game.store.roll()
+  const roll4 = game.get('roll')()
 
-  expect(game.store.turn).toBe(3)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(3)
+  expect(game.get('isRolling')).toBe(false)
 
   await roll4
-  const roll4Dice = game.store.dice
+  const roll4Dice = game.get('dice')
 
-  expect(game.store.turn).toBe(3)
-  expect(game.store.isRolling).toBe(false)
+  expect(game.get('turn')).toBe(3)
+  expect(game.get('isRolling')).toBe(false)
 
   expect(roll3Dice).toStrictEqual(roll4Dice)
 })
@@ -180,7 +182,7 @@ test('should only show rolling during rolls', async () => {
 test('should update dice', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
 
   d6Spy
     .mockReturnValueOnce(1)
@@ -188,9 +190,9 @@ test('should update dice', async () => {
     .mockReturnValueOnce(2)
     .mockReturnValueOnce(4)
     .mockReturnValueOnce(3)
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.dice).toStrictEqual([
+  expect(game.get('dice')).toStrictEqual([
     { value: 1, held: false },
     { value: 2, held: false },
     { value: 2, held: false },
@@ -202,7 +204,7 @@ test('should update dice', async () => {
 test('should hold dice', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
 
   d6Spy
     .mockReturnValueOnce(1)
@@ -210,11 +212,11 @@ test('should hold dice', async () => {
     .mockReturnValueOnce(2)
     .mockReturnValueOnce(4)
     .mockReturnValueOnce(3)
-  await game.store.roll()
-  game.store.hold(2)
-  game.store.hold(4)
+  await game.get('roll')()
+  game.get('hold')(2)
+  game.get('hold')(4)
 
-  expect(game.store.dice).toStrictEqual([
+  expect(game.get('dice')).toStrictEqual([
     { value: 1, held: false },
     { value: 2, held: false },
     { value: 2, held: true },
@@ -223,9 +225,9 @@ test('should hold dice', async () => {
   ])
 
   d6Spy.mockReturnValueOnce(2).mockReturnValueOnce(6).mockReturnValueOnce(5)
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.dice).toStrictEqual([
+  expect(game.get('dice')).toStrictEqual([
     { value: 2, held: false },
     { value: 6, held: false },
     { value: 2, held: true },
@@ -237,20 +239,20 @@ test('should hold dice', async () => {
 test('should not hold dice before first roll', () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
 
-  game.store.hold(0)
-  game.store.hold(1)
-  game.store.hold(3)
+  game.get('hold')(0)
+  game.get('hold')(1)
+  game.get('hold')(3)
 
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
 })
 
 test('should score', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
-  expect(game.store.gameState).toStrictEqual({
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
+  expect(game.get('gameState')).toStrictEqual({
     dice: getInitialState().dice,
     scores: getInitialState().scores,
     topScores: getInitialState().topScores,
@@ -263,9 +265,9 @@ test('should score', async () => {
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.potentialScoreboard).toStrictEqual({
+  expect(game.get('potentialScoreboard')).toStrictEqual({
     ...getInitialState().scores,
     fullHouse: 25,
     gamble: 21,
@@ -273,7 +275,7 @@ test('should score', async () => {
     threes: 9,
     threeOfAKind: 21,
   })
-  expect(game.store.gameState).toStrictEqual({
+  expect(game.get('gameState')).toStrictEqual({
     dice: [
       { value: 6, held: false },
       { value: 6, held: false },
@@ -286,13 +288,13 @@ test('should score', async () => {
     turn: 1,
   })
 
-  game.store.score('fullHouse')
+  game.get('score')('fullHouse')
 
-  expect(game.store.scores).toStrictEqual({
+  expect(game.get('scores')).toStrictEqual({
     ...getInitialState().scores,
     fullHouse: 25,
   })
-  expect(game.store.gameState).toStrictEqual({
+  expect(game.get('gameState')).toStrictEqual({
     dice: [
       { value: null, held: false },
       { value: null, held: false },
@@ -317,12 +319,12 @@ test.each([
   [{ ones: 0, twos: 0, threes: 0, fours: 0, fives: 0, sixes: 0 }, 0],
 ])('should total upper board with scoreboard of %o', (scores, expected) => {
   const game = createStore(new GameEngine())
-  game.store.loadState({
+  game.get('loadState')({
     ...getInitialState(),
     scores: { ...getInitialState().scores, ...scores },
   })
 
-  expect(game.store.upperBoardSum).toBe(expected)
+  expect(game.get('upperBoardSum')).toBe(expected)
 })
 
 test.each([
@@ -337,12 +339,12 @@ test.each([
   'should calculate upper board bonus with scoreboard of %o',
   (scores, expected) => {
     const game = createStore(new GameEngine())
-    game.store.loadState({
+    game.get('loadState')({
       ...getInitialState(),
       scores: { ...getInitialState().scores, ...scores },
     })
 
-    expect(game.store.upperBoardBonus).toBe(expected)
+    expect(game.get('upperBoardBonus')).toBe(expected)
   },
 )
 
@@ -399,12 +401,12 @@ test.each([
   ],
 ])('should total lower board with scoreboard of %o', (scores, expected) => {
   const game = createStore(new GameEngine())
-  game.store.loadState({
+  game.get('loadState')({
     ...getInitialState(),
     scores: { ...getInitialState().scores, ...scores },
   })
 
-  expect(game.store.lowerBoardSum).toBe(expected)
+  expect(game.get('lowerBoardSum')).toBe(expected)
 })
 
 test('should end game and restart', async () => {
@@ -416,7 +418,7 @@ test('should end game and restart', async () => {
     .mockReturnValueOnce(3)
 
   const game = createStore(new GameEngine())
-  game.store.loadState({
+  game.get('loadState')({
     ...getInitialState(),
     scores: {
       ones: 2,
@@ -435,29 +437,27 @@ test('should end game and restart', async () => {
     },
   })
 
-  expect(game.store.upperBoardSum).toBe(30)
-  expect(game.store.lowerBoardSum).toBe(101)
-  expect(game.store.total).toBe(131)
+  expect(game.get('upperBoardSum')).toBe(30)
+  expect(game.get('lowerBoardSum')).toBe(101)
+  expect(game.get('total')).toBe(131)
 
-  expect(game.store.isGameOver).toBe(false)
+  expect(game.get('isGameOver')).toBe(false)
 
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.potentialScoreboard).toStrictEqual({
+  expect(game.get('potentialScoreboard')).toStrictEqual({
     ...getInitialState().scores,
     '5Dice': 50,
   })
 
-  game.store.score('5Dice')
+  game.get('score')('5Dice')
 
-  expect(game.store.topScores).toStrictEqual([
-    { score: 181, timestamp: 0 },
-  ])
-  expect(game.store.dice).toStrictEqual(getInitialState().dice)
-  expect(game.store.scores).toStrictEqual(getInitialState().scores)
-  expect(game.store.potentialScoreboard).toStrictEqual({})
-  expect(game.store.turn).toStrictEqual(getInitialState().turn)
-  expect(game.store.gameState).toStrictEqual({
+  expect(game.get('topScores')).toStrictEqual([{ score: 181, timestamp: 0 }])
+  expect(game.get('dice')).toStrictEqual(getInitialState().dice)
+  expect(game.get('scores')).toStrictEqual(getInitialState().scores)
+  expect(game.get('potentialScoreboard')).toStrictEqual({})
+  expect(game.get('turn')).toStrictEqual(getInitialState().turn)
+  expect(game.get('gameState')).toStrictEqual({
     dice: getInitialState().dice,
     scores: getInitialState().scores,
     topScores: [{ score: 181, timestamp: 0 }],
@@ -468,8 +468,8 @@ test('should end game and restart', async () => {
 test('should show potential jokers', async () => {
   const game = createStore(new GameEngine())
 
-  expect(game.store.potentialHasJoker).toBe(false)
-  expect(game.store.jokerCount).toBe(0)
+  expect(game.get('potentialHasJoker')).toBe(false)
+  expect(game.get('jokerCount')).toBe(0)
 
   d6Spy
     .mockReturnValueOnce(3)
@@ -477,17 +477,17 @@ test('should show potential jokers', async () => {
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
     .mockReturnValueOnce(3)
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.potentialHasJoker).toBe(false)
+  expect(game.get('potentialHasJoker')).toBe(false)
 
-  game.store.score('5Dice')
+  game.get('score')('5Dice')
 
-  expect(game.store.scores).toStrictEqual({
+  expect(game.get('scores')).toStrictEqual({
     ...getInitialState().scores,
     '5Dice': 50,
   })
-  expect(game.store.potentialHasJoker).toBe(false)
+  expect(game.get('potentialHasJoker')).toBe(false)
 
   d6Spy
     .mockReturnValueOnce(6)
@@ -495,12 +495,12 @@ test('should show potential jokers', async () => {
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(6)
     .mockReturnValueOnce(6)
-  await game.store.roll()
+  await game.get('roll')()
 
-  expect(game.store.potentialHasJoker).toBe(true)
-  expect(game.store.jokerCount).toBe(0)
+  expect(game.get('potentialHasJoker')).toBe(true)
+  expect(game.get('jokerCount')).toBe(0)
 
-  game.store.score('5Dice')
+  game.get('score')('5Dice')
 
-  expect(game.store.jokerCount).toBe(1)
+  expect(game.get('jokerCount')).toBe(1)
 })

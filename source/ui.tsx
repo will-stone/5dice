@@ -1,18 +1,18 @@
-import path from 'node:path'
-import url from 'node:url'
+import type { ReactNode } from 'react'
 
 import fs from 'fs-extra'
 import { Box, Spacer, Text, useApp, useInput } from 'ink'
 import _ from 'lodash'
+import path from 'node:path'
 import open from 'open'
-import type { ReactNode } from 'react'
 import React from 'react'
 
 import type { State } from './model.js'
+
 import { useGame } from './use-game.js'
 import { toPairs } from './utils.js'
 
-const __dirname = path.dirname(url.fileURLToPath(import.meta.url))
+const __dirname = import.meta.dirname
 
 const packageJson = fs.readJSONSync(path.join(__dirname, '..', 'package.json'))
 
@@ -20,11 +20,13 @@ const rulesKey = 'P'
 const restartKey = 'L'
 
 const diceKeys: Record<string, 0 | 1 | 2 | 3 | 4> = {
+  /* eslint-disable perfectionist/sort-objects */
   A: 0,
   S: 1,
   D: 2,
   F: 3,
   G: 4,
+  /* eslint-enable perfectionist/sort-objects */
 }
 
 const upperBoardKeys: Record<string, keyof State['scores']> = {
@@ -37,6 +39,7 @@ const upperBoardKeys: Record<string, keyof State['scores']> = {
 }
 
 const lowerBoardKeys: Record<string, keyof State['scores']> = {
+  /* eslint-disable perfectionist/sort-objects */
   Q: 'threeOfAKind',
   W: 'fourOfAKind',
   E: 'fullHouse',
@@ -44,12 +47,13 @@ const lowerBoardKeys: Record<string, keyof State['scores']> = {
   T: 'largeStraight',
   Y: 'gamble',
   U: '5Dice',
+  /* eslint-enable perfectionist/sort-objects */
 }
 
 const LabelBox: React.FC<{
+  readonly children: ReactNode
   readonly label: string
   readonly width: number
-  readonly children: ReactNode
 }> = ({ children, label, width }) => {
   if (width > 0) {
     return (
@@ -173,7 +177,7 @@ const App: React.FC = () => {
               {Object.keys(diceKeys).join(' ')}
             </Text>
             <Box flexGrow={1} justifyContent="space-between">
-              {dice.map(({ value, held }, index) => (
+              {dice.map(({ held, value }, index) => (
                 <Text
                   // eslint-disable-next-line react/no-array-index-key
                   key={index}
